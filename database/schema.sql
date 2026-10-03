@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS reservations (
   table_number VARCHAR(10) NOT NULL,
   `date` DATE NOT NULL,
   `time` TIME NOT NULL,
-  PRIMARY KEY (id)
+  PRIMARY KEY (id),
+  UNIQUE KEY reservations_date_table_unique (`date`, table_number)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

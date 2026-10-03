@@ -4,7 +4,7 @@
 
 ## สถานะ
 
-ตอนนี้เปิดหน้าแรกและหน้าจองผ่าน Express ได้ มี API ตรวจสถานะ server และ MySQL รวมถึง `POST /api/reservations` สำหรับบันทึกการจอง 6 ช่อง: guest_name, phone_number, zone, table_number, date, time พร้อมรหัส id หน้าเว็บแสดงใบยืนยันหลังบันทึกสำเร็จ การตรวจโต๊ะว่าง/จองซ้อนและฟีเจอร์ธุรกิจอื่นยังไม่ได้พัฒนา
+ตอนนี้เปิดหน้าแรกและหน้าจองผ่าน Express ได้ มี API ตรวจสถานะ server และ MySQL รวมถึง `POST /api/reservations` สำหรับบันทึกการจอง 6 ช่อง: guest_name, phone_number, zone, table_number, date, time พร้อมรหัส id หน้าเว็บแสดงใบยืนยันหลังบันทึกสำเร็จ หน้าจองตรวจโต๊ะที่ถูกจองตามวันที่และแสดงเป็นสีเทา โดยหนึ่งโต๊ะจองได้หนึ่งครั้งต่อวัน ส่วนฟีเจอร์ธุรกิจอื่นยังไม่ได้พัฒนา
 
 ใช้ stack ตาม proposal: **HTML/CSS/JavaScript + Node.js/Express + MySQL** และเริ่มพัฒนาบน localhost โดยไม่มี login/roles หรือแอปมือถือ
 
@@ -101,7 +101,7 @@ npm run db:check
 - `ER_ACCESS_DENIED_ERROR`: บัญชี รหัสผ่าน หรือสิทธิ์ไม่ตรง
 - `ER_BAD_DB_ERROR`: ยังไม่มีฐานข้อมูลชื่อตาม `DB_NAME`
 
-สร้างตารางการจองด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้างตาราง `reservations` ถ้ายังไม่มี โดยไม่ลบข้อมูลเดิม ส่วน `seed.sql` ยังไม่มีข้อมูลตัวอย่าง
+สร้างตารางการจองด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้างตาราง `reservations` ถ้ายังไม่มี โดยไม่ลบข้อมูลเดิม คำสั่งนี้ยังเพิ่ม unique key สำหรับหนึ่งโต๊ะต่อวันในฐานข้อมูลเดิมด้วย หากมีข้อมูลจองซ้ำจะหยุดและแจ้งให้ตรวจสอบ โดยไม่ลบข้อมูลใด ๆ ส่วน `seed.sql` ยังไม่มีข้อมูลตัวอย่าง
 
 เปิด `/reserve.html` เลือกโต๊ะ กรอกชื่อ เบอร์โทร วันที่และเวลา แล้วกดยืนยัน ข้อมูลจะถูกบันทึกลง MySQL ตรวจข้อมูลใน SQL editor ได้ด้วย:
 
@@ -117,7 +117,8 @@ ORDER BY id DESC;
 | --- | --- | --- |
 | GET | `/` | หน้าแรก HTML |
 | GET | `/reserve.html` | หน้าจองโต๊ะ |
-| POST | `/api/reservations` | บันทึกการจองลง MySQL และตอบ HTTP 201 |
+| POST | `/api/reservations` | บันทึกการจองลง MySQL และตอบ HTTP 201 หรือ HTTP 409 เมื่อโต๊ะถูกจองวันนั้นแล้ว |
+| GET | `/api/reservations/availability?date=YYYY-MM-DD` | รายการรหัสโต๊ะที่ถูกจองในวันที่เลือก |
 | GET | `/api/health` | HTTP 200 เมื่อ Express ทำงาน ไม่ตรวจ MySQL |
 | GET | `/api/health/db` | HTTP 200 เมื่อ `SELECT 1` สำเร็จ หรือ HTTP 503 เมื่อฐานข้อมูลไม่พร้อม |
 

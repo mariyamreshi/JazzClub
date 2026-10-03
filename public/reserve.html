@@ -70,6 +70,9 @@
             </div>
         </div>
 
+        <p id="availabilityStatus" role="status" aria-live="polite">Checking available tables...</p>
+        <button type="button" id="retryAvailability" hidden>Check tables again</button>
+
         <!-- Floor Plan Container -->
         <!-- Zoned Floor Plan Container -->
         <div class="floor-wrapper">
@@ -168,7 +171,7 @@
         </div>
 
         <p id="reservationError" role="alert" hidden></p>
-        <button type="submit" class="btn-confirm">Confirm reservation request</button>
+        <button type="submit" class="btn-confirm" disabled>Confirm reservation request</button>
     </form>
 </div>
 <!-- Confirmation Receipt View (Hidden by default) -->

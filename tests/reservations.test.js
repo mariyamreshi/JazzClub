@@ -91,3 +91,44 @@ test('returns an error instead of confirming when MySQL fails', async t => {
   assert.equal(result.data, undefined);
   assert.ok(!JSON.stringify(result).includes('private SQL'));
 });
+
+test('availability lists only table codes for the requested date without guest details', async t => {
+  t.mock.method(db, 'execute', async (sql, values) => {
+    assert.match(sql, /SELECT table_number FROM reservations WHERE `date` = \?/);
+    assert.deepEqual(values, ['2026-10-16']);
+    return [[{ table_number: 'F02' }, { table_number: 'VIP-1' }]];
+  });
+  const response = await fetch(`${baseURL}/api/reservations/availability?date=2026-10-16`);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.deepEqual(await response.json(), { data: { date: '2026-10-16', booked_tables: ['F02', 'VIP-1'] } });
+});
+
+test('availability rejects missing and invalid dates without querying MySQL', async t => {
+  const query = t.mock.method(db, 'execute', async () => assert.fail('No query for an invalid date'));
+  for (const queryString of ['', '?date=2026-02-30', '?date=2026-10-16&date=2026-10-17', '?date=16/10/2026']) {
+    const response = await fetch(`${baseURL}/api/reservations/availability${queryString}`);
+    assert.equal(response.status, 400);
+  }
+  assert.equal(query.mock.callCount(), 0);
+});
+
+test('availability returns an empty list for a day with no reservations', async t => {
+  t.mock.method(db, 'execute', async () => [[]]);
+  const response = await fetch(`${baseURL}/api/reservations/availability?date=2026-10-17`);
+  assert.deepEqual(await response.json(), { data: { date: '2026-10-17', booked_tables: [] } });
+});
+
+test('availability does not pretend tables are free when the database is unavailable', async t => {
+  t.mock.method(db, 'execute', async () => { throw new Error('private database details'); });
+  const response = await fetch(`${baseURL}/api/reservations/availability?date=2026-10-16`);
+  assert.equal(response.status, 500);
+  assert.equal((await response.json()).data, undefined);
+});
+
+test('duplicate table/day reservations return a conflict', async t => {
+  t.mock.method(db, 'execute', async () => { throw Object.assign(new Error('duplicate'), { code: 'ER_DUP_ENTRY' }); });
+  const response = await submit(valid);
+  assert.equal(response.status, 409);
+  assert.equal((await response.json()).error.code, 'TABLE_ALREADY_BOOKED');
+});

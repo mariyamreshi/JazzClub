@@ -11,6 +11,7 @@ router.get('/api/health', health.server);
 router.get('/api/health/db', health.database);
 
 // Reservation routes (your part)
+router.get('/api/reservations/availability', reservationController.getAvailability);
 router.post('/api/reservations', reservationController.createReservation);
 
 module.exports = router;

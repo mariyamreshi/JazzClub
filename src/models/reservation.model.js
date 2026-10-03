@@ -10,4 +10,12 @@ async function create(reservation) {
   return { id: result.insertId, ...reservation };
 }
 
-module.exports = { create };
+async function bookedTables(date) {
+  const [rows] = await db.execute(
+    'SELECT table_number FROM reservations WHERE `date` = ? ORDER BY table_number',
+    [date]
+  );
+  return rows.map(row => row.table_number);
+}
+
+module.exports = { create, bookedTables };

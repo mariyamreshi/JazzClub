@@ -299,9 +299,13 @@ h2 { font-size: 1.1rem; color: #333; }
 }
 
 .table-card.booked .table-circle {
-    background-color: #EFEFEF;
-    border-color: #DDD;
-    opacity: 0.5;
+    background-color: #DDD;
+    border-color: #BBB;
+    color: #666;
+    box-shadow: none;
+}
+
+.table-card[aria-disabled="true"] {
     cursor: not-allowed;
 }
 
@@ -402,10 +406,10 @@ h2 { font-size: 1.1rem; color: #333; }
 
 /* VIP Circle Styling */
 .vip-circle {
-    border-color: var(--gold) !important;
+    border-color: var(--gold);
     width: 85px !important;
     height: 85px !important;
-    background: #FFF9E6 !important;
+    background: #FFF9E6;
 }
 
 /* Bar Zone Styling */
@@ -456,6 +460,21 @@ h2 { font-size: 1.1rem; color: #333; }
 
 .bar-spot.selected .t-seats {
     color: #555;
+}
+
+.bar-spot.booked {
+    background: #DDD;
+    border-color: #BBB;
+    color: #666;
+}
+
+.table-card.booked .t-seats {
+    color: #666;
+}
+
+.btn-confirm:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 /* Confirmation Receipt Overlay */
