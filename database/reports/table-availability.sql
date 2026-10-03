@@ -1,0 +1,2 @@
+-- TODO: Report 1 - available tables for a selected date/time interval.
+-- Decide booking duration, active statuses and overlap rules first.

@@ -1,0 +1,5 @@
+-- Scaffold only: no tables are created yet.
+-- Finalize the ERD and business rules in docs/requirements.md first.
+-- Planned tables: customers, club_tables, reservations, artists, shows,
+-- employees, employee_shifts, menu_items, orders, order_items, payments,
+-- show_attendance. Add keys and constraints after schema review.

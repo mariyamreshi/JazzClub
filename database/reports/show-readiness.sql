@@ -1,0 +1,2 @@
+-- TODO: Report 2 - stock and employee readiness for each scheduled show.
+-- Requires agreed demand/stock thresholds and employee requirements.

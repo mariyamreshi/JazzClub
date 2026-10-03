@@ -1,0 +1,3 @@
+-- TODO: Report 3 - orders and payments associated with each reservation.
+-- Include reservations without orders and unpaid orders.
+-- Avoid duplicate totals when joining order items and payments.

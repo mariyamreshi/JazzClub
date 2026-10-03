@@ -1,0 +1,3 @@
+-- TODO: Add fictional sample data after schema.sql is finalized.
+-- Include valid cancelled/no-show reservations and high/low demand shows.
+-- Test invalid booking attempts through the API, not as invalid seed rows.
