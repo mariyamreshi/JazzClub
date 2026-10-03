@@ -50,9 +50,9 @@
             <div class="form-group">
                 <label for="resTime">Arrival time</label>
                 <select id="resTime" required>
-                    <option value="19:30">7:30 PM</option>
                     <option value="20:00">8:00 PM</option>
-                    <option value="20:30" selected>8:30 PM</option>
+                    <option value="20:10">8:30 PM</option>
+                    <option value="21:00" selected>9:00 PM</option>
                 </select>
             </div>
         </div>
@@ -71,56 +71,74 @@
         </div>
 
         <!-- Floor Plan Container -->
+        <!-- Zoned Floor Plan Container -->
         <div class="floor-wrapper">
-            <div class="grid-background"></div>
-            <div class="stage">
-                <span class="icon">🎸</span> STAGE
+            <div class="stage"><span class="icon">🎸</span> STAGE</div>
+
+            <!-- Zone 1: Front Stage (4 Tables, 8 Seats Total) -->
+            <div class="zone-block">
+                <div class="zone-label">FRONT STAGE ZONE (MAX 8 SEATS)</div>
+                <div class="tables-grid grid-2x2">
+                    <div class="table-card" data-id="1" data-code="F01" data-seats="2" data-zone="Front Stage">
+                        <div class="table-circle"><span class="t-name">F01</span><span class="t-seats">2 seats</span></div>
+                    </div>
+                    <div class="table-card" data-id="2" data-code="F02" data-seats="2" data-zone="Front Stage">
+                        <div class="table-circle"><span class="t-name">F02</span><span class="t-seats">2 seats</span></div>
+                    </div>
+                    <div class="table-card" data-id="3" data-code="F03" data-seats="2" data-zone="Front Stage">
+                        <div class="table-circle"><span class="t-name">F03</span><span class="t-seats">2 seats</span></div>
+                    </div>
+                    <div class="table-card" data-id="4" data-code="F04" data-seats="2" data-zone="Front Stage">
+                        <div class="table-circle"><span class="t-name">F04</span><span class="t-seats">2 seats</span></div>
+                    </div>
+                </div>
             </div>
-            <div class="bar">
-                <span class="icon">🍷</span> BAR
+
+            <!-- Zone 2: Main Floor (3 Tables, 9 Seats Total) -->
+            <div class="zone-block">
+                <div class="zone-label">MAIN FLOOR ZONE (MAX 9 SEATS)</div>
+                <div class="tables-grid grid-3col">
+                    <div class="table-card" data-id="5" data-code="M01" data-seats="3" data-zone="Main Floor">
+                        <div class="table-circle"><span class="t-name">M01</span><span class="t-seats">3 seats</span></div>
+                    </div>
+                    <div class="table-card" data-id="6" data-code="M02" data-seats="3" data-zone="Main Floor">
+                        <div class="table-circle"><span class="t-name">M02</span><span class="t-seats">3 seats</span></div>
+                    </div>
+                    <div class="table-card" data-id="7" data-code="M03" data-seats="3" data-zone="Main Floor">
+                        <div class="table-circle"><span class="t-name">M03</span><span class="t-seats">3 seats</span></div>
+                    </div>
+                </div>
             </div>
 
-            <div class="tables-grid">
-                <!-- Row 1 -->
-                <div class="table-card" data-id="1" data-code="T01" data-seats="2">
-                    <div class="chairs top-bottom"></div>
-                    <div class="table-circle"><span class="t-name">T01</span><span class="t-seats">2 seats</span></div>
+            <!-- Zone 3: VIP Lounge (At the Back, 12 Seats Total) -->
+            <div class="zone-block vip-zone">
+                <div class="zone-label vip-label">👑 VIP LOUNGE (MAX 12 SEATS)</div>
+                <div class="tables-grid grid-2col">
+                    <div class="table-card vip-card" data-id="8" data-code="VIP-1" data-seats="6" data-zone="VIP Lounge">
+                        <div class="table-circle vip-circle"><span class="t-name">VIP 1</span><span class="t-seats">6 seats</span></div>
+                    </div>
+                    <div class="table-card vip-card" data-id="9" data-code="VIP-2" data-seats="6" data-zone="VIP Lounge">
+                        <div class="table-circle vip-circle"><span class="t-name">VIP 2</span><span class="t-seats">6 seats</span></div>
+                    </div>
                 </div>
-                <div class="table-card booked" data-id="2" data-code="T02" data-seats="2">
-                    <div class="chairs top-bottom"></div>
-                    <div class="table-circle"><span class="t-name">T02</span><span class="t-seats">2 seats</span></div>
-                </div>
-                <div class="table-card" data-id="3" data-code="T03" data-seats="4">
-                    <div class="chairs all-around"></div>
-                    <div class="table-circle"><span class="t-name">T03</span><span class="t-seats">4 seats</span></div>
-                </div>
+            </div>
 
-                <!-- Row 2 -->
-                <div class="table-card" data-id="4" data-code="T04" data-seats="4">
-                    <div class="chairs all-around"></div>
-                    <div class="table-circle"><span class="t-name">T04</span><span class="t-seats">4 seats</span></div>
-                </div>
-                <div class="table-card booked" data-id="5" data-code="T05" data-seats="2">
-                    <div class="chairs top-bottom"></div>
-                    <div class="table-circle"><span class="t-name">T05</span><span class="t-seats">2 seats</span></div>
-                </div>
-                <div class="table-card booked" data-id="6" data-code="T06" data-seats="4">
-                    <div class="chairs all-around"></div>
-                    <div class="table-circle"><span class="t-name">T06</span><span class="t-seats">4 seats</span></div>
-                </div>
-
-                <!-- Row 3 -->
-                <div class="table-card" data-id="7" data-code="T07" data-seats="6">
-                    <div class="chairs large"></div>
-                    <div class="table-circle"><span class="t-name">T07</span><span class="t-seats">6 seats</span></div>
-                </div>
-                <div class="table-card selected" data-id="8" data-code="T08" data-seats="2">
-                    <div class="chairs top-bottom"></div>
-                    <div class="table-circle"><span class="t-name">T08</span><span class="t-seats">2 seats</span></div>
-                </div>
-                <div class="table-card" data-id="9" data-code="T09" data-seats="4">
-                    <div class="chairs all-around"></div>
-                    <div class="table-circle"><span class="t-name">T09</span><span class="t-seats">4 seats</span></div>
+            <!-- Zone 4: Bar Counter (4 Spots, Max 2 Seats Each) -->
+            <div class="bar-container">
+                <div class="bar-title">🍷 BAR COUNTER</div>
+                <div class="bar-spots">
+                    <div class="table-card bar-spot" data-id="10" data-code="B01" data-seats="2" data-zone="Bar Counter">
+                        <span class="t-name">B01</span><span class="t-seats">2 seats</span>
+                    </div>
+                    <div class="table-card bar-spot" data-id="11" data-code="B02" data-seats="2" data-zone="Bar Counter">
+                        <span class="t-name">B02</span><span class="t-seats">2 seats</span>
+                    </div>
+                    <div class="table-card bar-spot" data-id="12" data-code="B03" data-seats="2" data-zone="Bar Counter">
+                        <span class="t-name">B03</span><span class="t-seats">2 seats</span>
+                    </div>
+                    <div class="table-card bar-spot" data-id="13" data-code="B04" data-seats="2" data-zone="Bar Counter">
+                        <span class="t-name">B04</span><span class="t-seats">2 seats</span>
+                    </div>
                 </div>
             </div>
 
