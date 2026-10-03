@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Lark Jazz Club - Reserve Table</title>
+    <link rel="stylesheet" href="/css/reserve.css">
+</head>
+<body>
+
+<!-- Top Dark Header -->
+<nav class="navbar">
+    <div class="logo">
+        <span class="logo-box">BL</span>
+        <div class="logo-text">
+            <div class="brand-name">Blue Lark</div>
+            <div class="brand-sub">JAZZ CLUB · BANGKOK</div>
+        </div>
+    </div>
+    <div class="nav-links">
+        <a href="/">Live shows</a>
+        <a href="/">The club</a>
+        <a href="/">Visit</a>
+        <a href="/reserve.html" class="active-link">Reserve a table</a>
+    </div>
+</nav>
+
+<!-- Main Card Container -->
+<div class="card-container">
+    <div class="section-subtitle">TABLE RESERVATION</div>
+    <h1 class="page-title">Plan your evening</h1>
+
+    <!-- Show Information Card -->
+    <div class="show-card">
+        <div class="show-img">🎷</div>
+        <div class="show-info">
+            <div class="genre-tag">CONTEMPORARY JAZZ</div>
+            <div class="artist-name">The Araya Quartet</div>
+            <div class="show-meta">8:30 PM · From ฿450</div>
+        </div>
+    </div>
+
+    <!-- Booking Details Form -->
+    <form id="reservationForm">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="resDate">Date</label>
+                <input type="date" id="resDate" value="2026-12-09" required>
+            </div>
+            <div class="form-group">
+                <label for="resTime">Arrival time</label>
+                <select id="resTime" required>
+                    <option value="19:30">7:30 PM</option>
+                    <option value="20:00">8:00 PM</option>
+                    <option value="20:30" selected>8:30 PM</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Floor Plan Header & Legend -->
+        <div class="section-header">
+            <div>
+                <h2>Choose your table</h2>
+                <p class="subtitle">Tap an available table on the floor plan</p>
+            </div>
+            <div class="legend">
+                <span class="legend-item"><span class="dot avail"></span> Available</span>
+                <span class="legend-item"><span class="dot select"></span> Selected</span>
+                <span class="legend-item"><span class="dot booked"></span> Booked</span>
+            </div>
+        </div>
+
+        <!-- Floor Plan Container -->
+        <div class="floor-wrapper">
+            <div class="grid-background"></div>
+            <div class="stage">
+                <span class="icon">🎸</span> STAGE
+            </div>
+            <div class="bar">
+                <span class="icon">🍷</span> BAR
+            </div>
+
+            <div class="tables-grid">
+                <!-- Row 1 -->
+                <div class="table-card" data-id="1" data-code="T01" data-seats="2">
+                    <div class="chairs top-bottom"></div>
+                    <div class="table-circle"><span class="t-name">T01</span><span class="t-seats">2 seats</span></div>
+                </div>
+                <div class="table-card booked" data-id="2" data-code="T02" data-seats="2">
+                    <div class="chairs top-bottom"></div>
+                    <div class="table-circle"><span class="t-name">T02</span><span class="t-seats">2 seats</span></div>
+                </div>
+                <div class="table-card" data-id="3" data-code="T03" data-seats="4">
+                    <div class="chairs all-around"></div>
+                    <div class="table-circle"><span class="t-name">T03</span><span class="t-seats">4 seats</span></div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="table-card" data-id="4" data-code="T04" data-seats="4">
+                    <div class="chairs all-around"></div>
+                    <div class="table-circle"><span class="t-name">T04</span><span class="t-seats">4 seats</span></div>
+                </div>
+                <div class="table-card booked" data-id="5" data-code="T05" data-seats="2">
+                    <div class="chairs top-bottom"></div>
+                    <div class="table-circle"><span class="t-name">T05</span><span class="t-seats">2 seats</span></div>
+                </div>
+                <div class="table-card booked" data-id="6" data-code="T06" data-seats="4">
+                    <div class="chairs all-around"></div>
+                    <div class="table-circle"><span class="t-name">T06</span><span class="t-seats">4 seats</span></div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="table-card" data-id="7" data-code="T07" data-seats="6">
+                    <div class="chairs large"></div>
+                    <div class="table-circle"><span class="t-name">T07</span><span class="t-seats">6 seats</span></div>
+                </div>
+                <div class="table-card selected" data-id="8" data-code="T08" data-seats="2">
+                    <div class="chairs top-bottom"></div>
+                    <div class="table-circle"><span class="t-name">T08</span><span class="t-seats">2 seats</span></div>
+                </div>
+                <div class="table-card" data-id="9" data-code="T09" data-seats="4">
+                    <div class="chairs all-around"></div>
+                    <div class="table-circle"><span class="t-name">T09</span><span class="t-seats">4 seats</span></div>
+                </div>
+            </div>
+
+            <div class="entrance">ENTRANCE</div>
+        </div>
+
+        <!-- Selected Table Info Banner -->
+        <div class="selection-box">
+            <div class="selected-left">
+                <span class="sofa-icon">🛋️</span>
+                <div>
+                    <div class="table-title" id="selectedTableTitle">Table T08</div>
+                    <div class="table-sub" id="selectedTableSub">Main floor · Clear stage view</div>
+                </div>
+            </div>
+            <div class="fee-text">No table fee</div>
+        </div>
+
+        <!-- Guest Fields -->
+        <div class="form-group full-width">
+            <label for="guestName">Guest name</label>
+            <input type="text" id="guestName" placeholder="Full name" required>
+        </div>
+
+        <div class="form-group full-width">
+            <label for="guestEmail">Email address</label>
+            <input type="email" id="guestEmail" placeholder="Confirmation email" required>
+        </div>
+
+        <div class="form-group full-width">
+            <label for="specialRequests">Special requests</label>
+            <textarea id="specialRequests" rows="3" placeholder="Celebration, dietary needs, accessibility..."></textarea>
+        </div>
+
+        <button type="submit" class="btn-confirm">Confirm reservation request</button>
+    </form>
+</div>
+
+<script src="/js/pages/reserve.js"></script>
+</body>
+</html>
