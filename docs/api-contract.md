@@ -1,6 +1,8 @@
 # API contract - ร่างสำหรับทีม
 
-ยังไม่มี endpoints ที่ใช้งานได้ ตารางนี้เป็นรายการกลุ่ม API เพื่อแบ่งงาน ต้องเติม request/response ก่อน implementation
+Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"server":"ok"}}` และ `GET /api/health/db` ตอบ `{"data":{"database":"ok"}}` เมื่อเชื่อม MySQL ได้ หรือ HTTP 503 พร้อม error code `DATABASE_UNAVAILABLE` เมื่อไม่พร้อม
+
+ตารางด้านล่างยังเป็นรายการกลุ่ม API สำหรับงานธุรกิจที่ต้องพัฒนาต่อ ต้องเติม request/response ก่อน implementation
 
 | กลุ่ม | Resource path ที่เสนอ | ผู้ดูแลเบื้องต้น |
 | --- | --- | --- |

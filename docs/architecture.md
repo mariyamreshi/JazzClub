@@ -14,13 +14,13 @@
 | Middleware | `src/middleware/` | การตรวจ request และจัดการ error ร่วมกัน |
 | Static assets | `public/` | CSS, JavaScript ฝั่ง browser และรูปภาพ |
 
-`src/app.js` ใช้ประกอบ Express application ส่วน `src/server.js` โหลด config และเริ่ม server ทั้งสองไฟล์ยังเป็น placeholder
+`src/app.js` ใช้ประกอบ Express application ส่วน `src/server.js` โหลด config และเริ่ม server โดย `src/config/env.js` โหลด `.env` จาก root
 
 ## View และการเรียกข้อมูล
 
 หน้าแรกอยู่ที่ `src/views/index.html` สร้างหน้าฟีเจอร์ใน `src/views/pages/` เช่น `reservations.html`, `shows.html`, `staffing.html`, `menu.html`, `orders.html` และ `reports.html`
 
-เมื่อเริ่มเขียน Express ให้ page routes เรียก controller ที่ส่ง HTML ด้วย `res.sendFile()` และให้ data routes ใต้ `/api` เรียก controller ที่ตอบ JSON ด้วย `res.json()` โดยใช้ URL หน้าเว็บและ API แยกกัน เช่น `/reservations` กับ `/api/reservations`
+Page routes เรียก controller ที่ส่ง HTML ด้วย `res.sendFile()` และ data routes ใต้ `/api` เรียก controller ที่ตอบ JSON ด้วย `res.json()` โดยใช้ URL หน้าเว็บและ API แยกกัน เช่น `/reservations` กับ `/api/reservations`
 
 View ยังเป็น HTML ปกติ จึงไม่ใช้ `res.render()` เว้นแต่ภายหลังทีมเลือก template engine และตั้งค่าเพิ่ม หน้า HTML เรียก API ผ่าน JavaScript เพื่อแสดงข้อมูลจากฐานข้อมูล
 
@@ -72,4 +72,4 @@ SQL อยู่ใน Model และใช้ connection pool จาก `src/c
 
 ## สถานะ
 
-ตอนนี้เป็นโครงสร้างไฟล์เท่านั้น ยังไม่มี Express routes, CRUD, การเชื่อม MySQL หรือ static serving ที่ทำงานได้
+ตอนนี้มีหน้าแรก, static serving, `/api/health`, `/api/health/db` และ connection pool แล้ว ทดสอบ MySQL จริงด้วย `npm run db:check` หลังตั้ง `.env` และเตรียม database/account ส่วน CRUD และตารางธุรกิจยังไม่ได้พัฒนา
