@@ -10,6 +10,13 @@
 
 ให้ Garnet ทำตัวอย่าง CRUD หนึ่ง resource ร่วมกับทีมก่อน แล้ว Fifa/Mary ใช้รูปแบบเดียวกันทำ API ที่รับผิดชอบ วิธีนี้ลดงาน backend ที่กองอยู่คนเดียว ทุกคนช่วยทำ sample data ของฟีเจอร์ตัวเอง โดย Garnet รวม `seed.sql`
 
+## ตำแหน่งไฟล์ใน MVC
+
+- งานฐานข้อมูล: `database/` และ `docs/erd/`
+- งาน backend: `src/models/`, `src/controllers/`, `src/routes/` และ `src/config/`
+- งานหน้าเว็บ: `src/views/`, `public/css/`, `public/js/` และ `public/images/`
+- แต่ละคนแก้ไฟล์ตามฟีเจอร์ที่รับผิดชอบในโฟลเดอร์ร่วมเหล่านี้ เช่น `shows.model.js` กับ `shows.controller.js` ไม่จำเป็นต้องแบ่งคนหนึ่งทำเฉพาะ Model อีกคนทำเฉพาะ Controller
+
 ## ลำดับงานตาม proposal
 
 | Milestone | เจ้าของตาม proposal | วิธีทำร่วมกัน |
@@ -34,7 +41,7 @@ Week เหล่านี้คือลำดับ milestone ในเอก�
 - แยก branch ตามงาน เช่น `feature/reservations-ui`, `feature/shows-api`, `feature/database-schema`
 - ใช้ pull request และให้เพื่อนอย่างน้อยหนึ่งคน review ก่อน merge เข้า `main`
 - เปลี่ยน API/schema ให้แจ้งทีมและอัปเดตเอกสารใน PR เดียวกัน
-- ไฟล์ส่วนกลาง เช่น schema, routes/index และ api.js ให้ตกลงผู้แก้ในแต่ละช่วง
+- ไฟล์ส่วนกลาง เช่น `database/schema.sql`, `src/app.js`, `src/routes/index.js` และ `public/js/api.js` ให้ตกลงผู้แก้ในแต่ละช่วง
 - งานเสร็จเมื่อหน้าที่เกี่ยวข้องเชื่อม API ได้ ตรวจข้อมูลผิดพลาดได้ และอธิบายผลต่อฐานข้อมูลได้
 
 ## กรณีทดสอบร่วมกันเมื่อมี implementation

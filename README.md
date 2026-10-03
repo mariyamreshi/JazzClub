@@ -12,42 +12,36 @@
 
 ```text
 JazzClub/
-├── frontend/
-│   ├── index.html              # หน้าเริ่มต้นของ scaffold
-│   ├── pages/                  # หน้าจัดการแต่ละกลุ่มงาน
-│   └── assets/
-│       ├── css/                # CSS ส่วนกลางและของแต่ละหน้า
-│       ├── js/
-│       │   ├── api.js          # จุดเรียก backend ร่วมกัน
-│       │   └── pages/          # JavaScript ของแต่ละหน้า
-│       └── images/
-├── backend/
-│   ├── .env.example           # ตัวอย่าง config ฝั่ง server
-│   ├── src/
-│   │   ├── app.js             # ตั้งค่า Express และรวม routes
-│   │   ├── server.js          # เริ่ม server
-│   │   ├── config/db.js       # MySQL connection pool
-│   │   ├── routes/index.js    # รวม API routes
-│   │   ├── middleware/        # ตรวจ request และจัดการ error ร่วมกัน
-│   │   └── modules/
-│   │       ├── reservations/ # ลูกค้า โต๊ะ และการจอง
-│   │       ├── shows/         # ศิลปิน การแสดง และผู้เข้าชม
-│   │       ├── staffing/      # พนักงานและเวร
-│   │       ├── menu/          # เมนูและ stock
-│   │       ├── orders/        # ออเดอร์ รายการอาหาร และการชำระเงิน
-│   │       └── reports/       # รายงาน 3 ข้อตาม proposal
-│   └── tests/                 # ที่เก็บ integration tests เมื่อมี API
+├── src/
+│   ├── models/                # Model: SQL และการเข้าถึง MySQL
+│   ├── views/                 # View: หน้า HTML
+│   │   ├── index.html         # หน้าเริ่มต้นของ scaffold
+│   │   └── pages/             # หน้าจัดการแต่ละกลุ่มงาน
+│   ├── controllers/           # Controller: รับ request เรียก model ตอบกลับ
+│   ├── routes/index.js        # จับคู่ URL กับ controller
+│   ├── config/db.js           # MySQL connection pool
+│   ├── middleware/            # ตรวจ request และจัดการ error ร่วมกัน
+│   ├── app.js                 # ตั้งค่า Express และรวม routes
+│   └── server.js              # เริ่ม server
+├── public/                    # ไฟล์ static สำหรับ browser
+│   ├── css/
+│   ├── js/
+│   │   ├── api.js             # จุดเรียก API ร่วมกัน
+│   │   └── pages/             # JavaScript ของแต่ละหน้า
+│   └── images/
 ├── database/
-│   ├── schema.sql            # สร้างตารางและ constraints หลังตกลง ERD
-│   ├── seed.sql              # ข้อมูลตัวอย่าง
-│   ├── reports/              # SQL สำหรับรายงาน 3 ข้อ
-│   └── migrations/           # การเปลี่ยน schema หลังมีฐานข้อมูลร่วม
+│   ├── schema.sql             # สร้างตารางหลังตกลง ERD
+│   ├── seed.sql               # ข้อมูลตัวอย่าง
+│   ├── reports/               # SQL สำหรับรายงาน 3 ข้อ
+│   └── migrations/            # การเปลี่ยน schema หลังมีฐานข้อมูลร่วม
 ├── docs/
-│   ├── architecture.md       # วิธีวางไฟล์และขอบเขตแต่ละ module
-│   ├── api-contract.md       # ข้อตกลง API สำหรับ frontend/backend
-│   ├── requirements.md       # ขอบเขตและเรื่องที่ต้องตกลงก่อนเขียน logic
-│   ├── team-plan.md          # ข้อเสนอแบ่งงาน 3 คนและ milestones
-│   └── erd/                  # ERD และ data dictionary
+│   ├── architecture.md        # วิธีวางไฟล์ตาม MVC
+│   ├── api-contract.md        # ข้อตกลง API
+│   ├── requirements.md        # ขอบเขตและเรื่องที่ต้องตกลง
+│   ├── team-plan.md           # ข้อเสนอแบ่งงาน 3 คน
+│   └── erd/                   # ERD และ data dictionary
+├── tests/                     # ที่เก็บ integration tests เมื่อมี API
+├── .env.example               # ตัวอย่าง config ฝั่ง server
 └── .gitignore
 ```
 
@@ -55,11 +49,18 @@ JazzClub/
 
 ## การไหลของข้อมูล
 
-`หน้าเว็บ → HTTP/JSON → Express API → SQL → MySQL`
+ใช้ **MVC แบบแยกตามหน้าที่** โดย Model อยู่ใน `src/models/`, View อยู่ใน `src/views/` และ Controller อยู่ใน `src/controllers/`
 
-หน้าเว็บเรียก backend ผ่าน `frontend/assets/js/api.js` ส่วนการเชื่อม MySQL อยู่ใน `backend/src/config/db.js` เท่านั้น เมื่อตั้งค่าการเชื่อมจริงให้คัดลอก `backend/.env.example` เป็น `backend/.env` และกำหนดให้ backend โหลดไฟล์นี้
+เมื่อเริ่ม implementation เส้นทางการทำงานจะเป็น:
 
-เมื่อเริ่มเขียน backend ให้สร้าง `backend/package.json` พร้อม dependencies และคำสั่ง start หลังทีมตกลงเวอร์ชัน Node.js ที่ใช้ร่วมกัน
+- เปิดหน้าเว็บ: `Browser → Route → Controller → HTML View`
+- อ่าน/บันทึกข้อมูล: `JavaScript ในหน้าเว็บ → API Route → Controller → Model → MySQL` แล้วส่ง JSON กลับให้หน้าเว็บแสดงผล
+
+ยังใช้ HTML/JavaScript ตาม proposal โดย controller ส่งไฟล์ HTML และ API ส่ง JSON ส่วน Express เสิร์ฟ CSS/JS/รูปภาพจาก `public/` รายละเอียดอยู่ใน [Architecture](docs/architecture.md)
+
+หน้าเว็บเรียก API ผ่าน `public/js/api.js` ส่วนการเชื่อม MySQL อยู่ใน `src/config/db.js` เท่านั้น เมื่อตั้งค่าการเชื่อมจริงให้คัดลอก `.env.example` เป็น `.env` ที่ root และกำหนดให้ server โหลดไฟล์นี้
+
+เมื่อเริ่มเขียน server ให้สร้าง `package.json` ที่ root พร้อม dependencies และคำสั่ง start หลังทีมตกลงเวอร์ชัน Node.js ที่ใช้ร่วมกัน
 
 ## เริ่มทำงานร่วมกัน
 
