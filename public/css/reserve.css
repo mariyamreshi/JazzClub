@@ -13,6 +13,20 @@
     --grid-line: #E8E3D8;
     --border-light: #E0DDD5;
 }
+.ticket-notice {
+    background: rgba(255, 199, 0, 0.08);
+    border: 1px solid rgba(255, 199, 0, 0.3);
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 0.8rem;
+    color: #DDD;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.ticket-notice strong {
+    color: #FFC700;
+}
 
 * {
     box-sizing: border-box;

@@ -23,7 +23,7 @@ test('home route serves the HTML view', async () => {
   const response = await fetch(baseURL);
   assert.equal(response.status, 200);
   assert.match(response.headers.get('content-type'), /text\/html/);
-  assert.match(await response.text(), /Jazz Club Management System/);
+  assert.match(await response.text(), /Garnet's House/);
 });
 
 test('server health does not need a database connection', async () => {

@@ -12,9 +12,10 @@ async function initDatabase() {
 
     // แยก SQL statements (แต่ละ statement จบด้วย ;)
     const statements = schemaSQL
+      .replace(/^\s*--.*$/gm, '')
       .split(';')
       .map(s => s.trim())
-      .filter(s => s.length > 0 && !s.startsWith('--'));
+      .filter(s => s.length > 0);
 
     // รัน SQL ทีละ statement
     const connection = await db.getConnection();
