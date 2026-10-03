@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Menu</title>
+    <link rel="stylesheet" href="/css/menu.css">
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<div class="mobile-container">
+    <!-- Header Bar -->
+    <header class="app-header">
+        <button class="icon-btn" onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></button>
+        <div class="header-right">
+            <button class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="icon-btn"><i class="fa-regular fa-heart"></i></button>
+            <button class="icon-btn cart-btn">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="badge">2</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page Title -->
+    <h1 class="page-title">Our Menu</h1>
+
+    <!-- Category Filter Tabs -->
+    <div class="categories">
+        <button class="category-btn active">All Dishes</button>
+        <button class="category-btn">Starters</button>
+        <button class="category-btn">Main Course</button>
+        <button class="category-btn">Desserts</button>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="menu-content">
+
+        <!-- Chef's Recommendation Section -->
+        <section class="section">
+            <h2 class="section-title">Chef's Recommendation</h2>
+            <div class="featured-card">
+                <div class="featured-info">
+                    <h3 class="item-title">Ribeye Steak</h3>
+                    <p class="item-desc">Grilled to perfection with roasted vegetables</p>
+                    <span class="item-price">$28.00</span>
+                </div>
+                <div class="featured-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80" alt="Ribeye Steak">
+                    <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Popular Dishes Section -->
+        <section class="section">
+            <h2 class="section-title">Popular Dishes</h2>
+            <div class="dish-list">
+
+                <!-- Dish Item 1 -->
+                <div class="dish-card">
+                    <img src="https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=200&q=80" alt="Spaghetti Carbonara" class="dish-img">
+                    <div class="dish-info">
+                        <h3 class="item-title">Spaghetti Carbonara</h3>
+                        <p class="item-desc">Classic Italian pasta with creamy sauce</p>
+                        <div class="rating"><i class="fa-solid fa-star"></i> 4.6</div>
+                    </div>
+                    <div class="dish-action">
+                        <span class="item-price">$16.50</span>
+                        <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <!-- Dish Item 2 -->
+                <div class="dish-card">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=200&q=80" alt="Margherita Pizza" class="dish-img">
+                    <div class="dish-info">
+                        <h3 class="item-title">Margherita Pizza</h3>
+                        <p class="item-desc">Fresh tomatoes, mozzarella & basil</p>
+                        <div class="rating"><i class="fa-solid fa-star"></i> 4.7</div>
+                    </div>
+                    <div class="dish-action">
+                        <span class="item-price">$15.00</span>
+                        <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <!-- Dish Item 3 -->
+                <div class="dish-card">
+                    <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=200&q=80" alt="California Sushi Roll" class="dish-img">
+                    <div class="dish-info">
+                        <h3 class="item-title">California Sushi Roll</h3>
+                        <p class="item-desc">Crab, avocado, cucumber with masago</p>
+                        <div class="rating"><i class="fa-solid fa-star"></i> 4.8</div>
+                    </div>
+                    <div class="dish-action">
+                        <span class="item-price">$13.50</span>
+                        <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <!-- Dish Item 4 -->
+                <div class="dish-card">
+                    <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=200&q=80" alt="Chocolate Lava Cake" class="dish-img">
+                    <div class="dish-info">
+                        <h3 class="item-title">Chocolate Lava Cake</h3>
+                        <p class="item-desc">Warm chocolate cake with vanilla ice cream</p>
+                    </div>
+                    <div class="dish-action">
+                        <span class="item-price">$9.00</span>
+                        <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar (ตัด Favorite & Profile ออกแล้ว) -->
+    <nav class="bottom-nav">
+        <!-- กด Home แล้วกลับไป index.html -->
+        <a href="index.html" class="nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+
+        <a href="menu.html" class="nav-item active">
+            <i class="fa-solid fa-utensils"></i>
+            <span>Menu</span>
+        </a>
+
+        <a href="#orders" class="nav-item">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>Orders</span>
+        </a>
+    </nav>
+</div>
+
+</body>
+</html>
