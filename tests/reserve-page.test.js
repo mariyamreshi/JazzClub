@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const path = require('node:path');
 
 // Small DOM stand-in for exercising submission behavior without a browser dependency.
-function page(fetch, availability = async date => ({ ok: true, json: async () => ({ data: { date, booked_tables: [] } }) })) {
+function page(fetch, availability = async date => ({ ok: true, json: async () => ({ data: { date, booked_tables: [] } }) }), search = '', initialDate = '2026-12-09') {
   function element(value = '') {
     const classes = new Set();
     return {
@@ -18,7 +18,7 @@ function page(fetch, availability = async date => ({ ok: true, json: async () =>
   const ids = Object.fromEntries([
     'reservationForm', 'reservationError', 'confirmationCard', 'selectedTableTitle', 'selectedTableSub',
     'guestName', 'phoneNumber', 'resDate', 'resTime', 'confirmName', 'confirmDate', 'confirmTime', 'confirmTable',
-    'availabilityStatus', 'retryAvailability',
+    'availabilityStatus', 'retryAvailability', 'showStatus', 'retryShow', 'showArtist', 'showGenre', 'showMeta', 'confirmShowArtist', 'confirmShowGenre',
   ].map(id => [id, element()]));
   const button = element();
   button.textContent = 'Confirm reservation request';
@@ -27,18 +27,21 @@ function page(fetch, availability = async date => ({ ok: true, json: async () =>
   ids.confirmationCard.classList.add('hidden');
   ids.guestName.value = 'Example Guest';
   ids.phoneNumber.value = '0812345678';
-  ids.resDate.value = '2026-12-09';
+  ids.resDate.value = initialDate;
   ids.resTime.value = '20:30';
+  ids.resTime.options = ['20:00', '20:30', '21:00'].map(value => ({ value }));
+  ids.resTime.appendChild = option => ids.resTime.options.push(option);
   const table = element();
   table.dataset = { code: 'F01', zone: 'Front Stage', seats: '8' };
   let ready;
   const document = {
+    createElement: () => element(),
     getElementById: id => ids[id],
     querySelector: () => table.classList.contains('selected') ? table : null,
     querySelectorAll: () => [table],
     addEventListener: (event, handler) => { ready = handler(); },
   };
-  const context = vm.createContext({ document, fetch: (url, options) => url.startsWith('/api/reservations/availability')
+  const context = vm.createContext({ document, window: { location: { search } }, URLSearchParams, fetch: (url, options) => url.startsWith('/api/reservations/availability')
     ? availability(new URL(url, 'http://localhost').searchParams.get('date')) : fetch(url, options) });
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../public/js/pages/reserve.js'), 'utf8'), context);
   return { ids, button, table, ready, close: () => context.closeConfirmation(), submit: () => ids.reservationForm.handlers.submit({ preventDefault() {} }) };
@@ -183,4 +186,103 @@ test('successful booking and closing the pass keep the chosen date and reload it
   assert.equal(ui.ids.resDate.value, '2026-10-16');
   assert.equal(ui.table.classList.contains('booked'), true);
   assert.equal(ui.ids.confirmationCard.classList.contains('hidden'), true);
+});
+
+const selectedShow = { show_id: 2, show_date: '2026-10-17', artist: 'Midnight Blue Trio', genre: 'Bebop & Standards', start_time: '22:15' };
+
+test('selected SQL show fills card, date, new start time option and confirmation before loading tables', async () => {
+  const dates = [];
+  let submitted;
+  const ui = page(async (url, options) => {
+    if (url === '/api/shows/2') return { ok: true, json: async () => ({ data: selectedShow }) };
+    assert.equal(url, '/api/reservations');
+    submitted = JSON.parse(options.body);
+    return { ok: true, json: async () => ({ data: { id: 99, ...submitted } }) };
+  }, async date => {
+    dates.push(date);
+    return availabilityResult(date, []);
+  }, '?show_id=2');
+  await ui.ready;
+  assert.deepEqual(dates, ['2026-10-17']);
+  assert.equal(ui.ids.resDate.value, '2026-10-17');
+  assert.equal(ui.ids.resDate.readOnly, true);
+  assert.equal(ui.ids.resTime.value, '22:15');
+  assert.ok(ui.ids.resTime.options.some(option => option.value === '22:15'));
+  assert.equal(ui.ids.showArtist.textContent, 'Midnight Blue Trio');
+  assert.equal(ui.ids.showGenre.textContent, 'Bebop & Standards');
+  assert.equal(ui.ids.showMeta.textContent, '17 Oct 2026 · 10:15 PM');
+  ui.table.handlers.click();
+  await ui.submit();
+  assert.equal(submitted.date, selectedShow.show_date);
+  assert.equal(submitted.time, selectedShow.start_time);
+  assert.equal(ui.ids.confirmShowArtist.textContent, selectedShow.artist);
+  assert.equal(ui.ids.confirmShowGenre.textContent, selectedShow.genre);
+  await ui.close();
+  assert.equal(ui.ids.resDate.value, selectedShow.show_date);
+  assert.equal(ui.ids.resTime.value, selectedShow.start_time);
+  assert.equal(ui.ids.resDate.readOnly, true);
+});
+
+test('the form remains blocked while the selected show is loading', async () => {
+  let resolveShow;
+  let requests = 0;
+  const ui = page(async () => {
+    requests++;
+    return new Promise(resolve => { resolveShow = resolve; });
+  }, undefined, '?show_id=2');
+  assert.equal(ui.button.disabled, true);
+  assert.equal(ui.ids.resDate.value, '');
+  ui.table.handlers.click();
+  await ui.submit();
+  assert.equal(requests, 1);
+  assert.equal(ui.table.classList.contains('selected'), false);
+  resolveShow({ ok: true, json: async () => ({ data: selectedShow }) });
+  await ui.ready;
+  assert.equal(ui.button.disabled, false);
+});
+
+test('missing, invalid and failed show details never fall back to the default booking date', async () => {
+  for (const [search, response] of [
+    ['?show_id=999', { ok: false, status: 404 }],
+    ['?show_id=2', { ok: false, status: 500 }],
+    ['?show_id=', null],
+    ['?show_id=abc', null],
+  ]) {
+    let bookings = 0;
+    const ui = page(async url => {
+      if (url === '/api/reservations') bookings++;
+      assert.ok(response, 'Invalid IDs should not make a request');
+      return response;
+    }, async () => assert.fail('No availability lookup before a valid show is loaded'), search);
+    await ui.ready;
+    assert.equal(ui.button.disabled, true);
+    assert.equal(ui.ids.resDate.value, '');
+    assert.equal(ui.ids.showStatus.hidden, false);
+    assert.equal(ui.ids.showArtist.textContent, 'Show unavailable');
+    ui.table.handlers.click();
+    await ui.submit();
+    assert.equal(bookings, 0);
+  }
+});
+
+test('retry loads the selected show after a network failure', async () => {
+  let attempt = 0;
+  const ui = page(async () => {
+    if (++attempt === 1) throw new Error('offline');
+    return { ok: true, json: async () => ({ data: selectedShow }) };
+  }, undefined, '?show_id=2');
+  await ui.ready;
+  assert.equal(ui.ids.retryShow.hidden, false);
+  await ui.ids.retryShow.handlers.click();
+  assert.equal(ui.ids.resDate.value, selectedShow.show_date);
+  assert.equal(ui.ids.showStatus.hidden, true);
+  assert.equal(ui.button.disabled, false);
+});
+
+test('opening the reservation page directly waits for a date instead of a hardcoded default', async () => {
+  const ui = page(async () => assert.fail('No show was selected'), async () => assert.fail('No date was chosen'), '', '');
+  await ui.ready;
+  assert.equal(ui.ids.resDate.value, '');
+  assert.equal(ui.button.disabled, true);
+  assert.match(ui.ids.availabilityStatus.textContent, /choose a date/);
 });

@@ -12,18 +12,24 @@ async function seedDatabase() {
 
     // แยก SQL statements
     const statements = seedSQL
+      .replace(/^\s*--.*$/gm, '')
       .split(';')
       .map(s => s.trim())
-      .filter(s => s.length > 0 && !s.startsWith('--'));
+      .filter(s => s.length > 0);
 
     // รัน SQL ทีละ statement
     const connection = await db.getConnection();
     try {
+      await connection.beginTransaction();
       for (const statement of statements) {
         console.log(`  ✓ Executing: ${statement.substring(0, 50)}...`);
         await connection.query(statement);
       }
+      await connection.commit();
       console.log('✅ Database seeded successfully!');
+    } catch (error) {
+      await connection.rollback();
+      throw error;
     } finally {
       connection.release();
     }
