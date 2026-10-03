@@ -19,4 +19,11 @@ app.use(routes);
 app.use(notFound);
 app.use(errorHandler);
 
+app.use(express.static('public'));
+
+// Optional explicit route for admin overview
+app.get('/admin', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/admin/admin.html'));
+});
+
 module.exports = app;
