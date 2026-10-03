@@ -4,7 +4,7 @@
 
 ## สถานะ
 
-ตอนนี้เปิดหน้าแรกผ่าน Express ได้ มี API ตรวจสถานะ server และโค้ด connection pool สำหรับ MySQL พร้อมคำสั่งทดสอบ `SELECT 1` ส่วน CRUD และตารางธุรกิจยังไม่ได้พัฒนา การเชื่อม MySQL จริงต้องมี server, database และบัญชีผู้ใช้ตาม `.env`
+ตอนนี้เปิดหน้าแรกและหน้าจองผ่าน Express ได้ มี API ตรวจสถานะ server และ MySQL รวมถึง `POST /api/reservations` สำหรับบันทึกการจอง 6 ช่อง: guest_name, phone_number, zone, table_number, date, time พร้อมรหัส id หน้าเว็บแสดงใบยืนยันหลังบันทึกสำเร็จ การตรวจโต๊ะว่าง/จองซ้อนและฟีเจอร์ธุรกิจอื่นยังไม่ได้พัฒนา
 
 ใช้ stack ตาม proposal: **HTML/CSS/JavaScript + Node.js/Express + MySQL** และเริ่มพัฒนาบน localhost โดยไม่มี login/roles หรือแอปมือถือ
 
@@ -101,13 +101,23 @@ npm run db:check
 - `ER_ACCESS_DENIED_ERROR`: บัญชี รหัสผ่าน หรือสิทธิ์ไม่ตรง
 - `ER_BAD_DB_ERROR`: ยังไม่มีฐานข้อมูลชื่อตาม `DB_NAME`
 
-ไฟล์ `database/schema.sql` และ `seed.sql` ยังเป็น placeholder ให้ตกลง ERD ก่อนเติมตารางจริง
+สร้างตารางการจองด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้างตาราง `reservations` ถ้ายังไม่มี โดยไม่ลบข้อมูลเดิม ส่วน `seed.sql` ยังไม่มีข้อมูลตัวอย่าง
+
+เปิด `/reserve.html` เลือกโต๊ะ กรอกชื่อ เบอร์โทร วันที่และเวลา แล้วกดยืนยัน ข้อมูลจะถูกบันทึกลง MySQL ตรวจข้อมูลใน SQL editor ได้ด้วย:
+
+```sql
+SELECT id, guest_name, phone_number, zone, table_number, `date`, `time`
+FROM reservations
+ORDER BY id DESC;
+```
 
 ## Endpoints ที่ใช้งานได้
 
 | Method | URL | ผลลัพธ์ |
 | --- | --- | --- |
 | GET | `/` | หน้าแรก HTML |
+| GET | `/reserve.html` | หน้าจองโต๊ะ |
+| POST | `/api/reservations` | บันทึกการจองลง MySQL และตอบ HTTP 201 |
 | GET | `/api/health` | HTTP 200 เมื่อ Express ทำงาน ไม่ตรวจ MySQL |
 | GET | `/api/health/db` | HTTP 200 เมื่อ `SELECT 1` สำเร็จ หรือ HTTP 503 เมื่อฐานข้อมูลไม่พร้อม |
 

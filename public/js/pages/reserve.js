@@ -1,115 +1,88 @@
-let selectedTableId = null;
+let isSubmitting = false;
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Handle table selection
     const tables = document.querySelectorAll('.table-card, .node-item');
-
     tables.forEach(table => {
         table.addEventListener('click', () => {
-            if (table.classList.contains('booked')) return;
+            if (isSubmitting || table.classList.contains('booked')) return;
 
-            // Deselect all
             tables.forEach(t => t.classList.remove('selected'));
             table.classList.add('selected');
-
-            selectedTableId = table.dataset.id || table.dataset.code;
-            const tableCode = table.dataset.code || selectedTableId;
-            const seats = table.dataset.seats || '1';
-            const zone = table.dataset.zone || 'Main floor';
-
-            // Update selection banner text
-            const titleEl = document.getElementById('selectedTableTitle');
-            const subEl = document.getElementById('selectedTableSub');
-
-            if (titleEl) titleEl.textContent = `Table ${tableCode}`;
-            if (subEl) subEl.textContent = `${zone} · ${seats} seats`;
+            document.getElementById('selectedTableTitle').textContent = `Table ${table.dataset.code}`;
+            document.getElementById('selectedTableSub').textContent = `${table.dataset.zone} · ${table.dataset.seats} seats`;
         });
     });
 
-    // 2. Handle Form Submission
-    const reservationForm = document.getElementById('reservationForm');
-    if (reservationForm) {
-        reservationForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+    const form = document.getElementById('reservationForm');
+    const errorMessage = document.getElementById('reservationError');
+    const confirmation = document.getElementById('confirmationCard');
+    const submitButton = form.querySelector('button[type="submit"]');
 
-            const selectedElement = document.querySelector('.table-card.selected, .node-item.selected');
-            if (!selectedElement) {
-                alert('Please pick a table on the floor plan.');
-                return;
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (isSubmitting || !confirmation.classList.contains('hidden')) return;
+
+        errorMessage.hidden = true;
+        errorMessage.textContent = '';
+        const selected = document.querySelector('.table-card.selected, .node-item.selected');
+        if (!selected) {
+            errorMessage.textContent = 'Please pick a table on the floor plan.';
+            errorMessage.hidden = false;
+            return;
+        }
+
+        const payload = {
+            guest_name: document.getElementById('guestName').value.trim(),
+            phone_number: document.getElementById('phoneNumber').value.trim(),
+            zone: selected.dataset.zone,
+            table_number: selected.dataset.code,
+            date: document.getElementById('resDate').value,
+            time: document.getElementById('resTime').value,
+        };
+
+        isSubmitting = true;
+        submitButton.disabled = true;
+        const originalLabel = submitButton.textContent;
+        submitButton.textContent = 'Saving reservation...';
+
+        try {
+            const response = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.error?.message || 'Unable to save your reservation. Please try again.');
             }
+            const saved = result.data;
+            if (!saved?.id) throw new Error('The server did not confirm the reservation.');
 
-            const nameInput = document.getElementById('guestName');
-            const phoneInput = document.getElementById('guestPhone') || document.getElementById('guestEmail');
-            const dateInput = document.getElementById('resDate');
-            const timeInput = document.getElementById('resTime');
-
-            const name = nameInput ? nameInput.value : '';
-            const phone = phoneInput ? phoneInput.value : '';
-            const date = dateInput ? dateInput.value : '2026-12-09';
-            const time = timeInput ? timeInput.value : '8:30 PM';
-            const tableCode = selectedElement.dataset.code || 'B03';
-            const zone = selectedElement.dataset.zone || 'Main floor';
-
-            try {
-                await fetch('/api/reservations', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name,
-                        phone,
-                        tableId: selectedTableId,
-                        date,
-                        time
-                    })
-                });
-            } catch (err) {
-                console.log('Preview mode active');
-            }
-
-            // Populate confirmation modal fields
-            const confirmName = document.getElementById('confirmName');
-            const confirmDate = document.getElementById('confirmDate');
-            const confirmTime = document.getElementById('confirmTime');
-            const confirmTable = document.getElementById('confirmTable');
-            const confirmationModal = document.getElementById('confirmationCard');
-
-            if (confirmName) confirmName.textContent = name;
-            if (confirmDate) confirmDate.textContent = date;
-            if (confirmTime) confirmTime.textContent = time;
-            if (confirmTable) confirmTable.textContent = `${tableCode} (${zone})`;
-
-            // Show screenshot pass modal
-            if (confirmationModal) {
-                confirmationModal.classList.remove('hidden');
-            }
-        });
-    }
+            document.getElementById('confirmName').textContent = saved.guest_name;
+            document.getElementById('confirmDate').textContent = saved.date;
+            document.getElementById('confirmTime').textContent = saved.time;
+            document.getElementById('confirmTable').textContent = `${saved.table_number} (${saved.zone})`;
+            confirmation.classList.remove('hidden');
+        } catch (error) {
+            errorMessage.textContent = error instanceof TypeError || error instanceof SyntaxError
+                ? 'Unable to connect to the server. Please check your connection and try again.'
+                : error.message;
+            errorMessage.hidden = false;
+        } finally {
+            isSubmitting = false;
+            submitButton.disabled = false;
+            submitButton.textContent = originalLabel;
+        }
+    });
 });
 
-// Close function: hides pass modal & clears form/selection state
 function closeConfirmation() {
-    const confirmationModal = document.getElementById('confirmationCard');
-    if (confirmationModal) {
-        confirmationModal.classList.add('hidden');
-    }
-
-    // 1. Reset input fields inside the form
-    const form = document.getElementById('reservationForm');
-    if (form) {
-        form.reset();
-    }
-
-    // 2. Clear selected table highlight
-    document.querySelectorAll('.table-card.selected, .node-item.selected').forEach(el => {
-        el.classList.remove('selected');
+    document.getElementById('confirmationCard').classList.add('hidden');
+    document.getElementById('reservationForm').reset();
+    document.getElementById('reservationError').hidden = true;
+    document.querySelectorAll('.table-card.selected, .node-item.selected').forEach(table => {
+        table.classList.remove('selected');
     });
-
-    // 3. Reset table selection state & display text
-    selectedTableId = null;
-
-    const titleEl = document.getElementById('selectedTableTitle');
-    const subEl = document.getElementById('selectedTableSub');
-
-    if (titleEl) titleEl.textContent = 'Select a Table';
-    if (subEl) subEl.textContent = 'Click on any available table on the floor plan above';
+    document.getElementById('selectedTableTitle').textContent = 'Select a Table';
+    document.getElementById('selectedTableSub').textContent = 'Click on any available table on the floor plan above';
 }

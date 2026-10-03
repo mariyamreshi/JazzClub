@@ -51,7 +51,7 @@
                 <label for="resTime">Arrival time</label>
                 <select id="resTime" required>
                     <option value="20:00">8:00 PM</option>
-                    <option value="20:10">8:30 PM</option>
+                    <option value="20:30">8:30 PM</option>
                     <option value="21:00" selected>9:00 PM</option>
                 </select>
             </div>
@@ -150,8 +150,8 @@
             <div class="selected-left">
                 <span class="sofa-icon">🛋️</span>
                 <div>
-                    <div class="table-title" id="selectedTableTitle">Table T08</div>
-                    <div class="table-sub" id="selectedTableSub">Main floor · Clear stage view</div>
+                    <div class="table-title" id="selectedTableTitle">Select a Table</div>
+                    <div class="table-sub" id="selectedTableSub">Click on any available table on the floor plan above</div>
                 </div>
             </div>
         </div>
@@ -159,14 +159,15 @@
         <!-- Guest Fields -->
         <div class="form-group full-width">
             <label for="guestName">Guest name</label>
-            <input type="text" id="guestName" placeholder="Full name" required>
+            <input type="text" id="guestName" placeholder="Full name" maxlength="100" autocomplete="name" required>
         </div>
 
         <div class="form-group full-width">
             <label for="phoneNumber">Phone Number</label>
-            <input type="number" id="phoneNumber" placeholder="Confirmation Number" required>
+            <input type="tel" id="phoneNumber" placeholder="Phone number" maxlength="25" autocomplete="tel" required>
         </div>
 
+        <p id="reservationError" role="alert" hidden></p>
         <button type="submit" class="btn-confirm">Confirm reservation request</button>
     </form>
 </div>

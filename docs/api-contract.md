@@ -1,5 +1,35 @@
 # API contract - ร่างสำหรับทีม
 
+## API การจองที่ใช้งานได้
+
+`POST /api/reservations` รับ JSON จากหน้า `/reserve.html` และบันทึกลงตาราง `reservations`:
+
+```json
+{
+  "guest_name": "Example Guest",
+  "phone_number": "0812345678",
+  "zone": "Front Stage",
+  "table_number": "F01",
+  "date": "2026-12-09",
+  "time": "20:30"
+}
+```
+
+ทุกช่องจำเป็นต้องเป็น string ที่ไม่ว่าง เบอร์โทรเก็บเป็นข้อความเพื่อรักษาเลข 0 นำหน้า
+ชื่อยาวไม่เกิน 100 ตัวอักษร เบอร์โทรไม่เกิน 25 ตัวอักษร มีตัวเลข 7–15 หลัก
+รองรับเครื่องหมาย + นำหน้า เว้นวรรค วงเล็บ และขีดในเบอร์โทร
+วันที่ต้องมีจริงในรูปแบบ `YYYY-MM-DD` (ปี 1000–9999) และเวลาใช้ `HH:mm` แบบ 24 ชั่วโมง ตามเวลาท้องถิ่นของร้าน (Asia/Bangkok)
+โซนและรหัสโต๊ะต้องตรงกับผังหน้าเว็บ: Front Stage (F01–F04), Main Floor (M01–M03), VIP Lounge (VIP-1–VIP-2), Bar Counter (B01–B04)
+
+- สำเร็จ: HTTP 201, `{"data":{"id":1,...}}` โดย data มีข้อมูลทั้ง 6 ช่องที่บันทึกแล้ว
+- ข้อมูลไม่ถูกต้อง: HTTP 400, `{"error":{"code":"VALIDATION_ERROR","message":"..."}}`
+- บันทึกไม่สำเร็จ: HTTP 500, `{"error":{"code":"INTERNAL_ERROR","message":"An unexpected error occurred."}}`
+
+หน้าเว็บแสดงใบยืนยันหลังได้รับผลสำเร็จเท่านั้น และปิดปุ่มระหว่างบันทึกเพื่อกันการกดซ้ำ
+เวอร์ชันนี้บันทึกข้อมูลการจอง ยังไม่ตรวจโต๊ะว่างหรือช่วงเวลาจองซ้อน และยังไม่มี API แก้ไข/ยกเลิก
+
+## API ส่วนอื่น
+
 Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"server":"ok"}}` และ `GET /api/health/db` ตอบ `{"data":{"database":"ok"}}` เมื่อเชื่อม MySQL ได้ หรือ HTTP 503 พร้อม error code `DATABASE_UNAVAILABLE` เมื่อไม่พร้อม
 
 ตารางด้านล่างยังเป็นรายการกลุ่ม API สำหรับงานธุรกิจที่ต้องพัฒนาต่อ ต้องเติม request/response ก่อน implementation
