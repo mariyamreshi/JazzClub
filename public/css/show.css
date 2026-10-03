@@ -177,3 +177,22 @@ body {
         margin-left: 0;
     }
 }
+.shows-status {
+    margin-bottom: 20px;
+    color: #666056;
+}
+
+.retry-shows {
+    margin-bottom: 20px;
+    padding: 10px 18px;
+    border: 1px solid #d3c8bc;
+    border-radius: 4px;
+    background: #fff;
+    color: #2b2b2b;
+    font: inherit;
+    cursor: pointer;
+}
+
+.arrow-btn {
+    flex-shrink: 0;
+}

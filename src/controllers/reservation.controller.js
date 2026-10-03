@@ -9,6 +9,7 @@ const tablesByZone = {
 };
 
 function validDate(value) {
+  if (typeof value !== 'string') return false;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || Number(value.slice(0, 4)) < 1000) return false;
   const parsed = new Date(`${value}T00:00:00Z`);
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
@@ -45,8 +46,28 @@ async function createReservation(req, res, next) {
     const saved = await reservations.create(reservation);
     res.status(201).json({ data: saved });
   } catch (error) {
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({
+        error: { code: 'TABLE_ALREADY_BOOKED', message: 'This table is already booked for the selected date. Please choose another table.' },
+      });
+    }
     next(error);
   }
 }
 
-module.exports = { createReservation };
+async function getAvailability(req, res, next) {
+  const { date } = req.query;
+  if (!validDate(date)) {
+    return res.status(400).json({
+      error: { code: 'VALIDATION_ERROR', message: 'Please enter a valid date in YYYY-MM-DD format.' },
+    });
+  }
+  res.set('Cache-Control', 'no-store');
+  try {
+    res.json({ data: { date, booked_tables: await reservations.bookedTables(date) } });
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { createReservation, getAvailability };
