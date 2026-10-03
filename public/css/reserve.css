@@ -8,6 +8,8 @@
     --maroon: #7A2E3B;
     --maroon-hover: #5A202A;
     --stage-green: #23473B;
+
+
     --grid-line: #E8E3D8;
     --border-light: #E0DDD5;
 }
@@ -333,4 +335,237 @@ h2 { font-size: 1.1rem; color: #333; }
 
 .btn-confirm:hover {
     background-color: var(--maroon-hover);
+}
+
+/* Zone Containers */
+.zone-block {
+    border: 1px dashed #D6CFBF;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+.zone-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.vip-zone {
+    border: 1.5px solid var(--gold);
+    background-color: #FFFDF7;
+}
+
+.vip-label {
+    color: var(--gold);
+}
+
+/* Grid Layouts */
+.grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    justify-items: center;
+}
+
+.grid-3col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    justify-items: center;
+}
+
+.grid-2col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    justify-items: center;
+}
+
+/* VIP Circle Styling */
+.vip-circle {
+    border-color: var(--gold) !important;
+    width: 85px !important;
+    height: 85px !important;
+    background: #FFF9E6 !important;
+}
+
+/* Bar Zone Styling */
+.bar-container {
+    background-color: var(--maroon);
+    color: #FFF;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+}
+
+.bar-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.bar-spots {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.bar-spot {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    padding: 8px;
+    text-align: center;
+    color: #FFF;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bar-spot.selected {
+    background-color: #E3CA7A;
+    color: #000;
+    border-color: var(--gold);
+}
+
+.bar-spot .t-seats {
+    color: #DDD;
+}
+
+.bar-spot.selected .t-seats {
+    color: #555;
+}
+
+/* Confirmation Receipt Overlay */
+.confirmation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.confirmation-overlay.hidden {
+    display: none;
+}
+
+/* Screenshot Ticket Card */
+.ticket-card {
+    background: #121214;
+    border: 2px solid #FFC700;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 440px;
+    color: #FFF;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+}
+
+.ticket-header {
+    background: #FFC700;
+    color: #000;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ticket-brand {
+    font-family: Georgia, serif;
+    font-weight: 800;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.ticket-status {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    background: #000;
+    color: #FFC700;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.ticket-body {
+    padding: 24px 20px;
+}
+
+.ticket-show {
+    border-bottom: 1px dashed #333;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+}
+
+.ticket-show h2 {
+    color: #FFF;
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+    margin-top: 4px;
+}
+
+.ticket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.ticket-field label {
+    color: #888;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.field-value {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #FFC700;
+}
+
+.ticket-notice {
+    background: rgba(255, 199, 0, 0.1);
+    border: 1px solid rgba(255, 199, 0, 0.3);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 0.8rem;
+    color: #DDD;
+    text-align: center;
+}
+
+.ticket-footer {
+    padding: 0 20px 20px;
+}
+
+.btn-close-ticket {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #555;
+    color: #CCC;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-close-ticket:hover {
+    background: #222;
+    color: #FFF;
 }
