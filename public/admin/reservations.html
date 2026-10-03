@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Lark Jazz Club - Reservations</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+
+<div class="admin-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo-diamond">BL</div>
+            <div class="brand-text">
+                <h1>Blue Lark</h1>
+                <span>JAZZ CLUB</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">CLUB MANAGEMENT</div>
+            <a href="/admin/overview.html" class="nav-item">
+                <span class="nav-icon">📊</span> Overview
+            </a>
+            <a href="/admin/reservations.html" class="nav-item active">
+                <span class="nav-icon">📅</span> Reservations
+                <span class="badge">12</span>
+            </a>
+            <a href="/admin/shows.html" class="nav-item">
+                <span class="nav-icon">🎷</span> Shows & artists
+            </a>
+            <a href="/admin/tables.html" class="nav-item">
+                <span class="nav-icon">🛋️</span> Tables & floor
+            </a>
+            <a href="/admin/orders.html" class="nav-item">
+                <span class="nav-icon">📋</span> Orders
+            </a>
+            <a href="/admin/inventory.html" class="nav-item">
+                <span class="nav-icon">📦</span> Inventory
+                <span class="badge warning">3</span>
+            </a>
+            <a href="/admin/team.html" class="nav-item">
+                <span class="nav-icon">👥</span> Team & shifts
+            </a>
+
+            <div class="nav-section-label">REPORTS</div>
+            <a href="/admin/performance.html" class="nav-item">
+                <span class="nav-icon">📈</span> Performance
+            </a>
+        </nav>
+
+        <div class="sidebar-footer-widgets">
+            <div class="user-profile-bar">
+                <div class="avatar-circle">MR</div>
+                <div class="profile-info">
+                    <div class="profile-name">Mariyam Reshi</div>
+                    <div class="profile-role">Club Manager</div>
+                </div>
+                <div class="profile-menu-dots">•••</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="admin-main">
+
+        <!-- TOP NAVIGATION BAR -->
+        <header class="admin-header-simple">
+            <a href="/" class="btn-guest-site">Homepage</a>
+        </header>
+
+        <!-- DASHBOARD BODY CONTAINER -->
+        <div class="dashboard-content">
+
+            <!-- Reservations Header Banner -->
+            <div class="welcome-banner">
+                <div>
+                    <h1 class="banner-greeting">Reservations Management</h1>
+                    <p class="banner-tagline">View, filter, and manage all table bookings.</p>
+                </div>
+            </div>
+
+            <!-- FULL RESERVATION TABLE PANEL -->
+            <div class="panel-card guest-list-panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-sub">ALL BOOKINGS</div>
+                        <h2 class="panel-title">Master Guest List</h2>
+                    </div>
+                </div>
+
+                <!-- Table Filter Controls -->
+                <div class="table-controls">
+                    <div class="table-search">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="guestSearchInput" placeholder="Find a guest">
+                    </div>
+                    <div class="filter-tabs">
+                        <button class="tab-btn active" data-filter="all">All</button>
+                        <button class="tab-btn" data-filter="confirmed">Confirmed</button>
+                        <button class="tab-btn" data-filter="seated">Seated</button>
+                        <button class="tab-btn" data-filter="pending">Pending</button>
+                    </div>
+                </div>
+
+                <!-- Table List -->
+                <div class="data-table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>GUEST</th>
+                            <th>TIME</th>
+                            <th>PARTY</th>
+                            <th>TABLE</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="reservationTableBody">
+                        <tr>
+                            <td>
+                                <div class="guest-cell">
+                                    <div class="avatar-circle gold-bg">MC</div>
+                                    <div>
+                                        <div class="guest-name">Maya Chen</div>
+                                        <div class="res-id">R-1048</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>7:00 PM</td>
+                            <td>4 guests</td>
+                            <td><strong class="table-badge">T12</strong></td>
+                            <td class="cell-actions">•••</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="guest-cell">
+                                    <div class="avatar-circle green-bg">NP</div>
+                                    <div>
+                                        <div class="guest-name">Niran Patel</div>
+                                        <div class="res-id">R-1047</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>7:30 PM</td>
+                            <td>2 guests</td>
+                            <td><strong class="table-badge">B04</strong></td>
+                            <td class="cell-actions">•••</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="guest-cell">
+                                    <div class="avatar-circle pink-bg">ER</div>
+                                    <div>
+                                        <div class="guest-name">Elena Rossi</div>
+                                        <div class="res-id">R-1046</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>8:00 PM</td>
+                            <td>6 guests</td>
+                            <td><strong class="table-badge">TO8</strong></td>
+                            <td class="cell-actions">•••</td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="guest-cell">
+                                    <div class="avatar-circle blue-bg">JW</div>
+                                    <div>
+                                        <div class="guest-name">James Wilson</div>
+                                        <div class="res-id">R-1045</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>8:30 PM</td>
+                            <td>3 guests</td>
+                            <td><span class="unassigned-dash">—</span></td>
+                            <td><span class="status-pill pending">Pending</span></td>
+                            <td class="cell-actions">•••</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+</div>
+
+<script src="/js/pages/admin.js"></script>
+</body>
+</html>

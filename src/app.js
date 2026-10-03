@@ -22,8 +22,8 @@ app.use(errorHandler);
 app.use(express.static('public'));
 
 // Optional explicit route for admin overview
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/admin/admin.html'));
+app.get('/overview', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/admin/overview.html'));
 });
 
 module.exports = app;

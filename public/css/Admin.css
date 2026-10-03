@@ -584,61 +584,23 @@ body.admin-body {
     text-align: right;
 }
 
-/* FEATURED SHOW CARD */
-.featured-show-card {
-    background: #112820;
-    color: #FFF;
-    border-radius: 12px;
-    padding: 24px;
-}
 
-.featured-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 24px;
-}
 
-.tag-featured {
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: #8C9992;
-}
-
-.tag-tonight {
-    font-size: 0.65rem;
-    font-weight: 800;
-    background: rgba(255, 255, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 10px;
-}
-
-.show-time-text {
-    font-size: 0.8rem;
-    color: #C5A059;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.show-artist-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    line-height: 1.1;
-    margin-bottom: 12px;
-}
-
-.show-description {
-    font-size: 0.85rem;
-    color: #A3B1A9;
-    line-height: 1.4;
-    margin-bottom: 24px;
-}
-
-.show-metrics {
-    display: flex;
+/* 2 Compact Cards Side-By-Side */
+.kpi-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 16px;
-    font-size: 0.85rem;
-    color: #DDD;
+    max-width: 650px; /* Constrains width so they stay compact & square */
+}
+
+.kpi-card {
+    background: var(--panel-bg, #FFFFFF);
+    border: 1px solid var(--border-light, #EBE8E1);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px; /* Gives nice proportion */
 }
