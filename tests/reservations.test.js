@@ -163,7 +163,7 @@ test('admin reservation list reports database failures without exposing details'
 });
 
 test('admin reservations page and its assets are served', async () => {
-  for (const path of ['/admin/overview.html', '/admin/reservations.html', '/css/Admin.css', '/js/pages/admin-reservations.js']) {
+  for (const path of ['/admin/overview.html', '/admin/reservations.html', '/css/admin.css', '/js/pages/admin-reservations.js']) {
     const response = await fetch(`${baseURL}${path}`);
     assert.equal(response.status, 200, path);
     if (path.endsWith('.html')) {
