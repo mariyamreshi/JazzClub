@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garnet's House - Menu Page</title>
+    <link rel="stylesheet" href="/css/menu.css">
+</head>
+<body>
+
+<!-- Navigation Bar อยู่ด้านนอก -->
+<nav class="navbar">
+    <div class="brand-text">
+        <span class="brand-sub">Garnet's House</span>
+    </div>
+
+    <ul class="nav-links">
+        <li><a href="/show.html">Live shows</a></li>
+        <li><a href="/index.html">The club</a></li>
+        <li><a href="/menu.html">Menu</a></li>
+    </ul>
+
+    <div class="nav-right">
+        <a href="/reserve.html" class="btn-reserve-nav">Reserve a table</a>
+    </div>
+</nav>
+
+<!-- ส่วนเนื้อหาเมนู -->
+<main class="menu-section">
+    <!-- Header Section -->
+    <div class="menu-header">
+        <div class="header-left">
+            <h1 class="main-title">
+                Good food,<br>
+                <span class="highlight-text">made simple.</span>
+            </h1>
+        </div>
+
+        <div class="header-right">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search Menu.">
+                <button id="searchBtn">SEARCH</button>
+            </div>
+        </div>
+    </div>
+    <!-- Filter & Counter -->
+    <div class="filter-container">
+        <div class="category-buttons">
+            <button class="filter-btn active" data-category="all">Recommended</button>
+            <button class="filter-btn" data-category="breakfast">Seasonal</button>
+            <button class="filter-btn" data-category="mains">Cocktail</button>
+            <button class="filter-btn" data-category="pasta">Liquor</button>
+            <button class="filter-btn" data-category="salads">Dessert</button>
+            <button class="filter-btn" data-category="desserts">Appetizer</button>
+        </div>
+    </div>
+
+    <!-- Dish Cards Grid -->
+    <div class="dishes-grid" id="dishesGrid">
+        <!-- Dish items will be rendered by JavaScript -->
+    </div>
+</main>
+
+</body>
+</html>
