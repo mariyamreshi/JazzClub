@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blue Lark Jazz Club - Shows & Artists</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+
+<div class="admin-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-logo-diamond">BL</div>
+            <div class="brand-text">
+                <h1>Blue Lark</h1>
+                <span>JAZZ CLUB</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">CLUB MANAGEMENT</div>
+            <a href="/admin/overview.html" class="nav-item">
+                <span class="nav-icon">📊</span> Overview
+            </a>
+            <a href="/admin/reservations.html" class="nav-item">
+                <span class="nav-icon">📅</span> Reservations
+                <span class="badge">12</span>
+            </a>
+            <a href="/admin/shows.html" class="nav-item active">
+                <span class="nav-icon">🎷</span> Shows & artists
+            </a>
+            <a href="/admin/tables.html" class="nav-item">
+                <span class="nav-icon">🛋️</span> Tables & floor
+            </a>
+            <a href="/admin/orders.html" class="nav-item">
+                <span class="nav-icon">📋</span> Orders
+            </a>
+            <a href="/admin/inventory.html" class="nav-item">
+                <span class="nav-icon">📦</span> Inventory
+                <span class="badge warning">3</span>
+            </a>
+            <a href="/admin/team.html" class="nav-item">
+                <span class="nav-icon">👥</span> Team & shifts
+            </a>
+
+            <div class="nav-section-label">REPORTS</div>
+            <a href="/admin/performance.html" class="nav-item">
+                <span class="nav-icon">📈</span> Performance
+            </a>
+        </nav>
+
+        <!-- Sidebar Bottom Footer -->
+        <div class="sidebar-footer-widgets">
+            <div class="user-profile-bar">
+                <div class="avatar-circle">MR</div>
+                <div class="profile-info">
+                    <div class="profile-name">Mariyam Reshi</div>
+                    <div class="profile-role">Club Manager</div>
+                </div>
+                <div class="profile-menu-dots">•••</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="admin-main">
+
+        <!-- TOP NAVIGATION BAR -->
+        <header class="admin-header-simple">
+            <a href="/" class="btn-guest-site">Homepage</a>
+        </header>
+
+        <!-- DASHBOARD BODY CONTAINER -->
+        <div class="dashboard-content">
+
+            <!-- Title & Header Banner -->
+            <div class="shows-header-banner">
+                <div>
+                    <div class="banner-sub-date">PROGRAMMING</div>
+                    <h1 class="banner-greeting">Shows & artists</h1>
+                    <p class="banner-tagline">Plan the lineup and keep an eye on ticket demand.</p>
+                </div>
+                <button class="btn-add-show">+ Add show</button>
+            </div>
+
+            <!-- 3 KPI SUMMARY CARDS -->
+            <div class="kpi-grid-3">
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-title">UPCOMING SHOWS</span>
+                    </div>
+                    <div class="kpi-value">8</div>
+                    <div class="kpi-footer">
+                        <span class="sub-text">Across the next 30 days</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-title">TICKETS BOOKED</span>
+                    </div>
+                    <div class="kpi-value">241</div>
+                    <div class="kpi-footer">
+                        <span class="sub-text">73% average capacity</span>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-title">NEXT SHOW</span>
+                    </div>
+                    <div class="kpi-value">8:30</div>
+                    <div class="kpi-footer">
+                        <span class="sub-text">The Araya Quartet</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHOWS LIST CONTAINER -->
+            <div class="shows-list">
+
+                <!-- Show Card 1 (Tonight) -->
+                <div class="show-item-card highlighted">
+                    <div class="show-date-badge">
+                        <span class="date-num">12</span>
+                        <span class="date-month">Sep</span>
+                    </div>
+                    <div class="show-details">
+                        <div class="show-genre">CONTEMPORARY JAZZ</div>
+                        <h2 class="show-title">The Araya Quartet</h2>
+                        <div class="show-meta">
+                            <span>🕒 8:30 PM</span>
+                            <span>👥 86 / 110 booked</span>
+                        </div>
+                    </div>
+                    <div class="show-actions">
+                        <span class="status-badge tonight">Tonight</span>
+                        <button class="btn-dots">•••</button>
+                    </div>
+                </div>
+
+                <!-- Show Card 2 (On sale) -->
+                <div class="show-item-card">
+                    <div class="show-date-badge">
+                        <span class="date-num">13</span>
+                        <span class="date-month">Sep</span>
+                    </div>
+                    <div class="show-details">
+                        <div class="show-genre">BEBOP & STANDARDS</div>
+                        <h2 class="show-title">Midnight Blue Trio</h2>
+                        <div class="show-meta">
+                            <span>🕒 9:00 PM</span>
+                            <span>👥 64 / 110 booked</span>
+                        </div>
+                    </div>
+                    <div class="show-actions">
+                        <span class="status-badge on-sale">On sale</span>
+                        <button class="btn-dots">•••</button>
+                    </div>
+                </div>
+
+                <!-- Show Card 3 (On sale) -->
+                <div class="show-item-card">
+                    <div class="show-date-badge">
+                        <span class="date-num">19</span>
+                        <span class="date-month">Sep</span>
+                    </div>
+                    <div class="show-details">
+                        <div class="show-genre">SOUL JAZZ</div>
+                        <h2 class="show-title">Nina & The Brass</h2>
+                        <div class="show-meta">
+                            <span>🕒 8:30 PM</span>
+                            <span>👥 91 / 110 booked</span>
+                        </div>
+                    </div>
+                    <div class="show-actions">
+                        <span class="status-badge on-sale">On sale</span>
+                        <button class="btn-dots">•••</button>
+                    </div>
+                </div>
+                <!-- ADD SHOW MODAL -->
+                <div class="modal-overlay" id="addShowModal">
+                    <div class="modal-card">
+                        <div class="modal-header">
+                            <h2>Add New Show</h2>
+                            <button class="btn-close-modal" id="closeModalBtn">&times;</button>
+                        </div>
+                        <form id="addShowForm" class="modal-form">
+                            <div class="form-group">
+                                <label for="artistName">Artist / Show Title</label>
+                                <input type="text" id="artistName" placeholder="e.g. Miles Davis Experience" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="showGenre">Genre</label>
+                                <input type="text" id="showGenre" placeholder="e.g. HARD BOP / CONTEMPORARY JAZZ" required>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="showDate">Date</label>
+                                    <input type="date" id="showDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="showTime">Time</label>
+                                    <input type="text" id="showTime" placeholder="e.g. 8:30 PM" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="maxCapacity">Capacity</label>
+                                    <input type="number" id="maxCapacity" value="110" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="showStatus">Status Badge</label>
+                                    <select id="showStatus">
+                                        <option value="on-sale">On sale</option>
+                                        <option value="tonight">Tonight</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn-cancel" id="cancelModalBtn">Cancel</button>
+                                <button type="submit" class="btn-submit-show">Save Show</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+</div>
+
+<script src="/routes/admin.js"></script>
+</body>
+</html>
