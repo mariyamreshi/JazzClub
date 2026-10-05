@@ -20,7 +20,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 body.admin-body {
@@ -37,8 +37,8 @@ body.admin-body {
 /* SIDEBAR STYLES */
 .admin-sidebar {
     width: 260px;
-    background-color: var(--sidebar-bg);
-    color: #FFFFFF;
+    background-color: rgba(230, 220, 200, 0.99);
+    color: #4B2E2B;
     padding: 24px 16px;
     display: flex;
     flex-direction: column;
@@ -54,31 +54,12 @@ body.admin-body {
     margin-bottom: 20px;
 }
 
-.brand-logo-diamond {
-    width: 36px;
-    height: 36px;
-    border: 1.5px solid #C5A059;
-    transform: rotate(45deg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: #C5A059;
-}
 
 .brand-text h1 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Inter', sans-serif;
     font-size: 1.15rem;
     line-height: 1.1;
-    color: #FFFFFF;
-}
-
-.brand-text span {
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    color: #8C9992;
+    color: #4B2E2B;
 }
 
 .nav-section-label {
@@ -87,6 +68,12 @@ body.admin-body {
     letter-spacing: 1.5px;
     color: #58665E;
     margin: 16px 12px 8px;
+}
+
+.brand-text span {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    color: #8C9992;
 }
 
 .sidebar-nav {
@@ -101,7 +88,7 @@ body.admin-body {
     align-items: center;
     gap: 12px;
     padding: 10px 12px;
-    color: #A3B1A9;
+    color: #4B2E2B;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
