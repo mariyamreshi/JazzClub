@@ -37,4 +37,76 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+    document.addEventListener('DOMContentLoaded', () => {
+        const addShowBtn = document.querySelector('.btn-add-show');
+        const modal = document.getElementById('addShowModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelModalBtn = document.getElementById('cancelModalBtn');
+        const addShowForm = document.getElementById('addShowForm');
+        const showsList = document.querySelector('.shows-list');
+
+        // Open Modal
+        if (addShowBtn && modal) {
+            addShowBtn.addEventListener('click', () => {
+                modal.classList.add('open');
+            });
+        }
+
+        // Close Modal helper
+        const closeModal = () => modal.classList.remove('open');
+
+        if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+        if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
+
+        // Form Submit Handler
+        if (addShowForm) {
+            addShowForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const title = document.getElementById('artistName').value;
+                const genre = document.getElementById('showGenre').value.toUpperCase();
+                const dateVal = document.getElementById('showDate').value;
+                const time = document.getElementById('showTime').value;
+                const capacity = document.getElementById('maxCapacity').value;
+                const status = document.getElementById('showStatus').value;
+
+                // Format date (e.g. "15" and "Sep")
+                const parsedDate = new Date(dateVal);
+                const dayNum = isNaN(parsedDate.getDate()) ? '15' : parsedDate.getDate();
+                const monthStr = isNaN(parsedDate.getDate())
+                    ? 'Sep'
+                    : parsedDate.toLocaleString('default', { month: 'short' });
+
+                const statusText = status === 'tonight' ? 'Tonight' : 'On sale';
+                const isHighlighted = status === 'tonight' ? 'highlighted' : '';
+
+                // Construct new card element
+                const newShowCard = document.createElement('div');
+                newShowCard.className = `show-item-card ${isHighlighted}`;
+                newShowCard.innerHTML = `
+                <div class="show-date-badge">
+                    <span class="date-num">${dayNum}</span>
+                    <span class="date-month">${monthStr}</span>
+                </div>
+                <div class="show-details">
+                    <div class="show-genre">${genre}</div>
+                    <h2 class="show-title">${title}</h2>
+                    <div class="show-meta">
+                        <span>🕒 ${time}</span>
+                        <span>👥 0 / ${capacity} booked</span>
+                    </div>
+                </div>
+                <div class="show-actions">
+                    <span class="status-badge ${status}">${statusText}</span>
+                    <button class="btn-dots">•••</button>
+                </div>
+            `;
+
+                // Append new card and reset form
+                showsList.prepend(newShowCard);
+                addShowForm.reset();
+                closeModal();
+            });
+        }
+    });
 });

@@ -591,3 +591,231 @@ body.admin-body {
     justify-content: space-between;
     min-height: 140px; /* Gives nice proportion */
 }
+
+/* SHOWWWWW */
+/* Header & Add Button */
+.shows-header-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+}
+
+.btn-add-show {
+    background-color: #8B2635; /* Dark burgundy */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* 3 KPI Grid */
+.kpi-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+/* Shows List & Cards */
+.shows-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.show-item-card {
+    background: #FFFFFF;
+    border: 1px solid #EBE8E1;
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.show-item-card.highlighted {
+    border-left: 4px solid #C49A45; /* Gold border emphasis */
+}
+
+.show-date-badge {
+    border: 1px solid #EBE8E1;
+    border-radius: 10px;
+    padding: 12px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 60px;
+}
+
+.show-date-badge .date-num {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.show-date-badge .date-month {
+    font-size: 12px;
+    color: #7D7A75;
+    margin-top: 4px;
+}
+
+.show-details {
+    flex: 1;
+}
+
+.show-genre {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: #8C7B5D;
+    font-weight: 700;
+}
+
+.show-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 4px 0 8px 0;
+}
+
+.show-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 13px;
+    color: #6E6B65;
+}
+
+.show-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.tonight {
+    background-color: #F8EED7;
+    color: #8A6818;
+}
+
+.status-badge.on-sale {
+    background-color: #E8F2EC;
+    color: #2D6A4F;
+}
+
+.btn-dots {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #A09D96;
+    cursor: pointer;
+}
+
+/* Modal Overlay & Styling */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-card {
+    background: #FFFFFF;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-family: 'Playfair Display', serif;
+    margin: 0;
+    font-size: 20px;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-form .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
+}
+
+.modal-form label {
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #555;
+}
+
+.modal-form input, .modal-form select {
+    padding: 10px 12px;
+    border: 1px solid #EBE8E1;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #F2F0EB;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-submit-show {
+    background: #8B2635;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
