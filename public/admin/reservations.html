@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blue Lark Jazz Club - Reservations</title>
-    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/Admin.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
 </head>
 <body class="admin-body">
@@ -28,7 +28,7 @@
             </a>
             <a href="/admin/reservations.html" class="nav-item active">
                 <span class="nav-icon">📅</span> Reservations
-                <span class="badge">12</span>
+                <span class="badge" id="reservationCount">—</span>
             </a>
             <a href="/admin/shows.html" class="nav-item">
                 <span class="nav-icon">🎷</span> Shows & artists
@@ -80,7 +80,7 @@
             <div class="welcome-banner">
                 <div>
                     <h1 class="banner-greeting">Reservations Management</h1>
-                    <p class="banner-tagline">View, filter, and manage all table bookings.</p>
+                    <p class="banner-tagline">View and filter all table bookings.</p>
                 </div>
             </div>
 
@@ -97,94 +97,33 @@
                 <div class="table-controls">
                     <div class="table-search">
                         <span class="search-icon">🔍</span>
-                        <input type="text" id="guestSearchInput" placeholder="Find a guest">
+                        <input type="search" id="guestSearchInput" aria-label="Search reservations" placeholder="Name, phone, table or zone">
                     </div>
-                    <div class="filter-tabs">
-                        <button class="tab-btn active" data-filter="all">All</button>
-                        <button class="tab-btn" data-filter="confirmed">Confirmed</button>
-                        <button class="tab-btn" data-filter="seated">Seated</button>
-                        <button class="tab-btn" data-filter="pending">Pending</button>
+                    <div class="reservation-filters">
+                        <label for="reservationDateFilter">Date</label>
+                        <input type="date" id="reservationDateFilter">
+                        <button type="button" class="tab-btn" id="clearReservationFilters">Clear filters</button>
+                        <button type="button" class="tab-btn" id="refreshReservations">Refresh</button>
                     </div>
                 </div>
+
+                <p id="reservationListStatus" class="reservation-list-status" role="status" aria-live="polite">Loading reservations...</p>
 
                 <!-- Table List -->
                 <div class="data-table-wrapper">
                     <table class="data-table">
                         <thead>
                         <tr>
-                            <th>GUEST</th>
-                            <th>TIME</th>
-                            <th>PARTY</th>
-                            <th>TABLE</th>
-                            <th></th>
+                            <th scope="col">GUEST</th>
+                            <th scope="col">PHONE</th>
+                            <th scope="col">DATE</th>
+                            <th scope="col">TIME</th>
+                            <th scope="col">ZONE</th>
+                            <th scope="col">TABLE</th>
+                            <th scope="col">ACTIONS</th>
                         </tr>
                         </thead>
-                        <tbody id="reservationTableBody">
-                        <tr>
-                            <td>
-                                <div class="guest-cell">
-                                    <div class="avatar-circle gold-bg">MC</div>
-                                    <div>
-                                        <div class="guest-name">Maya Chen</div>
-                                        <div class="res-id">R-1048</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>7:00 PM</td>
-                            <td>4 guests</td>
-                            <td><strong class="table-badge">T12</strong></td>
-                            <td class="cell-actions">•••</td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="guest-cell">
-                                    <div class="avatar-circle green-bg">NP</div>
-                                    <div>
-                                        <div class="guest-name">Niran Patel</div>
-                                        <div class="res-id">R-1047</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>7:30 PM</td>
-                            <td>2 guests</td>
-                            <td><strong class="table-badge">B04</strong></td>
-                            <td class="cell-actions">•••</td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="guest-cell">
-                                    <div class="avatar-circle pink-bg">ER</div>
-                                    <div>
-                                        <div class="guest-name">Elena Rossi</div>
-                                        <div class="res-id">R-1046</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>8:00 PM</td>
-                            <td>6 guests</td>
-                            <td><strong class="table-badge">TO8</strong></td>
-                            <td class="cell-actions">•••</td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <div class="guest-cell">
-                                    <div class="avatar-circle blue-bg">JW</div>
-                                    <div>
-                                        <div class="guest-name">James Wilson</div>
-                                        <div class="res-id">R-1045</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>8:30 PM</td>
-                            <td>3 guests</td>
-                            <td><span class="unassigned-dash">—</span></td>
-                            <td><span class="status-pill pending">Pending</span></td>
-                            <td class="cell-actions">•••</td>
-                        </tr>
-                        </tbody>
+                        <tbody id="reservationTableBody" aria-busy="true"></tbody>
                     </table>
                 </div>
             </div>
@@ -194,6 +133,38 @@
 
 </div>
 
-<script src="/js/pages/admin.js"></script>
+
+<dialog id="editReservationDialog" class="reservation-dialog" aria-labelledby="editReservationTitle">
+    <form id="editReservationForm">
+        <h2 id="editReservationTitle">Edit reservation</h2>
+        <fieldset id="editReservationFields" class="reservation-edit-fields">
+            <label>Guest name<input id="editGuestName" type="text" maxlength="100" required></label>
+            <label>Phone number<input id="editPhoneNumber" type="tel" maxlength="25" required></label>
+            <label>Date<input id="editDate" type="date" required></label>
+            <label>Arrival time<input id="editTime" type="time" required></label>
+            <label>Zone<select id="editZone" required>
+                <option>Front Stage</option><option>Main Floor</option><option>VIP Lounge</option><option>Bar Counter</option>
+            </select></label>
+            <label>Table<select id="editTable" required></select></label>
+        </fieldset>
+        <p id="editReservationError" class="reservation-action-error" role="alert" hidden></p>
+        <div class="reservation-dialog-actions">
+            <button id="cancelReservationEdit" type="button" class="tab-btn">Cancel</button>
+            <button id="saveReservationEdit" type="submit" class="reservation-save">Save changes</button>
+        </div>
+    </form>
+</dialog>
+<dialog id="deleteReservationDialog" class="reservation-dialog" aria-labelledby="deleteReservationTitle">
+    <h2 id="deleteReservationTitle">Delete reservation?</h2>
+    <p id="deleteReservationSummary"></p>
+    <p>This permanently deletes the booking and makes the table available again.</p>
+    <p id="deleteReservationError" class="reservation-action-error" role="alert" hidden></p>
+    <div class="reservation-dialog-actions">
+        <button id="cancelReservationDelete" type="button" class="tab-btn">Cancel</button>
+        <button id="confirmReservationDelete" type="button" class="reservation-delete">Delete reservation</button>
+    </div>
+</dialog>
+
+<script src="/js/pages/admin-reservations.js"></script>
 </body>
 </html>

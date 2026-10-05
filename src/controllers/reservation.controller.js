@@ -15,12 +15,9 @@ function validDate(value) {
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
 }
 
-async function createReservation(req, res, next) {
+function validateReservation(body = {}) {
   const fields = ['guest_name', 'phone_number', 'zone', 'table_number', 'date', 'time'];
-  const body = req.body || {};
-  const invalid = message => res.status(400).json({
-    error: { code: 'VALIDATION_ERROR', message },
-  });
+  const invalid = message => ({ error: message });
 
   if (fields.some(field => typeof body[field] !== 'string' || !body[field].trim())) {
     return invalid('Please provide guest name, phone number, zone, table, date and time.');
@@ -42,16 +39,30 @@ async function createReservation(req, res, next) {
     return invalid('Please enter a valid time in HH:mm format.');
   }
 
+  return { reservation };
+}
+
+function reservationError(error, res, next) {
+  if (error.code === 'ER_DUP_ENTRY') {
+    return res.status(409).json({
+      error: { code: 'TABLE_ALREADY_BOOKED', message: 'This table is already booked for the selected date. Please choose another table.' },
+    });
+  }
+  next(error);
+}
+
+function validId(value) {
+  return /^[1-9]\d*$/.test(value) && Number(value) <= 4294967295;
+}
+
+async function createReservation(req, res, next) {
+  const { reservation, error } = validateReservation(req.body || {});
+  if (error) return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: error } });
   try {
     const saved = await reservations.create(reservation);
     res.status(201).json({ data: saved });
   } catch (error) {
-    if (error.code === 'ER_DUP_ENTRY') {
-      return res.status(409).json({
-        error: { code: 'TABLE_ALREADY_BOOKED', message: 'This table is already booked for the selected date. Please choose another table.' },
-      });
-    }
-    next(error);
+    reservationError(error, res, next);
   }
 }
 
@@ -70,4 +81,37 @@ async function getAvailability(req, res, next) {
   }
 }
 
-module.exports = { createReservation, getAvailability };
+async function listReservations(req, res, next) {
+  res.set('Cache-Control', 'no-store');
+  try {
+    res.json({ data: await reservations.list() });
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updateReservation(req, res, next) {
+  if (!validId(req.params.id)) return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Invalid reservation ID.' } });
+  const { reservation, error } = validateReservation(req.body || {});
+  if (error) return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: error } });
+  try {
+    const updated = await reservations.update(Number(req.params.id), reservation);
+    if (!updated) return res.status(404).json({ error: { code: 'RESERVATION_NOT_FOUND', message: 'This reservation no longer exists. Please refresh the list.' } });
+    res.json({ data: updated });
+  } catch (error) {
+    reservationError(error, res, next);
+  }
+}
+
+async function deleteReservation(req, res, next) {
+  if (!validId(req.params.id)) return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Invalid reservation ID.' } });
+  try {
+    const removed = await reservations.remove(Number(req.params.id));
+    if (!removed) return res.status(404).json({ error: { code: 'RESERVATION_NOT_FOUND', message: 'This reservation no longer exists. Please refresh the list.' } });
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
+}
+
+module.exports = { createReservation, getAvailability, listReservations, updateReservation, deleteReservation };

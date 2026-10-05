@@ -14,7 +14,10 @@ router.get('/api/shows', showController.listShows);
 router.get('/api/shows/:showId', showController.getShow);
 
 // Reservation routes (your part)
+router.get('/api/reservations', reservationController.listReservations);
 router.get('/api/reservations/availability', reservationController.getAvailability);
 router.post('/api/reservations', reservationController.createReservation);
+router.put('/api/reservations/:id', reservationController.updateReservation);
+router.delete('/api/reservations/:id', reservationController.deleteReservation);
 
 module.exports = router;
