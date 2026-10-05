@@ -6,12 +6,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const refresh = document.getElementById('refreshReservations');
     const count = document.getElementById('reservationCount');
     const status = document.getElementById('reservationListStatus');
+    const add = document.getElementById('addReservation');
     let reservations = [];
     let loaded = false;
     let loading = false;
     let saving = false;
     let editingId = null;
     let deletingId = null;
+    let creating = false;
     const editDialog = document.getElementById('editReservationDialog');
     const deleteDialog = document.getElementById('deleteReservationDialog');
     const editForm = document.getElementById('editReservationForm');
@@ -50,11 +52,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openEdit(reservation) {
         if (loading || saving) return;
+        creating = false;
         editingId = reservation.id;
         document.getElementById('editReservationTitle').textContent = `Edit reservation R-${editingId}`;
+        document.getElementById('saveReservationEdit').textContent = 'Save changes';
         editFields.zone.value = reservation.zone;
         fillTables();
         for (const [field, input] of Object.entries(editFields)) input.value = reservation[field];
+        editError.hidden = true;
+        editDialog.showModal();
+    }
+
+    function openAdd() {
+        if (loading || saving || editDialog.open || deleteDialog.open) return;
+        creating = true;
+        editingId = null;
+        document.getElementById('editReservationTitle').textContent = 'Add reservation';
+        document.getElementById('saveReservationEdit').textContent = 'Add reservation';
+        for (const input of Object.values(editFields)) input.value = '';
+        editFields.date.value = dateFilter.value;
+        editFields.zone.value = 'Front Stage';
+        fillTables();
         editError.hidden = true;
         editDialog.showModal();
     }
@@ -69,7 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function writeReservation(method, id, payload) {
-        const response = await fetch(`/api/reservations/${id}`, {
+        const url = method === 'POST' ? '/api/reservations' : `/api/reservations/${id}`;
+        const response = await fetch(url, {
             method,
             ...(payload ? { headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) } : {}),
         });
@@ -81,28 +100,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     editFields.zone.addEventListener('change', fillTables);
+    add.addEventListener('click', openAdd);
     document.getElementById('cancelReservationEdit').addEventListener('click', () => {
         if (!saving) editDialog.close();
     });
     document.getElementById('cancelReservationDelete').addEventListener('click', () => {
         if (!saving) deleteDialog.close();
     });
-    editDialog.addEventListener('close', () => { editingId = null; });
+    editDialog.addEventListener('close', () => { editingId = null; creating = false; });
     deleteDialog.addEventListener('close', () => { deletingId = null; });
     for (const dialog of [editDialog, deleteDialog]) {
         dialog.addEventListener('cancel', event => { if (saving) event.preventDefault(); });
     }
     editForm.addEventListener('submit', async event => {
         event.preventDefault();
-        if (saving || editingId === null) return;
+        if (saving || (!creating && editingId === null)) return;
         setSaving(true);
         editError.hidden = true;
         let success = false;
         try {
             const payload = Object.fromEntries(Object.entries(editFields).map(([field, input]) => [field, input.value.trim()]));
-            const updated = await writeReservation('PUT', editingId, payload);
-            reservations = reservations.map(row => row.id === editingId ? updated : row);
+            const updated = await writeReservation(creating ? 'POST' : 'PUT', editingId, payload);
+            if (creating) {
+                reservations = [...reservations, updated];
+                // Show the new booking even when the previous search hid this guest.
+                search.value = '';
+                dateFilter.value = updated.date;
+            } else {
+                reservations = reservations.map(row => row.id === editingId ? updated : row);
+            }
             editingId = null;
+            creating = false;
             editDialog.close();
             success = true;
         } catch (error) {
@@ -187,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function loadReservations() {
-        if (loading || saving || editingId !== null || deletingId !== null) return;
+        if (loading || saving || creating || editingId !== null || deletingId !== null) return;
         loading = true;
         refresh.disabled = true;
         body.setAttribute('aria-busy', 'true');

@@ -121,7 +121,7 @@ ORDER BY id DESC;
 | --- | --- | --- |
 | GET | `/` | หน้าแรก HTML |
 | GET | `/reserve.html` | หน้าจองโต๊ะ |
-| GET | `/admin/reservations.html` | รายการจองสำหรับ Admin พร้อมค้นหา กรองวันที่ Edit และ Delete (ยืนยันก่อนลบ) |
+| GET | `/admin/reservations.html` | รายการจองสำหรับ Admin พร้อมค้นหา กรองวันที่ Add reservation, Edit และ Delete (ยืนยันก่อนลบ) |
 | GET | `/admin/overview.html` | Overview ที่มีรายการจองจาก API เดียวกัน อัปเดตทุก 10 วินาทีขณะเปิดหน้า |
 | GET | `/api/reservations` | รายการจองจาก MySQL พร้อมข้อมูลทั้ง 6 ช่องและ id |
 | PUT | `/api/reservations/:id` | แก้ไขข้อมูลการจอง ตรวจโต๊ะ/วันซ้ำก่อนบันทึก |

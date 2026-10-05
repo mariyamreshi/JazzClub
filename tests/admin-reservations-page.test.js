@@ -18,7 +18,7 @@ function page(fetch) {
   }
   const ids = Object.fromEntries([
     'reservationTableBody', 'guestSearchInput', 'reservationDateFilter', 'clearReservationFilters',
-    'refreshReservations', 'reservationCount', 'reservationListStatus',
+    'refreshReservations', 'reservationCount', 'reservationListStatus', 'addReservation',
     'editReservationDialog', 'deleteReservationDialog', 'editReservationForm', 'editReservationFields',
     'editReservationError', 'deleteReservationError', 'editGuestName', 'editPhoneNumber', 'editDate', 'editTime',
     'editZone', 'editTable', 'cancelReservationEdit', 'saveReservationEdit', 'cancelReservationDelete',
@@ -43,7 +43,7 @@ const rows = [
   { id: 12, guest_name: '<img src=x onerror=alert(1)>', phone_number: '0812345678', date: '2026-10-17', time: '20:30', zone: 'Front Stage', table_number: 'F02' },
   { id: 11, guest_name: 'Example Guest', phone_number: '0898765432', date: '2026-10-16', time: '21:00', zone: 'VIP Lounge', table_number: 'VIP-1' },
 ];
-const result = data => ({ ok: true, json: async () => ({ data }) });
+const result = data => ({ ok: true, json: async () => ({ data: JSON.parse(JSON.stringify(data)) }) });
 
 test('renders database reservations safely with phone, date, time, zone and table', async () => {
   const ui = page(async (url, options) => {
@@ -252,6 +252,120 @@ test('pending saves block repeated requests and prevent closing the dialog', asy
   let prevented = false;
   ui.ids.editReservationDialog.handlers.cancel({ preventDefault() { prevented = true; } });
   assert.equal(prevented, true);
+  finish();
+  await pending;
+});
+
+test('Add uses an empty form, pauses refresh, posts six fields and displays the new booking', async () => {
+  let stored = rows.map(row => ({ ...row }));
+  let calls = 0;
+  let posted;
+  const ui = page(async (url, options) => {
+    calls++;
+    if (options.method === 'POST') {
+      assert.equal(url, '/api/reservations');
+      posted = JSON.parse(options.body);
+      const created = { id: 13, ...posted };
+      stored.push(created);
+      return result(created);
+    }
+    return result(stored);
+  });
+  await ui.ready;
+  ui.ids.guestSearchInput.value = 'Unrelated guest';
+  ui.ids.reservationDateFilter.value = '2026-10-18';
+  ui.ids.addReservation.handlers.click();
+  assert.equal(ui.ids.editReservationTitle.textContent, 'Add reservation');
+  assert.equal(ui.ids.editGuestName.value, '');
+  assert.equal(ui.ids.editPhoneNumber.value, '');
+  assert.equal(ui.ids.editDate.value, '2026-10-18');
+  assert.equal(ui.ids.editTime.value, '');
+  assert.equal(ui.ids.editTable.value, 'F01');
+  ui.ids.editGuestName.value = ' New Guest ';
+  ui.ids.editPhoneNumber.value = '0811111111';
+  ui.ids.editTime.value = '21:15';
+  ui.ids.editZone.value = 'VIP Lounge';
+  ui.ids.editZone.handlers.change();
+  ui.ids.editTable.value = 'VIP-2';
+  ui.poll();
+  await ui.windowHandlers.focus();
+  assert.equal(calls, 1);
+  await ui.ids.editReservationForm.handlers.submit(submitEvent);
+  assert.deepEqual(posted, { guest_name: 'New Guest', phone_number: '0811111111', date: '2026-10-18', time: '21:15', zone: 'VIP Lounge', table_number: 'VIP-2' });
+  assert.equal(ui.ids.editReservationDialog.open, false);
+  assert.equal(ui.ids.reservationCount.textContent, '3');
+  assert.equal(ui.ids.guestSearchInput.value, '');
+  assert.equal(ui.ids.reservationListStatus.textContent, 'Showing 1 of 3 reservations');
+  assert.equal(ui.ids.reservationTableBody.children[0].children[0].children[0].textContent, 'New Guest');
+});
+
+test('cancelling Add sends no request and reopening Add clears the previous draft', async () => {
+  let calls = 0;
+  const ui = page(async () => { calls++; return result(rows); });
+  await ui.ready;
+  ui.ids.addReservation.handlers.click();
+  ui.ids.editGuestName.value = 'Abandoned draft';
+  ui.ids.cancelReservationEdit.handlers.click();
+  assert.equal(calls, 1);
+  ui.ids.addReservation.handlers.click();
+  assert.equal(ui.ids.editGuestName.value, '');
+  ui.ids.cancelReservationEdit.handlers.click();
+  action(ui, 0);
+  assert.equal(ui.ids.editReservationTitle.textContent, 'Edit reservation R-12');
+  assert.equal(ui.ids.saveReservationEdit.textContent, 'Save changes');
+});
+
+test('Add errors preserve draft values and allow correcting an occupied table', async () => {
+  let failing = true;
+  let stored = [...rows];
+  const ui = page(async (url, options) => {
+    if (options.method === 'POST') {
+      if (failing) return { ok: false, status: 409, json: async () => ({ error: { message: 'This table is already booked for the selected date.' } }) };
+      const saved = { id: 13, ...JSON.parse(options.body) };
+      stored.push(saved);
+      return result(saved);
+    }
+    return result(stored);
+  });
+  await ui.ready;
+  ui.ids.addReservation.handlers.click();
+  ui.ids.editGuestName.value = 'New Guest';
+  ui.ids.editPhoneNumber.value = '0811111111';
+  ui.ids.editDate.value = '2026-10-17';
+  ui.ids.editTime.value = '20:30';
+  ui.ids.editTable.value = 'F02';
+  await ui.ids.editReservationForm.handlers.submit(submitEvent);
+  assert.equal(ui.ids.editReservationDialog.open, true);
+  assert.equal(ui.ids.editGuestName.value, 'New Guest');
+  assert.equal(ui.ids.reservationCount.textContent, '2');
+  assert.match(ui.ids.editReservationError.textContent, /already booked/);
+  assert.equal(ui.ids.saveReservationEdit.disabled, false);
+  failing = false;
+  ui.ids.editTable.value = 'F03';
+  await ui.ids.editReservationForm.handlers.submit(submitEvent);
+  assert.equal(ui.ids.editReservationDialog.open, false);
+  assert.equal(ui.ids.reservationCount.textContent, '3');
+});
+
+test('Add prevents double submission while the request is pending', async () => {
+  let writes = 0;
+  let finish;
+  const ui = page(async (url, options) => {
+    if (options.method === 'POST') {
+      writes++;
+      await new Promise(resolve => { finish = resolve; });
+      return result({ id: 13, ...rows[0] });
+    }
+    return result(rows);
+  });
+  await ui.ready;
+  ui.ids.addReservation.handlers.click();
+  const pending = ui.ids.editReservationForm.handlers.submit(submitEvent);
+  await ui.ids.editReservationForm.handlers.submit(submitEvent);
+  assert.equal(writes, 1);
+  assert.equal(ui.ids.saveReservationEdit.disabled, true);
+  ui.ids.cancelReservationEdit.handlers.click();
+  assert.equal(ui.ids.editReservationDialog.open, true);
   finish();
   await pending;
 });
