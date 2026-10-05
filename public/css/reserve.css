@@ -49,7 +49,7 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 25px 50px;
-    background-color: rgba(230, 220, 200, 0.95);
+    background-color: rgba(230, 220, 200, 0.99);
 
     /* 2. เพิ่มเอฟเฟกต์เบลอพื้นหลังด้านหลัง Navbar (Glassmorphism) */
     backdrop-filter: blur(10px);
@@ -67,13 +67,13 @@ body {
 
 .brand-name {
     color: #FFFFFF;
-    font-family: Georgia, serif;
+    font-family:  'Inter', sans-serif;
     font-size: 1.1rem;
     font-weight: 600;
 }
 
 .brand-sub {
-    color: #888;
+    color: #4B2E2B;
     font-size: 0.65rem;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -86,7 +86,7 @@ body {
 }
 
     .nav-links a {
-        color: #BBB;
+        color: #4B2E2B;
         text-decoration: none;
         font-size: 0.85rem;
         padding: 8px 16px;
@@ -150,7 +150,7 @@ body {
 }
 
 .page-title {
-    font-family: Georgia, serif;
+    font-family:  'Inter', sans-serif;
     font-size: 2.5rem;
     color: #DDD4C0;
     margin-bottom: 24px;
