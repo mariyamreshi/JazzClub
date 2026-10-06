@@ -1,0 +1,461 @@
+/* ==========================================
+   SHOWS & ARTISTS MANAGEMENT STYLES
+   ========================================== */
+
+/* Import base variables and layout if separated */
+@import url('./admin.css');
+
+/* Custom Page Layout Overrides */
+.shows-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* Header & Controls Bar */
+.shows-controls-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 16px 20px;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.genre-select, .status-select {
+    background: #F8F7F4;
+    border: 1px solid var(--border-light);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    outline: none;
+    cursor: pointer;
+}
+
+/* SHOW CARDS GRID */
+.shows-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
+
+.show-card {
+    background: var(--panel-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.show-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* Show Banner & Poster Preview */
+.show-banner {
+    position: relative;
+    height: 180px;
+    background-color: #1a1a1a;
+    background-size: cover;
+    background-position: center;
+}
+
+.show-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px;
+}
+
+.genre-tag {
+    background: rgba(15, 26, 21, 0.85);
+    color: var(--gold-accent);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+    text-transform: uppercase;
+}
+
+.show-status-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.show-status-badge.upcoming { background: var(--amber-bg); color: #B45309; }
+.show-status-badge.live { background: var(--green-bg); color: var(--green-status); }
+.show-status-badge.sold-out { background: #FEE2E2; color: var(--coral-status); }
+.show-status-badge.completed { background: #F3F4F6; color: #6B7280; }
+
+/* Show Details Content */
+.show-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+}
+
+.show-date-time {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--primary-accent);
+    letter-spacing: 0.5px;
+}
+
+.show-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.25;
+}
+
+.artist-lineup {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.artist-lineup strong {
+    color: var(--text-dark);
+}
+
+/* Capacity & Sales Info */
+.ticket-sales-info {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+}
+
+.sales-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    margin-bottom: 6px;
+}
+
+.sales-label {
+    color: var(--text-muted);
+}
+
+.sales-count {
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.sales-progress-bar {
+    height: 6px;
+    background: #F3F1ED;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.sales-progress-fill {
+    height: 100%;
+    background: var(--primary-accent);
+    border-radius: 3px;
+}
+
+/* Show Card Actions */
+.show-actions {
+    display: flex;
+    gap: 8px;
+    padding: 14px 20px;
+    background: #FAF9F6;
+    border-top: 1px solid var(--border-light);
+}
+
+.btn-show-edit, .btn-show-delete {
+    flex: 1;
+    padding: 8px 0;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.15s ease;
+}
+
+.btn-show-edit {
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    color: var(--text-dark);
+}
+
+.btn-show-edit:hover {
+    background: #F3F1ED;
+}
+
+.btn-show-delete {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--coral-status);
+}
+
+.btn-show-delete:hover {
+    background: #FEE2E2;
+}
+
+/* ARTISTS MANAGEMENT TABLE ENHANCEMENTS */
+.artist-avatar-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.artist-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.artist-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.artist-genre {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+/* Top 3 KPI Grid */
+.kpi-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Show Item Card */
+.shows-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.show-item-card {
+    background: #FFFFFF;
+    border: 1px solid #EBE8E1;
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Date Box */
+.show-date-box {
+    border: 1px solid #EBE8E1;
+    border-radius: 8px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #FAF9F6;
+    flex-shrink: 0;
+}
+
+.date-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #1F2421;
+}
+
+.date-month {
+    font-size: 0.7rem;
+    color: #727A75;
+    text-transform: uppercase;
+    margin-top: 2px;
+}
+
+/* Show Content */
+.show-details {
+    flex: 1;
+}
+
+.show-genre {
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    color: #8C7B5D;
+    text-transform: uppercase;
+}
+
+.show-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    color: #1F2421;
+    margin: 4px 0 8px;
+}
+
+.show-meta {
+    display: flex;
+    gap: 16px;
+    font-size: 0.8rem;
+    color: #727A75;
+}
+
+/* Card Right Side */
+.show-card-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.status-pill {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.status-tonight {
+    background: #FEF3C7;
+    color: #B45309;
+}
+
+.status-onsale {
+    background: #E6F4EA;
+    color: #10B981;
+}
+
+.btn-dots {
+    background: none;
+    border: none;
+    color: #A0A0A0;
+    cursor: pointer;
+    font-size: 1.1rem;
+}
+
+/* Modal Overlay Styles */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+.modal-overlay.open {
+    display: flex;
+}
+
+.modal-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 520px;
+    padding: 28px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.btn-close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #727A75;
+    cursor: pointer;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #1F2421;
+}
+
+.form-group input, .form-group select {
+    padding: 10px 12px;
+    border: 1px solid #EBE8E1;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    outline: none;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: #800020;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.btn-cancel {
+    background: #F3F1ED;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.btn-submit-res {
+    background: #800020;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
