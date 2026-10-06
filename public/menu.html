@@ -38,28 +38,33 @@
 
         <div class="header-right">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search Menu.">
-                <button id="searchBtn">SEARCH</button>
+                <input type="search" id="searchInput" aria-label="Search menu" placeholder="Search menu">
+                <button id="searchBtn" type="button">SEARCH</button>
             </div>
         </div>
     </div>
     <!-- Filter & Counter -->
     <div class="filter-container">
         <div class="category-buttons">
-            <button class="filter-btn active" data-category="all">Recommended</button>
-            <button class="filter-btn" data-category="breakfast">Seasonal</button>
-            <button class="filter-btn" data-category="mains">Cocktail</button>
-            <button class="filter-btn" data-category="pasta">Liquor</button>
-            <button class="filter-btn" data-category="salads">Dessert</button>
-            <button class="filter-btn" data-category="desserts">Appetizer</button>
+            <button class="filter-btn active" data-category="recommended">Recommended</button>
+            <button class="filter-btn" data-category="seasonal">Seasonal</button>
+            <button class="filter-btn" data-category="cocktail">Cocktail</button>
+            <button class="filter-btn" data-category="liquor">Liquor</button>
+            <button class="filter-btn" data-category="dessert">Dessert</button>
+            <button class="filter-btn" data-category="appetizer">Appetizer</button>
         </div>
+        <span id="menuCount" class="menu-count">0 items</span>
     </div>
 
+    <p id="menuStatus" class="menu-status" role="status" aria-live="polite">Loading menu...</p>
+    <button id="retryMenu" class="retry-menu" type="button" hidden>Try again</button>
+
     <!-- Dish Cards Grid -->
-    <div class="dishes-grid" id="dishesGrid">
+    <div class="dishes-grid" id="dishesGrid" aria-busy="true">
         <!-- Dish items will be rendered by JavaScript -->
     </div>
 </main>
 
+<script src="/js/pages/menu.js" defer></script>
 </body>
 </html>

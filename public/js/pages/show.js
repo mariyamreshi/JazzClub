@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (retry) retry.addEventListener('click', loadShows);
-        loadShows(); // Call directly (without return)
+        return loadShows();
     }
 
     // ==========================================

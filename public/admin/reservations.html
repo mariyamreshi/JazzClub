@@ -27,10 +27,14 @@
                 <span class="nav-icon">📊</span> Overview
             </a>
             <a href="/admin/reservations.html" class="nav-item active">
+                <span class="nav-icon">📅</span> Reservations
                 <span class="badge" id="reservationCount">—</span>
             </a>
             <a href="/admin/shows.html" class="nav-item">
                 <span class="nav-icon">🎷</span> Shows & artists
+            </a>
+            <a href="/admin/menu.html" class="nav-item">
+                <span class="nav-icon">🍽️</span> Menu
             </a>
             <a href="/admin/orders.html" class="nav-item">
                 <span class="nav-icon">📋</span> Orders
@@ -138,7 +142,12 @@
             <label>Guest name<input id="editGuestName" type="text" maxlength="100" required></label>
             <label>Phone number<input id="editPhoneNumber" type="tel" maxlength="25" required></label>
             <label>Date<input id="editDate" type="date" required></label>
-            <label>Arrival time<input id="editTime" type="time" required></label>
+            <label>Arrival time<select id="editTime" required>
+                <option value="" disabled>Select arrival time</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+            </select></label>
             <label>Zone<select id="editZone" required>
                 <option>Front Stage</option><option>Main Floor</option><option>VIP Lounge</option><option>Bar Counter</option>
             </select></label>
@@ -162,68 +171,6 @@
     </div>
 
 </dialog>
-
-<!-- ADD RESERVATION MODAL OVERLAY -->
-<div class="modal-overlay" id="addReservationModal">
-    <div class="modal-card">
-        <div class="modal-header">
-            <div>
-                <span class="panel-sub" style="color: #8C7B5D; font-size: 11px; font-weight: 700; letter-spacing: 0.05em;">GUEST BOOKING</span>
-                <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; margin-top: 2px;">New reservation</h2>
-            </div>
-            <button type="button" class="btn-close-modal" id="closeReservationModalBtn">&times;</button>
-        </div>
-
-        <form id="addReservationForm" class="modal-form">
-            <div class="form-group">
-                <label for="guestNameInput">Guest name</label>
-                <input type="text" id="guestNameInput" placeholder="Full name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="phoneInput">Phone number</label>
-                <input type="tel" id="phoneInput" placeholder="+1 555-0192" required>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="resDateInput">Date</label>
-                    <input type="date" id="resDateInput" required>
-                </div>
-                <div class="form-group">
-                    <label for="resTimeInput">Time</label>
-                    <input type="time" id="resTimeInput" required>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="zoneSelect">Zone</label>
-                    <select id="zoneSelect" required>
-                        <option value="Front Stage">Front Stage</option>
-                        <option value="Main Floor">Main Floor</option>
-                        <option value="VIP Lounge">VIP Lounge</option>
-                        <option value="Bar Counter">Bar Counter</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="tableSelect">Table</label>
-                    <select id="tableSelect" required>
-                        <option value="F01">F01</option>
-                        <option value="F02">F02</option>
-                        <option value="F03">F03</option>
-                        <option value="F04">F04</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="modal-actions">
-                <button type="button" class="btn-cancel" id="cancelReservationBtn">Cancel</button>
-                <button type="submit" class="btn-submit-res">Create reservation</button>
-            </div>
-        </form>
-    </div>
-</div>
 
 <script src="/js/pages/admin-reservations.js"></script>
 </body>

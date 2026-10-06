@@ -33,6 +33,9 @@
             <a href="/admin/shows.html" class="nav-item">
                 <span class="nav-icon">🎷</span> Shows & artists
             </a>
+            <a href="/admin/menu.html" class="nav-item">
+                <span class="nav-icon">🍽️</span> Menu
+            </a>
             <a href="/admin/orders.html" class="nav-item">
                 <span class="nav-icon">📋</span> Orders
             </a>
@@ -174,7 +177,12 @@
             <label>Guest name<input id="editGuestName" type="text" maxlength="100" required></label>
             <label>Phone number<input id="editPhoneNumber" type="tel" maxlength="25" required></label>
             <label>Date<input id="editDate" type="date" required></label>
-            <label>Arrival time<input id="editTime" type="time" required></label>
+            <label>Arrival time<select id="editTime" required>
+                <option value="" disabled>Select arrival time</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+            </select></label>
             <label>Zone<select id="editZone" required>
                 <option>Front Stage</option><option>Main Floor</option><option>VIP Lounge</option><option>Bar Counter</option>
             </select></label>

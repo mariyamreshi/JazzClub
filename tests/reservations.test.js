@@ -163,13 +163,15 @@ test('admin reservation list reports database failures without exposing details'
 });
 
 test('admin reservations page and its assets are served', async () => {
-  for (const path of ['/admin/overview.html', '/admin/reservations.html', '/css/admin.css', '/js/pages/admin-reservations.js']) {
+  for (const path of ['/admin/overview.html', '/admin/reservations.html', '/css/admin/admin.css', '/js/pages/admin-reservations.js']) {
     const response = await fetch(`${baseURL}${path}`);
     assert.equal(response.status, 200, path);
     if (path.endsWith('.html')) {
       const html = await response.text();
       assert.doesNotMatch(html, /Maya Chen|Niran Patel|data-filter="pending"/);
       assert.match(html, /id="reservationTableBody"/);
+      assert.match(html, /<select id="editTime" required>/);
+      for (const time of ['20:00', '20:30', '21:00']) assert.match(html, new RegExp(`value="${time}"`));
       assert.match(html, /src="\/js\/pages\/admin-reservations.js"/);
     }
   }
