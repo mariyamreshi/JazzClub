@@ -1,0 +1,362 @@
+:root {
+    --bg-dark: #0D1412;
+    --bg-cream: #F4F0E8;
+    --card-white: #FFFFFF;
+    --text-primary: #33312E;
+    --text-muted: #807C75;
+    --gold: #A88138;
+    --gold-hover: #e2c486;
+    --maroon: #7A2E3B;
+    --maroon-hover: #5A202A;
+    --stage-green: #23473B;
+    --grid-line: #E8E3D8;
+    --border-light: #E0DDD5;
+
+}/* Reset & Base Setup */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color:var(--bg-cream);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+/* Navigation Bar */
+.navbar {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 50px;
+    background-color: rgba(230, 220, 200, 0.99);
+
+    /* Glassmorphism Effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    /* Border bottom */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.logo {
+    display: flex;
+    flex: 1; /* ดันพื้นที่ฝั่งซ้าย */
+}
+
+.brand-name {
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.brand-sub {
+    color: #4B2E2B;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.nav-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 35px;
+    list-style: none;
+}
+
+.nav-links a {
+    color: #4B2E2B;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 8px 16px;
+    transition: color 0.2s;
+    white-space: nowrap;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+}
+
+.nav-links .active-link,
+.nav-links a.active {
+    background-color: var(--gold);
+    color: #000000;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    flex: 1;
+}
+
+/* Reserve Button & Active States */
+.btn-reserve,
+.btn-reserve-nav,
+.nav-right .active-link {
+    background-color: #d1b172;
+    color: #121316;
+    text-decoration: none;
+    padding: 10px 22px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-reserve:hover,
+.btn-reserve-nav:hover,
+.nav-right .active-link:hover {
+    background-color: var(--gold-hover);
+}
+/* Container กำหนดความกว้างไม่ให้ล้น */
+.menu-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px;
+}
+
+/* Header Section จัดซ้าย-ขวา */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 40px;
+    margin-bottom: 50px;
+}
+.header-right {
+    max-width: 440px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* จัดองค์ประกอบภายในให้ชิดขวา */
+    text-align: right;     /* ให้ข้อความชิดขวา */
+}
+.sub-title {
+    color: #d1b172;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.main-title {
+    font-family: Georgia, serif;
+    font-size: 3.2rem;
+    line-height: 1.1;
+    color: #F4F0E8;
+}
+
+.highlight-text {
+    color: #C84B31;
+    font-style: italic;
+}
+
+.header-right {
+    max-width: 440px;
+}
+
+.description {
+    color: #A0A5AD;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+/* Search Box - Centered */
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #D6C8B0;
+    border-radius: 30px;
+    padding: 10px 10px 10px 10px;
+    margin: 0 auto;       /* Align centered horizontally */
+    max-width: 360px;     /* Adjust width as needed */
+    width: 100%;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    background: transparent;
+    color: #111827;
+}
+
+.search-box button {
+    background: #d1b172;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #374151;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-box button:hover {
+    background: #e2c486;  /* Added slight hover contrast */
+    color: #000;
+}
+
+/* Category Filter Bar */
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 30px;
+}
+
+.category-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    color: #4B2E2B;;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.filter-btn:hover {
+    background: #e2c486; /* สีทองอ่อน */
+    color: #121316;      /* สีตัวอักษรเข้ม */
+    border-color: #e2c486;
+    }
+
+/* ปุ่มที่ถูกเลือก (Active) และขณะเอาเมาส์ชี้บนปุ่ม Active */
+.filter-btn.active,
+.filter-btn.active:hover {
+    background: #d1b172;
+    color: #111827;
+    font-weight: 600;
+    border-color: #d1b172;
+}
+
+
+/* Dishes Grid (3 คอลัมน์) */
+.dishes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 28px;
+}
+
+.dish-card {
+    background: #16181D;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.dish-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(209, 177, 114, 0.4);
+}
+
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 240px;
+    overflow: hidden;
+}
+
+.dish-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(18, 19, 22, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #F4F0E8;
+    text-transform: uppercase;
+}
+
+.btn-add {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: none;
+    font-size: 1.2rem;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.btn-add:hover {
+    transform: scale(1.1);
+    background-color: #d1b172;
+}
+
+.dish-info {
+    padding: 20px;
+}
+
+.dish-category {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #C84B31;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.dish-name {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0 0 6px 0;
+}
+
+.dish-price {
+    font-size: 0.95rem;
+    color: #A0A5AD;
+}
