@@ -6,5 +6,6 @@ CREATE TABLE IF NOT EXISTS menu_items (
   stock_quantity INT UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (item_id),
   UNIQUE KEY menu_items_name_unique (item_name),
-  KEY menu_items_category_stock (category, stock_quantity)
+  KEY menu_items_category_stock (category, stock_quantity),
+  CONSTRAINT menu_items_price_positive CHECK (price > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

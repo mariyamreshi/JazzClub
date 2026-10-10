@@ -30,8 +30,9 @@ function page(fetch) {
 }
 
 const shows = Array.from({ length: 5 }, (_, i) => ({
-  show_id: i + 1, show_date: `2026-10-${16 + i}`, artist: i === 0 ? '<img src=x onerror=alert(1)>' : `Artist ${i}`,
-  genre: 'Jazz & Soul', start_time: i === 0 ? '00:05' : '20:30',
+  show_id: i + 1, artist_id: i + 1, performance_date: `2026-10-${16 + i}`,
+  artist_name: i === 0 ? '<img src=x onerror=alert(1)>' : `Artist ${i}`,
+  artist_type: 'group', genre: 'Jazz & Soul', start_time: i === 0 ? '00:05' : '20:30', end_time: '23:00',
 }));
 
 test('renders all database shows with text content, correct dates and 12-hour times', async () => {
@@ -43,7 +44,7 @@ test('renders all database shows with text content, correct dates and 12-hour ti
   const items = ui.ids.showsList.children;
   assert.equal(items.length, 5);
   items.forEach((item, index) => assert.equal(item.querySelector('.arrow-btn').href, `/reserve.html?show_id=${shows[index].show_id}`));
-  assert.equal(items[0].querySelector('.band-title').textContent, shows[0].artist);
+  assert.equal(items[0].querySelector('.band-title').textContent, shows[0].artist_name);
   assert.equal(items[0].querySelector('.date-badge').textContent, '16 OCT 2026');
   assert.equal(items[0].querySelector('.date-badge').dateTime, '2026-10-16');
   assert.equal(items[0].querySelector('.start-time').textContent, '12:05 AM');
