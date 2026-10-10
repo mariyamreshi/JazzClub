@@ -6,6 +6,7 @@
     <title>Garnet's House - Shifts</title>
     <link rel="stylesheet" href="/css/admin/admin.css">
     <link rel="stylesheet" href="/css/admin/employees.css">
+    <link rel="stylesheet" href="/css/admin/navbar.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="admin-body">
@@ -20,16 +21,32 @@
 
         <nav class="sidebar-nav">
             <div class="nav-section-label">CLUB MANAGEMENT</div>
-            <a href="/admin/overview.html" class="nav-item"><span class="nav-icon">▦</span> Overview</a>
-            <a href="/admin/reservations.html" class="nav-item"><span class="nav-icon">▣</span> Reservations</a>
-            <a href="/admin/shows.html" class="nav-item"><span class="nav-icon">♫</span> Shows &amp; artists</a>
-            <a href="/admin/menu.html" class="nav-item"><span class="nav-icon">♜</span> Menu</a>
-            <a href="/admin/orders.html" class="nav-item"><span class="nav-icon">▤</span> Orders</a>
-            <a href="/admin/inventory.html" class="nav-item"><span class="nav-icon">⬡</span> Inventory <span class="badge warning">3</span></a>
-            <a href="/admin/employees.html" class="nav-item"><span class="nav-icon">♧</span> Employees</a>
-            <a href="/admin/shifts.html" class="nav-item active" aria-current="page"><span class="nav-icon">▦</span> Shifts</a>
-            <div class="nav-section-label">REPORTS</div>
-            <a href="/admin/performance.html" class="nav-item"><span class="nav-icon">▥</span> Performance</a>
+            <a href="/admin/overview.html" class="nav-item active">
+                <span class="nav-icon">📊</span> Overview
+            </a>
+            <a href="/admin/reservations.html" class="nav-item">
+                <span class="nav-icon">📅</span> Reservations
+                <span class="badge" id="reservationCount">—</span>
+            </a>
+            <a href="/admin/shows.html" class="nav-item">
+                <span class="nav-icon">🎷</span> Shows & artists
+            </a>
+            <a href="/admin/menu.html" class="nav-item">
+                <span class="nav-icon">🍽️</span> Menu
+            </a>
+            <a href="/admin/orders.html" class="nav-item">
+                <span class="nav-icon">📋</span> Orders
+            </a>
+            <a href="/admin/inventory.html" class="nav-item">
+                <span class="nav-icon">📦</span> Inventory
+                <span class="badge warning">3</span>
+            </a>
+            <a href="/admin/employees.html" class="nav-item">
+                <span class="nav-icon">👥</span> Employees
+            </a>
+            <a href="/admin/shifts.html" class="nav-item">
+                <span class="nav-icon">🗓️</span> Shifts
+            </a>
         </nav>
 
         <div class="sidebar-footer-widgets">
@@ -56,12 +73,7 @@
                 <button class="employee-primary" id="createShift">＋ Create shift</button>
             </div>
 
-            <section class="employee-summary">
-                <article class="employee-stat"><div><span>ON SHIFT TONIGHT</span><p>Across 4 roles</p></div><strong>12</strong></article>
-                <article class="employee-stat"><div><span>WEEKLY COVERAGE</span><p>86 of 94 shifts filled</p></div><strong>92%</strong></article>
-                <article class="employee-stat"><div><span>HOURS SCHEDULED</span><p>This week</p></div><strong>487h</strong></article>
-                <article class="employee-stat warning-stat"><div><span>OPEN ROLES</span><p>Saturday · The Blue Notes</p></div><strong>2</strong></article>
-            </section>
+
 
             <section class="shift-panel">
                 <div class="shift-panel-heading">
@@ -117,20 +129,7 @@
                 </div>
             </section>
 
-            <section class="coverage-panel">
-                <div>
-                    <div class="employees-eyebrow">TONIGHT AT THE CLUB</div>
-                    <h2>The Blue Notes</h2>
-                    <p>Show ID: SH005 · 8:30 PM–11:00 PM · Expected guests: 164 / 180</p>
-                </div>
-                <div class="coverage-status">
-                    <b>Shift coverage</b>
-                    <span>Floor servers <strong>5 / 6 · Needs 1</strong></span>
-                    <span>Bar staff <strong>3 / 3 · Covered</strong></span>
-                    <span>Kitchen <strong>3 / 4 · Needs 1</strong></span>
-                    <span>Reservations <strong>1 / 1 · Covered</strong></span>
-                </div>
-            </section>
+
         </div>
     </main>
 </div>

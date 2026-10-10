@@ -64,145 +64,14 @@ select:focus-visible {
     width: 100%;
 }
 
-/* SIDEBAR / NAVBAR */
-    .admin-sidebar {
-        width: 260px;
-        background-color: rgba(230, 220, 200, 0.99);
-        color: #4B2E2B;
-        padding: 24px 16px;
-        display: flex;
-        flex-direction: column;
-        flex-shrink: 0;
-    }
+/* Sidebar styles are in admin/navbar.css. */
 
-.sidebar-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 0 8px 24px;
-    border-bottom: 1px solid rgba(75, 46, 43, 0.15);
-    margin-bottom: 20px;
-}
-
-.brand-text h1 {
-    font-family: 'Inter', sans-serif;
-    font-size: 1.15rem;
-    line-height: 1.1;
-    color: #4B2E2B;
-}
-
-.brand-text span {
-    font-size: 0.6rem;
-    letter-spacing: 2px;
-    color: #8C7468;
-}
-
-.nav-section-label {
-    font-size: 0.65rem;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    color: #8C7468;
-    margin: 16px 12px 8px;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 12px;
-    color: #4B2E2B;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: all 0.2s ease;
-}
-
-.nav-item:hover {
-    background: rgba(140, 35, 35, 0.08);
-    color: #8C2323;
-}
-
-.nav-item.active {
-    background: #8C2323;
-    color: #FFFFFF;
-    font-weight: 600;
-}
-
-.nav-item .badge {
-    margin-left: auto;
-    background: rgba(140, 35, 35, 0.1);
-    color: #8C2323;
-    font-size: 0.7rem;
-    padding: 2px 7px;
-    border-radius: 10px;
-}
-
-.nav-item .badge.warning {
-    background: #C5A059;
-    color: #FFFFFF;
-}
-
-/* Sidebar widgets */
-.stage-widget-card {
-    background: rgba(75, 46, 43, 0.06);
-    border: 1px solid rgba(75, 46, 43, 0.12);
-    border-radius: 12px;
-    padding: 14px;
-}
-
-.widget-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1rem;
-    color: #4B2E2B;
-    margin-top: 2px;
-}
-
-.widget-label,
-.widget-sub,
-.capacity-text {
-    color: #8C7468;
-}
-
-.widget-date {
-    background: rgba(197, 160, 89, 0.2);
-    color: #8C642D;
-}
-
-.capacity-bar {
-    height: 4px;
-    background: rgba(75, 46, 43, 0.12);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 6px;
-}
-
-.capacity-fill {
-    height: 100%;
-    background: #C5A059;
-}
-
-.profile-name {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #4B2E2B;
-}
-
-.profile-role,
-.profile-menu-dots {
-    color: #8C7468;
-}
-
-.avatar-circle {
-    background: #C5A059;
-    color: #FFFFFF;
-}
 /* 4. MAIN CONTENT */
 .admin-main {
     min-width: 0;
     min-height: 100vh;
     flex: 1;
-    margin-left: 250px;
+    margin-left: 0;
 }
 
 .admin-header-simple {
@@ -927,12 +796,6 @@ select:focus-visible {
 
 /* 16. RESPONSIVE: TABLET */
 @media (max-width: 1100px) {
-    .admin-sidebar {
-        width: 220px;
-        padding-right: 15px;
-        padding-left: 15px;
-    }
-
     .admin-main {
         margin-left: 220px;
     }
@@ -963,53 +826,6 @@ select:focus-visible {
 @media (max-width: 768px) {
     .admin-layout {
         display: block;
-    }
-
-    .admin-sidebar {
-        position: relative;
-        inset: auto;
-
-        width: 100%;
-        height: auto;
-        max-height: none;
-        overflow: visible;
-
-        padding: 18px 20px;
-    }
-
-    .sidebar-brand {
-        padding: 4px 0 18px;
-    }
-
-    .brand-text h1 {
-        font-size: 23px;
-    }
-
-    .sidebar-nav {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 5px;
-        padding-top: 16px;
-    }
-
-    .nav-section-label {
-        grid-column: 1 / -1;
-        margin: 8px 0;
-    }
-
-    .nav-section-label:not(:first-child) {
-        margin-top: 14px;
-    }
-
-    .nav-item {
-        min-width: 0;
-        padding: 10px;
-        font-size: 11px;
-    }
-
-    .sidebar-footer-widgets {
-        margin-top: 20px;
-        padding-top: 15px;
     }
 
     .admin-main {
@@ -1128,14 +944,6 @@ select:focus-visible {
 
     .banner-greeting {
         font-size: 28px;
-    }
-
-    .sidebar-nav {
-        grid-template-columns: 1fr;
-    }
-
-    .nav-section-label {
-        grid-column: auto;
     }
 
     .reservation-dialog-actions {

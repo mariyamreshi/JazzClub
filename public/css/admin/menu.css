@@ -91,6 +91,7 @@
 .menu-thumb {
     width: 54px;
     height: 54px;
+    height: 54px;
     border-radius: 8px;
     object-fit: cover;
     background: #EEEAE2;

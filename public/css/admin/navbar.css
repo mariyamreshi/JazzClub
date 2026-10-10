@@ -1,0 +1,208 @@
+/* Shared admin sidebar and navigation. Load this after page stylesheets. */
+.admin-sidebar {
+    box-sizing: border-box;
+    width: 260px;
+    min-height: 100vh;
+    padding: 24px 16px;
+    display: flex;
+    flex: 0 0 260px;
+    flex-direction: column;
+    background: #eee5d0;
+    color: #392c26;
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 0 8px 24px;
+    border-bottom: 1px solid #ddd3be;
+}
+
+.brand-text h1 {
+    color: #4b2e2b;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.15rem;
+    line-height: 1.1;
+}
+
+.brand-text span {
+    color: #8c9992;
+    font-size: .6rem;
+    letter-spacing: 2px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-section-label {
+    margin: 16px 12px 8px;
+    color: #58665e;
+    font-size: .65rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: #392c26;
+    font-size: .9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background .2s ease, color .2s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: #f8f3e8;
+    color: #392c26;
+}
+
+.nav-item.active {
+    font-weight: 600;
+}
+
+.nav-icon {
+    width: 22px;
+    flex: 0 0 22px;
+    text-align: center;
+    font-size: 1.05rem;
+}
+
+.nav-item .badge {
+    margin-left: auto;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: #d0a13e;
+    color: #392c26;
+    font-size: .7rem;
+}
+
+.nav-item .badge.warning {
+    background: #c5a059;
+    color: #392c26;
+}
+
+.sidebar-footer-widgets {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.user-profile-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 0 8px;
+    border-top: 1px solid #ddd3be;
+}
+
+.avatar-circle {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #392c26;
+    color: #fff;
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.profile-name {
+    color: #392c26;
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.profile-role,
+.profile-menu-dots {
+    color: #7a8179;
+    font-size: .7rem;
+}
+
+.profile-menu-dots {
+    margin-left: auto;
+    cursor: pointer;
+}
+
+/* The legacy Reservations stylesheet adds a left margin to admin-main. */
+.admin-main {
+    min-width: 0;
+    margin-left: 0;
+}
+
+@media (max-width: 1100px) {
+    .admin-sidebar {
+        width: 220px;
+        flex-basis: 220px;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-layout {
+        display: block;
+    }
+
+    .admin-sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 18px 20px;
+    }
+
+    .sidebar-brand {
+        padding: 4px 0 18px;
+    }
+
+    .sidebar-nav {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 5px;
+        padding-top: 16px;
+    }
+
+    .nav-section-label {
+        grid-column: 1 / -1;
+        margin: 8px 0;
+    }
+
+    .nav-item {
+        padding: 10px;
+        font-size: .78rem;
+    }
+
+    .sidebar-footer-widgets {
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+
+    .admin-main {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .sidebar-nav {
+        grid-template-columns: 1fr;
+    }
+
+    .nav-section-label {
+        grid-column: auto;
+    }
+}

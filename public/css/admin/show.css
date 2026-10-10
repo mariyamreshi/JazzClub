@@ -2,9 +2,6 @@
    SHOWS & ARTISTS MANAGEMENT STYLES
    ========================================== */
 
-/* Import base variables and layout if separated */
-@import url('./admin.css');
-
 /* Custom Page Layout Overrides */
 .shows-dashboard {
     display: flex;
