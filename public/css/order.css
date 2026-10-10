@@ -1,0 +1,322 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-dark: #0D1412;
+    --bg-cream: #F4F0E8;
+    --card-white: #FFFFFF;
+    --text-primary: #33312E;
+    --text-muted: #807C75;
+    --gold: #A88138;
+    --gold-hover: #e2c486;
+    --maroon: #7A2E3B;
+    --maroon-hover: #5A202A;
+    --stage-green: #23473B;
+    --grid-line: #E8E3D8;
+    --border-light: #E0DDD5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: var(--bg-cream);
+    color: var(--text-primary);
+    min-height: 100vh;
+}
+
+
+.order-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 65px 30px 90px;
+}
+
+.order-header {
+    margin-bottom: 55px;
+}
+
+
+.order-header h1 {
+    color: var(--text-primary);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3.5rem;
+    font-weight: 500;
+    line-height: 1.15;
+}
+
+.highlight {
+    color: var(--maroon);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+}
+
+.header-description {
+    max-width: 550px;
+    margin-top: 18px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.8;
+}
+
+.order-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 25px 0;
+    border-top: 1px solid var(--grid-line);
+    border-bottom: 1px solid var(--grid-line);
+}
+
+.order-toolbar h2 {
+    color: var(--text-primary);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+
+.order-toolbar p {
+    margin-top: 8px;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+.filter-wrapper select {
+    min-width: 160px;
+    padding: 12px 15px;
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    outline: none;
+    background-color: var(--card-white);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.filter-wrapper select:focus {
+    border-color: var(--gold);
+}
+
+.orders-list {
+    display: grid;
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.order-card {
+    overflow: hidden;
+    padding: 28px 30px;
+    background-color: var(--card-white);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(51, 49, 46, 0.035);
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(51, 49, 46, 0.07);
+}
+
+.order-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--grid-line);
+}
+
+.order-number {
+    color: var(--maroon);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    overflow-wrap: anywhere;
+}
+
+.order-date {
+    margin-top: 9px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+
+.status-badge {
+    flex-shrink: 0;
+    padding: 8px 13px;
+    border-radius: 3px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background-color: #F8EFD9;
+    color: #906B26;
+}
+
+.status-preparing {
+    background-color: #F4E5D7;
+    color: #96572F;
+}
+
+.status-ready {
+    background-color: #E3EEE7;
+    color: var(--stage-green);
+}
+
+.status-completed {
+    background-color: #E3EEE7;
+    color: var(--stage-green);
+}
+
+.status-cancelled {
+    background-color: #F4E4E5;
+    color: var(--maroon);
+}
+
+.order-items {
+    padding: 18px 0;
+}
+
+.ordered-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 13px 0;
+}
+
+.ordered-item-name {
+    color: var(--text-primary);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+}
+
+.ordered-item-quantity {
+    margin-top: 7px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    line-height: 1.6;
+}
+
+.ordered-item-price {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.order-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding-top: 22px;
+    border-top: 1px solid var(--grid-line);
+}
+
+.order-total-label {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+.order-total {
+    margin-top: 7px;
+    color: var(--maroon);
+    font-size: 1.45rem;
+    font-weight: 700;
+}
+
+
+.view-details-btn {
+    padding: 12px 18px;
+    border: 1px solid var(--maroon);
+    border-radius: 3px;
+    background-color: transparent;
+    color: var(--maroon);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.view-details-btn:hover {
+    background-color: var(--maroon);
+    color: var(--card-white);
+}
+
+.order-details {
+    margin-top: 22px;
+    padding: 20px;
+    border-left: 3px solid var(--gold);
+    background-color: var(--bg-cream);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    line-height: 1.9;
+    overflow-wrap: anywhere;
+}
+
+.order-details p + p {
+    margin-top: 5px;
+}
+
+.empty-orders {
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.empty-orders h2 {
+    color: var(--text-primary);
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.empty-orders p {
+    max-width: 400px;
+    margin: 16px auto 28px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.8;
+}
+
+.menu-button {
+    display: inline-block;
+    padding: 13px 22px;
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    background-color: var(--gold);
+    color: var(--bg-dark);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.menu-button:hover {
+    background-color: var(--gold-hover);
+    border-color: var(--gold-hover);
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
