@@ -53,6 +53,16 @@ async function initDatabase() {
           await connection.query(statement);
         }
       }
+      const [shiftTable] = await connection.query("SHOW TABLES LIKE 'employee_shifts'");
+      if (shiftTable.length === 0) {
+        const migration = fs.readFileSync(
+          path.join(__dirname, '../database/migrations/009-create-employee-schedules-and-shifts.sql'),
+          'utf8'
+        );
+        for (const statement of sqlStatements(migration)) {
+          await connection.query(statement);
+        }
+      }
       console.log('✅ Database schema initialized successfully!');
     } finally {
       connection.release();

@@ -4,7 +4,7 @@
 
 ## สถานะ
 
-ตอนนี้เปิดหน้าแรก หน้าจอง หน้า Show และหน้าเมนูผ่าน Express ได้ ระบบจองและเมนูเชื่อม MySQL แล้ว หน้าเมนูลูกค้าอ่านเฉพาะรายการที่มีสต็อก ค้นหาและกรองตามหมวดหมู่ได้ ส่วน `/admin/menu.html` เพิ่ม แก้ไขสต็อก และลบรายการเมนูได้จากฐานข้อมูล
+ตอนนี้เปิดหน้าแรก หน้าจอง หน้า Show และหน้าเมนูผ่าน Express ได้ ระบบจองและเมนูเชื่อม MySQL แล้ว หน้าเมนูลูกค้าอ่านเฉพาะรายการที่มีสต็อก ค้นหา กรอง และสั่งอาหารตาม Table ID ได้ ส่วน `/admin/menu.html` เพิ่ม แก้ไขสต็อก และลบรายการเมนูได้จากฐานข้อมูล
 
 ใช้ stack ตาม proposal: **HTML/CSS/JavaScript + Node.js/Express + MySQL** และเริ่มพัฒนาบน localhost โดยไม่มี login/roles หรือแอปมือถือ
 
@@ -101,7 +101,7 @@ npm run db:check
 - `ER_ACCESS_DENIED_ERROR`: บัญชี รหัสผ่าน หรือสิทธิ์ไม่ตรง
 - `ER_BAD_DB_ERROR`: ยังไม่มีฐานข้อมูลชื่อตาม `DB_NAME`
 
-สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้าง `customers`, `club_tables`, `reservations`, `artists`, `shows`, `employees` และ `menu_items` ตาม ERD ถ้ายังไม่มี
+สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้าง `customers`, `club_tables`, `reservations`, `artists`, `shows`, `employees`, `menu_items`, `orders` และ `order_items` ถ้ายังไม่มี โดย `orders.table_id` เป็นส่วนเพิ่มจาก ERD เดิมเพื่อระบุว่าออเดอร์เป็นของโต๊ะใด
 
 ถ้าฐานข้อมูลมี `menu_items` รุ่นก่อนหน้า `db:init` จะรัน `003-align-menu-item-with-erd.sql` เพื่อย้ายสถานะเดิมเป็น `category`/`stock_quantity` และปรับตารางให้เหลือฟิลด์ตาม ERD บัญชีที่ใช้รันคำสั่งนี้จึงต้องมีสิทธิ์ `ALTER` สำหรับการ migration
 
@@ -143,12 +143,23 @@ ORDER BY r.reservation_id DESC;
 | POST | `/api/menu-items` | เพิ่มรายการเมนูและตอบ HTTP 201 |
 | PUT | `/api/menu-items/:itemId` | แก้ไขชื่อ หมวดหมู่ ราคา และจำนวนสต็อก |
 | DELETE | `/api/menu-items/:itemId` | ลบรายการเมนูถาวรและตอบ HTTP 204 |
+| GET | `/api/tables` | รายการโต๊ะที่พร้อมรับออเดอร์สำหรับ pop-up หน้าเมนู |
+| GET | `/api/orders` | ออเดอร์ที่ยังไม่ยกเลิก พร้อมรายการรวมตามโต๊ะและข้อมูลการชำระเงินสำหรับหน้า Admin |
+| POST | `/api/orders` | เพิ่มรายการลง Order ที่เปิดอยู่ของ Table ID เดิม หรือสร้าง Order ใหม่สำหรับโต๊ะอื่น พร้อมตัด stock ใน transaction เดียวกัน |
+| POST | `/api/payments` | บันทึกการชำระเต็มจำนวนหนึ่งครั้งต่อ Order และเปลี่ยนสถานะ Order เป็น `paid` ใน transaction เดียวกัน |
+| GET | `/admin/order.html` | หน้า Admin Order จาก MySQL พร้อมปุ่มคิดเงิน pop-up และรีเฟรชอัตโนมัติทุก 3 วินาที |
 | GET | `/admin/employees.html` | หน้าจัดการ Employee พร้อมค้นหา กรอง เพิ่ม แก้ไข และลบ |
 | GET | `/api/employees` | รายการ Employee จาก MySQL ตาม field ใน ERD |
 | GET | `/api/employees/:employeeId` | Employee ตาม ID หรือ HTTP 404 เมื่อไม่พบ |
 | POST | `/api/employees` | เพิ่ม Employee และตอบ HTTP 201 |
 | PUT | `/api/employees/:employeeId` | แก้ไขชื่อ เบอร์โทร สถานะ และประเภทการจ้าง |
 | DELETE | `/api/employees/:employeeId` | ลบ Employee ที่ไม่ได้ถูก Shift อ้างอิง |
+| GET | `/admin/shifts.html` | หน้าจัดการ Employee Shift รายสัปดาห์ พร้อมค้นหา กรอง เพิ่ม แก้ไข และลบ |
+| GET | `/api/employee-shifts?from=YYYY-MM-DD&to=YYYY-MM-DD` | Shift ในช่วงวันที่ พร้อมชื่อ Employee และข้อมูล Show |
+| GET | `/api/employee-shifts/:shiftId` | Shift ตาม ID หรือ HTTP 404 เมื่อไม่พบ |
+| POST | `/api/employee-shifts` | เพิ่ม Shift ตามฟิลด์ใน ERD และตอบ HTTP 201 |
+| PUT | `/api/employee-shifts/:shiftId` | แก้ไข Employee, Show, Role, วันที่ และเวลา |
+| DELETE | `/api/employee-shifts/:shiftId` | ลบเฉพาะ Shift assignment และตอบ HTTP 204 |
 | POST | `/api/reservations` | บันทึก Customer และ Reservation ที่อ้างอิง Table ด้วย Foreign Key |
 | GET | `/api/reservations/availability?date=YYYY-MM-DD&time=HH:mm` | รายการรหัสโต๊ะที่ถูกจองในวันและเวลาที่เลือก |
 | GET | `/api/health` | HTTP 200 เมื่อ Express ทำงาน ไม่ตรวจ MySQL |

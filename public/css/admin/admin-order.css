@@ -239,9 +239,42 @@ body.admin-body {
 }
 
 .status-ready,
-.status-completed {
+.status-completed,
+.status-served,
+.status-paid {
     background: #E3EEE7;
     color: var(--stage-green);
+}
+
+.order-refresh {
+    min-height: 42px;
+    padding: 10px 16px;
+    border: 1px solid var(--maroon);
+    border-radius: 4px;
+    background: var(--maroon);
+    color: #fff;
+    font: 600 0.76rem 'Inter', sans-serif;
+    cursor: pointer;
+}
+
+.order-refresh:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.order-load-status {
+    margin-top: 18px;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+}
+
+.order-load-error {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-left: 3px solid var(--maroon);
+    background: #f4e4e5;
+    color: var(--maroon);
+    font-size: 0.78rem;
 }
 
 .status-cancelled {
@@ -452,6 +485,18 @@ body.admin-body {
     box-shadow: 0 20px 70px rgba(0, 0, 0, 0.2);
 }
 
+dialog.payment-modal {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    border: 1px solid var(--border-light);
+}
+
+dialog.payment-modal::backdrop {
+    background: rgba(13, 20, 18, 0.68);
+    backdrop-filter: blur(3px);
+}
+
 .modal-close {
     position: absolute;
     top: 14px;
@@ -520,6 +565,10 @@ body.admin-body {
     font-size: 0.8rem;
 }
 
+#paymentForm {
+    margin-top: 20px;
+}
+
 #paymentForm label {
     display: block;
     margin-bottom: 9px;
@@ -527,13 +576,18 @@ body.admin-body {
     font-weight: 600;
 }
 
-#paidAmountInput {
+#paidAmountInput,
+#paymentMethod {
     width: 100%;
     min-height: 45px;
     padding: 12px;
     border: 1px solid var(--border-light);
     border-radius: 4px;
     font: inherit;
+}
+
+#paymentMethod {
+    margin-bottom: 18px;
 }
 
 .input-hint {
@@ -580,6 +634,20 @@ body.admin-body {
 
 .btn-save-payment:hover {
     background: var(--maroon-hover);
+}
+
+.btn-secondary:disabled,
+.btn-save-payment:disabled,
+.modal-close:disabled {
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.order-payment-record {
+    color: var(--stage-green);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: right;
 }
 
 /* Responsive */

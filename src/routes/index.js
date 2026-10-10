@@ -6,7 +6,10 @@ const health = require('../controllers/health.controller');
 const reservationController = require('../controllers/reservation.controller');
 const showController = require('../controllers/show.controller');
 const employeeController = require('../controllers/employee.controller');
+const employeeShiftController = require('../controllers/employee-shift.controller');
 const menuController = require('../controllers/menu.controller');
+const orderController = require('../controllers/order.controller');
+const paymentController = require('../controllers/payment.controller');
 
 // Home & Health routes (from your friend)
 router.get('/', home.index);
@@ -20,6 +23,11 @@ router.get('/api/employees/:employeeId', employeeController.getEmployee);
 router.post('/api/employees', employeeController.createEmployee);
 router.put('/api/employees/:employeeId', employeeController.updateEmployee);
 router.delete('/api/employees/:employeeId', employeeController.deleteEmployee);
+router.get('/api/employee-shifts', employeeShiftController.list);
+router.get('/api/employee-shifts/:shiftId', employeeShiftController.getOne);
+router.post('/api/employee-shifts', employeeShiftController.create);
+router.put('/api/employee-shifts/:shiftId', employeeShiftController.update);
+router.delete('/api/employee-shifts/:shiftId', employeeShiftController.remove);
 
 // Guest menu and admin menu management.
 router.get('/api/menu-items', menuController.listPublic);
@@ -27,6 +35,12 @@ router.get('/api/admin/menu-items', menuController.listAdmin);
 router.post('/api/menu-items', menuController.createItem);
 router.put('/api/menu-items/:itemId', menuController.updateItem);
 router.delete('/api/menu-items/:itemId', menuController.deleteItem);
+
+// Guest table ordering. Each order owns one or more ORDER_ITEM rows.
+router.get('/api/tables', orderController.listTables);
+router.get('/api/orders', orderController.listOrders);
+router.post('/api/orders', orderController.createOrder);
+router.post('/api/payments', paymentController.createPayment);
 
 // Reservation routes (your part)
 router.get('/api/reservations', reservationController.listReservations);

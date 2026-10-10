@@ -126,6 +126,50 @@ API เพิ่ม/แก้ไข/ลบ Show สำหรับหน้า�
 
 หน้าเมนูลูกค้าเริ่มที่หมวด Recommended และรองรับการค้นหาร่วมกับตัวกรอง หน้า Admin แสดงจำนวนรายการ จำนวนรายการที่มีสต็อก และสต็อกรวม พร้อมกรองตามชื่อ หมวดหมู่ หรือสถานะสต็อกได้ เมื่อตั้ง `stock_quantity` เป็น 0 รายการจะหายจากหน้าลูกค้าแต่ยังอยู่ใน Admin
 
+## API สั่งอาหารตามโต๊ะที่ใช้งานได้
+
+`GET /api/tables` คืน `table_id`, `capacity` และ `zone` ของโต๊ะสถานะ `available` เพื่อสร้างตัวเลือก Table ID ใน pop-up หน้าเมนู
+
+`POST /api/orders` รับข้อมูลดังนี้:
+
+```json
+{
+  "table_id": "F01",
+  "item_id": 7,
+  "quantity": 2
+}
+```
+
+เมื่อสำเร็จ ระบบค้นหา Order สถานะ `pending`, `preparing` หรือ `served` ของโต๊ะนั้นก่อน ถ้ามีอยู่จะเพิ่มจำนวนใน `order_items` เดิม หรือเพิ่มรายการเมนูใหม่เข้า Order เดิม ถ้ายังไม่มีจึงสร้าง Order ใหม่สำหรับโต๊ะนั้น ระบบเก็บ `price_at_time`, ตัด `menu_items.stock_quantity` และคำนวณยอดรวมใหม่ภายใน transaction เดียวกัน
+
+`GET /api/orders` คืน Order ที่ไม่ถูกยกเลิก โดยแต่ละ Order มี `table_id`, `total`, `payment` และ array `items` ที่รวม quantity ของเมนูชนิดเดียวกันแล้ว หน้า `/admin/order.html` เรียก API นี้ทุก 3 วินาที จึงแสดงคำสั่งซื้อเพิ่มเติมของโต๊ะเดิมใน card เดิม แยก card เมื่อเป็นคนละโต๊ะ และเก็บ Order ที่ชำระแล้วไว้เป็นประวัติ
+
+- สำเร็จ: HTTP 201 พร้อม `order_id`, `table_id`, `status`, `total` และรายละเอียดรายการ
+- ข้อมูลไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
+- ไม่พบโต๊ะหรือเมนู: HTTP 404 (`TABLE_NOT_FOUND`, `MENU_ITEM_NOT_FOUND`)
+- โต๊ะไม่พร้อมหรือสต็อกไม่พอ: HTTP 409 (`TABLE_NOT_AVAILABLE`, `INSUFFICIENT_STOCK`)
+
+ERD ฉบับแก้ไขต้องเพิ่ม `table_id` เป็น FK ใน `ORDER` และเพิ่มความสัมพันธ์ `TABLE (1) — (N) ORDER` ส่วน `PAYMENT` คง `order_id` เป็น FK โดยไม่เพิ่ม `table_id` เพราะหาโต๊ะผ่าน `PAYMENT → ORDER → TABLE` ได้
+
+## API ชำระเงินที่ใช้งานได้
+
+`POST /api/payments` รับข้อมูลดังนี้:
+
+```json
+{
+  "order_id": 4,
+  "payment_method": "PromptPay",
+  "amount": "14.00"
+}
+```
+
+รองรับวิธีชำระ `Cash`, `Credit Card` และ `PromptPay` จำนวนเงินต้องเท่ากับยอดรวมปัจจุบันของ Order ระบบล็อก Order, เพิ่ม Payment และเปลี่ยนสถานะ Order เป็น `paid` ภายใน transaction เดียวกัน โดยหนึ่ง Order ชำระได้ครั้งเดียว หน้า Admin เปิด pop-up จากปุ่ม `Collect payment` และเติมยอดที่ต้องชำระให้อัตโนมัติ
+
+- สำเร็จ: HTTP 201 พร้อม `payment_id`, `order_id`, `table_id`, `payment_method`, `amount` และ `payment_time`
+- ข้อมูลไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
+- ไม่พบ Order: HTTP 404 (`ORDER_NOT_FOUND`)
+- Order ถูกยกเลิก ยอดไม่ตรง หรือชำระแล้ว: HTTP 409 (`ORDER_NOT_PAYABLE`, `PAYMENT_AMOUNT_MISMATCH`, `PAYMENT_EXISTS`)
+
 ## API พนักงานที่ใช้งานได้
 
 `GET /api/employees` คืน Employee ทุกคนจาก MySQL โดยแต่ละรายการมี `employee_id`, `employee_name`, `phone`, `status` และ `employment_type` ตรงกับ ERD ส่วน `GET /api/employees/:employeeId` คืนรายการตาม ID
@@ -133,6 +177,30 @@ API เพิ่ม/แก้ไข/ลบ Show สำหรับหน้า�
 `POST /api/employees` เพิ่ม Employee, `PUT /api/employees/:employeeId` แก้ไข และ `DELETE /api/employees/:employeeId` ลบรายการ หน้า `/admin/employees.html` ใช้ API ชุดนี้สำหรับค้นหา กรอง และจัดการข้อมูล
 
 สถานะที่รับได้คือ `Active`, `On leave`, `Inactive` และประเภทการจ้างคือ `Full-time`, `Part-time` เบอร์โทรต้องมีตัวเลข 7–15 หลักและไม่ซ้ำกับ Employee คนอื่น ข้อมูลไม่ถูกต้องตอบ HTTP 400, เบอร์ซ้ำตอบ 409, ไม่พบ ID ตอบ 404 และลบ Employee ที่ถูก Shift อ้างอิงตอบ 409
+
+## API เวรพนักงานที่ใช้งานได้
+
+`GET /api/employee-shifts?from=2026-10-12&to=2026-10-18` คืน Shift ในช่วงวันที่ โดยแต่ละรายการมีฟิลด์ตาม ERD คือ `shift_id`, `employee_id`, `show_id`, `role`, `shift_date`, `start_time`, `end_time` และมีชื่อ Employee, Artist กับเวลา Show ที่ join มาเพื่อแสดงในหน้า Admin ส่วน `GET /api/employee-shifts/:shiftId` คืน Shift เดียวตาม ID
+
+`POST /api/employee-shifts` และ `PUT /api/employee-shifts/:shiftId` รับข้อมูลดังนี้:
+
+```json
+{
+  "employee_id": 1,
+  "show_id": 2,
+  "role": "Bartender",
+  "shift_date": "2026-10-17",
+  "start_time": "19:00",
+  "end_time": "23:30"
+}
+```
+
+ระบบอนุญาตเฉพาะ Employee สถานะ `Active`, กำหนดให้ `shift_date` ตรงกับวันของ Show และป้องกันช่วงเวลาทับซ้อนของ Employee คนเดียวกัน การเพิ่มและแก้ไขตรวจ FK กับตาราง `employees` และ `shows` ใน transaction ส่วน `DELETE /api/employee-shifts/:shiftId` ลบเฉพาะ assignment
+
+- เพิ่มสำเร็จ: HTTP 201; แก้ไขสำเร็จ: HTTP 200; ลบสำเร็จ: HTTP 204
+- ข้อมูลหรือ ID ไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
+- ไม่พบ Employee, Show หรือ Shift: HTTP 404 (`EMPLOYEE_NOT_FOUND`, `SHOW_NOT_FOUND`, `SHIFT_NOT_FOUND`)
+- Employee ไม่ Active, วันไม่ตรง Show หรือเวลาทับซ้อน: HTTP 409 (`EMPLOYEE_NOT_ACTIVE`, `SHIFT_DATE_MISMATCH`, `SHIFT_OVERLAP`)
 
 ## API ส่วนอื่น
 
@@ -142,11 +210,10 @@ Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"se
 
 | กลุ่ม | Resource path ที่เสนอ | ผู้ดูแลเบื้องต้น |
 | --- | --- | --- |
-| ลูกค้า/โต๊ะ/การจอง | `/api/customers`, `/api/tables`, `/api/reservations` | Garnet |
+| ลูกค้า/การจอง | `/api/customers`, `/api/reservations` | Garnet |
 | ศิลปิน/การแสดง/ผู้เข้าชม | `/api/artists`, `/api/shows`, `/api/show-attendance` | Fifa |
-| เวรพนักงาน | `/api/employee-shifts` | Mary |
 | stock | `/api/stock` | Mary |
-| ออเดอร์/รายการ/ชำระเงิน | `/api/orders`, `/api/orders/:id/items`, `/api/payments` | Garnet |
+| จัดการออเดอร์เพิ่มเติม | `PUT /api/orders`, `/api/orders/:id/items` | Garnet |
 | โต๊ะว่าง | `/api/reports/table-availability` | Fifa + Garnet |
 | ความพร้อมของ show | `/api/reports/show-readiness` | Mary + Garnet |
 | ออเดอร์/ชำระเงินต่อการจอง | `/api/reports/reservation-summary` | Mary + Garnet |

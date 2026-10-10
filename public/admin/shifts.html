@@ -6,19 +6,14 @@
     <title>Garnet's House - Shifts</title>
     <link rel="stylesheet" href="/css/admin/admin.css">
     <link rel="stylesheet" href="/css/admin/employees.css">
+    <link rel="stylesheet" href="/css/admin/admin-shifts.css">
     <link rel="stylesheet" href="/css/admin/navbar.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="admin-body">
 <div class="admin-layout">
     <aside class="admin-sidebar">
-        <div class="sidebar-brand">
-            <div class="brand-text">
-                <h1>Garnet's House</h1>
-                <span>JAZZ CLUB</span>
-            </div>
-        </div>
-
+        <div class="sidebar-brand"><div class="brand-text"><h1>Garnet's House</h1><span>JAZZ CLUB</span></div></div>
         <nav class="sidebar-nav">
             <div class="nav-section-label">CLUB MANAGEMENT</div>
             <a href="/admin/overview.html" class="nav-item"><span class="nav-icon">📊</span> Overview</a>
@@ -30,150 +25,101 @@
             <a href="/admin/employees.html" class="nav-item"><span class="nav-icon">👥</span> Employees</a>
             <a href="/admin/shifts.html" class="nav-item active"><span class="nav-icon">🗓️</span> Shifts</a>
         </nav>
-
-        <div class="sidebar-footer-widgets">
-            <div class="user-profile-bar">
-                <div class="avatar-circle">MR</div>
-                <div class="profile-info">
-                    <div class="profile-name">Mariyam Reshi</div>
-                    <div class="profile-role">Club Manager</div>
-                </div>
-            </div>
-        </div>
+        <div class="sidebar-footer-widgets"><div class="user-profile-bar">
+            <div class="avatar-circle">MR</div>
+            <div class="profile-info"><div class="profile-name">Mariyam Reshi</div><div class="profile-role">Club Manager</div></div>
+        </div></div>
     </aside>
 
     <main class="admin-main">
         <header class="admin-header-simple"><a href="/" class="btn-guest-site">Guest website</a></header>
-
         <div class="employees-content">
             <div class="employees-heading">
                 <div>
-                    <div class="employees-eyebrow">CLUB MANAGEMENT <span>/</span> SHIFTS</div>
+                    <div class="employees-eyebrow">CLUB MANAGEMENT <span>/</span> EMPLOYEE SHIFT</div>
                     <h1>Shifts</h1>
-                    <p>Plan show coverage and make sure every role is staffed.</p>
+                    <p>Assign employees to shows using the EMPLOYEE_SHIFT records from the ERD.</p>
                 </div>
-                <button class="employee-primary" id="createShift">＋ Create shift</button>
+                <button type="button" class="employee-primary" id="addShift">+ Add shift</button>
             </div>
 
-
-
-            <section class="shift-panel">
-                <div class="shift-panel-heading">
-                    <div>
-                        <div class="employees-eyebrow">WEEKLY VIEW</div>
-                        <h2>September 14–20, 2026</h2>
-                    </div>
-                    <div class="week-actions">
-                        <button class="employee-secondary" aria-label="Previous week">‹</button>
-                        <button class="employee-secondary">Today</button>
-                        <button class="employee-secondary" aria-label="Next week">›</button>
-                    </div>
-                </div>
-
-                <div class="shift-grid">
-                    <div class="shift-day"><b>MON 14</b>
-                        <article class="shift-chip floor"><small>5–11 PM</small><strong>Floor server</strong><span>Mali P.</span></article>
-                        <article class="shift-chip bar"><small>6–12 PM</small><strong>Bar</strong><span>Niran C.</span></article>
-                    </div>
-                    <div class="shift-day"><b>TUE 15</b>
-                        <article class="shift-chip kitchen"><small>4–10 PM</small><strong>Kitchen</strong><span>Kanda S.</span></article>
-                        <article class="shift-chip floor"><small>6–12 PM</small><strong>Floor server</strong><span>Ben T.</span></article>
-                    </div>
-                    <div class="shift-day"><b>WED 16</b>
-                        <article class="shift-chip floor"><small>5–11 PM</small><strong>Floor server</strong><span>Mali P.</span></article>
-                        <article class="shift-chip bar"><small>6–12 PM</small><strong>Bar</strong><span>Niran C.</span></article>
-                    </div>
-                    <div class="shift-day"><b>THU 17</b>
-                        <article class="shift-chip kitchen"><small>4–10 PM</small><strong>Kitchen</strong><span>Kanda S.</span></article>
-                        <article class="shift-chip reservations"><small>6–12 PM</small><strong>Reservations</strong><span>June A.</span></article>
-                    </div>
-                    <div class="shift-day"><b>FRI 18</b>
-                        <article class="shift-chip floor"><small>5–12 PM</small><strong>Floor server</strong><span>Mali P.</span></article>
-                        <article class="shift-chip bar"><small>5–12 PM</small><strong>Bar</strong><span>Niran C.</span></article>
-                    </div>
-                    <div class="shift-day today"><b>SAT 19</b>
-                        <article class="shift-chip floor"><small>4–12 PM</small><strong>Floor server</strong><span>Ben T.</span></article>
-                        <article class="shift-chip bar"><small>5–12 PM</small><strong>Bar</strong><span>Niran C.</span></article>
-                        <article class="shift-chip kitchen"><small>4–11 PM</small><strong>Kitchen</strong><span>Kanda S.</span></article>
-                        <div class="open-role">⚠ 2 roles unfilled</div>
-                    </div>
-                    <div class="shift-day"><b>SUN 20</b>
-                        <article class="shift-chip reservations"><small>5–11 PM</small><strong>Reservations</strong><span>June A.</span></article>
-                        <article class="shift-chip floor"><small>6–12 PM</small><strong>Floor server</strong><span>Mali P.</span></article>
-                    </div>
-                </div>
-
-                <div class="shift-legend">
-                    <span><i class="floor-dot"></i> Floor</span>
-                    <span><i class="bar-dot"></i> Bar</span>
-                    <span><i class="kitchen-dot"></i> Kitchen</span>
-                    <span><i class="res-dot"></i> Reservations</span>
-                </div>
+            <section class="shift-summary" aria-label="Weekly shift summary">
+                <article><span>Assignments</span><strong id="shiftCount">0</strong></article>
+                <article><span>Employees scheduled</span><strong id="scheduledEmployees">0</strong></article>
+                <article><span>Shows covered</span><strong id="coveredShows">0</strong></article>
             </section>
 
+            <section class="employee-directory shift-directory">
+                <div class="shift-week-heading">
+                    <div><div class="employees-eyebrow">WEEKLY VIEW</div><h2 id="weekTitle">Loading week…</h2></div>
+                    <div class="shift-week-actions">
+                        <button type="button" class="employee-secondary" id="previousWeek" aria-label="Previous week">‹</button>
+                        <button type="button" class="employee-secondary" id="currentWeek">Today</button>
+                        <button type="button" class="employee-secondary" id="nextWeek" aria-label="Next week">›</button>
+                    </div>
+                </div>
 
+                <div class="employee-controls">
+                    <label class="employee-search">
+                        <span aria-hidden="true">⌕</span>
+                        <input id="shiftSearch" type="search" placeholder="Search employee, artist, role, or shift ID…" aria-label="Search shifts">
+                    </label>
+                    <div class="employee-filters">
+                        <select id="shiftRoleFilter" aria-label="Filter by role"><option value="all">All roles</option></select>
+                        <button type="button" id="refreshShifts" class="employee-secondary">Refresh</button>
+                    </div>
+                </div>
+
+                <div class="employee-count" id="shiftResultCount" aria-live="polite">Loading shifts…</div>
+                <p class="employee-load-error" id="shiftLoadError" role="alert" hidden></p>
+                <div class="schedule-scroll">
+                    <div class="schedule-grid" id="scheduleGrid" aria-live="polite" aria-busy="true"></div>
+                </div>
+                <div class="employee-empty" id="shiftEmpty" hidden>No shifts match this week or the selected filters.</div>
+            </section>
         </div>
     </main>
 </div>
 
-<dialog class="employee-dialog" id="shiftDialog">
-    <form method="dialog">
+<dialog class="employee-dialog shift-dialog" id="shiftDialog" aria-labelledby="shiftDialogTitle">
+    <form id="shiftForm">
         <div class="dialog-top">
-            <div>
-                <div class="employees-eyebrow">EMPLOYEE_SHIFT RECORD</div>
-                <h2>Create shift</h2>
-            </div>
-            <button class="dialog-close" value="cancel" aria-label="Close">×</button>
+            <div><div class="employees-eyebrow">EMPLOYEE_SHIFT RECORD</div><h2 id="shiftDialogTitle">Shift details</h2></div>
+            <button type="button" class="dialog-close" id="closeShift" aria-label="Close">×</button>
         </div>
-        <p>Assign an employee to a show with a role and shift time.</p>
+        <p class="shift-dialog-description">Each shift belongs to one employee and one show. The shift date follows the selected show date.</p>
         <div class="employee-fields">
-            <label>Shift ID<input value="Auto-generated" readonly></label>
-            <label>Employee ID
-                <select required>
-                    <option value="">Select employee</option>
-                    <option>E001 · Mali Prasert</option>
-                    <option>E002 · Niran Chaiyasit</option>
-                    <option>E003 · Kanda Saelim</option>
-                    <option>E004 · June Anan</option>
-                </select>
-            </label>
-            <label>Show ID
-                <select required>
-                    <option value="">Select show</option>
-                    <option>SH004 · Nora Lee Quartet</option>
-                    <option>SH005 · The Blue Notes</option>
-                    <option>SH006 · Sunday Sessions</option>
-                </select>
-            </label>
-            <label>Role
-                <select>
-                    <option>Floor server</option>
-                    <option>Bartender</option>
-                    <option>Kitchen staff</option>
-                    <option>Reservations staff</option>
-                    <option>Stock keeper</option>
-                    <option>Artist coordinator</option>
-                </select>
-            </label>
-            <label>Shift date<input type="date" value="2026-09-19" required></label>
-            <label>Start time<input type="time" value="17:00" required></label>
-            <label>End time<input type="time" value="23:00" required></label>
+            <label>Shift ID<input id="shiftId" name="shift_id" readonly placeholder="Assigned after save"></label>
+            <label>Employee<select id="shiftEmployee" name="employee_id" required><option value="">Loading employees…</option></select></label>
+            <label class="shift-field-wide">Show<select id="shiftShow" name="show_id" required><option value="">Loading shows…</option></select></label>
+            <label>Role<select id="shiftRole" name="role" required>
+                <option value="Floor server">Floor server</option><option value="Bartender">Bartender</option>
+                <option value="Kitchen staff">Kitchen staff</option><option value="Reservations staff">Reservations staff</option>
+                <option value="Stock keeper">Stock keeper</option><option value="Artist coordinator">Artist coordinator</option>
+            </select></label>
+            <label>Shift date<input id="shiftDate" name="shift_date" type="date" readonly required></label>
+            <label>Start time<input id="shiftStart" name="start_time" type="time" required></label>
+            <label>End time<input id="shiftEnd" name="end_time" type="time" required></label>
         </div>
+        <p id="shiftFormError" class="employee-form-error" role="alert" hidden></p>
         <div class="employee-dialog-actions">
-            <button class="employee-secondary" value="cancel">Cancel</button>
-            <button class="employee-primary" id="saveShift" value="default">Save shift</button>
+            <button type="button" class="employee-secondary" id="cancelShift">Cancel</button>
+            <button type="submit" class="employee-primary" id="saveShift">Save shift</button>
         </div>
     </form>
 </dialog>
 
-<script>
-    document.getElementById('createShift').addEventListener('click', () => {
-        document.getElementById('shiftDialog').showModal();
-    });
-    document.getElementById('saveShift').addEventListener('click', event => {
-        event.preventDefault();
-        document.getElementById('shiftDialog').close();
-    });
-</script>
+<dialog class="employee-dialog employee-delete-dialog" id="deleteShiftDialog" aria-labelledby="deleteShiftTitle">
+    <h2 id="deleteShiftTitle">Delete shift?</h2>
+    <p id="deleteShiftSummary"></p>
+    <p>This permanently removes only this EMPLOYEE_SHIFT assignment.</p>
+    <p id="deleteShiftError" class="employee-form-error" role="alert" hidden></p>
+    <div class="employee-dialog-actions">
+        <button type="button" class="employee-secondary" id="cancelShiftDelete">Cancel</button>
+        <button type="button" class="employee-delete" id="confirmShiftDelete">Delete shift</button>
+    </div>
+</dialog>
+
+<script src="/js/pages/admin-shifts.js"></script>
 </body>
 </html>
