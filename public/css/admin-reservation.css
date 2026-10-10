@@ -105,6 +105,13 @@ select:focus-visible {
     margin: 16px 12px 8px;
 }
 
+.sidebar-nav {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+}
+
 .nav-item {
     display: flex;
     align-items: center;
@@ -144,6 +151,23 @@ select:focus-visible {
 }
 
 /* Sidebar widgets */
+.sidebar-footer-widgets {
+    margin-top: auto;
+    padding-top: 18px;
+}
+
+.user-profile-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px 0;
+    border-top: 1px solid rgba(75, 46, 43, 0.15);
+}
+
+.profile-info {
+    min-width: 0;
+}
+
 .stage-widget-card {
     background: rgba(75, 46, 43, 0.06);
     border: 1px solid rgba(75, 46, 43, 0.12);
@@ -186,6 +210,7 @@ select:focus-visible {
     font-size: 0.85rem;
     font-weight: 600;
     color: #4B2E2B;
+    white-space: nowrap;
 }
 
 .profile-role,
@@ -193,16 +218,28 @@ select:focus-visible {
     color: #8C7468;
 }
 
+.profile-menu-dots {
+    margin-left: auto;
+}
+
 .avatar-circle {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
     background: #C5A059;
     color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 700;
 }
 /* 4. MAIN CONTENT */
 .admin-main {
     min-width: 0;
     min-height: 100vh;
     flex: 1;
-    margin-left: 250px;
 }
 
 .admin-header-simple {
@@ -248,13 +285,14 @@ select:focus-visible {
 
     display: flex;
     flex-direction: column;
-    align-items: center; /* จัดทุกอย่างที่อยู่ข้างในให้อยู่ตรงกลางแนวนอน */
+    align-items: center;
+    gap: 24px;
 }
 
 /* 1. จัดหัวข้อด้านบนให้อยู่กึ่งกลางและมีความกว้างพอดีกับกล่อง */
 .dashboard-content > .welcome-banner {
     width: 100%;
-    max-width: 1100px; /* ปรับขนาดความกว้างตามต้องการ */
+    max-width: 1240px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -262,9 +300,9 @@ select:focus-visible {
 /* 2. บังคับให้ตัว Box (Panel-card) มาอยู่ตรงกลางแนวนอนแน่นอน */
 .panel-card {
     width: 100%;
-    max-width: 1100px; /* กำหนดความกว้างของ Box */
-    margin-left: auto;  /* ดันซ้ายให้อัตโนมัติ เพื่อให้อยู่กึ่งกลาง */
-    margin-right: auto; /* ดันขวาให้อัตโนมัติ เพื่อให้อยู่กึ่งกลาง */
+    max-width: 1240px;
+    margin-left: auto;
+    margin-right: auto;
 
     min-width: 0;
     padding: 28px;
@@ -462,6 +500,7 @@ select:focus-visible {
 
 .data-table {
     width: 100%;
+    min-width: 900px;
     border-collapse: collapse;
     text-align: left;
     background: var(--cream-light);
@@ -523,10 +562,8 @@ select:focus-visible {
 }
 
 .reservation-row-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 7px;
+    min-width: 142px;
+    white-space: nowrap;
 }
 
 .reservation-row-actions .tab-btn,
@@ -534,6 +571,10 @@ select:focus-visible {
     min-height: 30px;
     padding: 7px 10px;
     font-size: 10px;
+}
+
+.reservation-row-actions button + button {
+    margin-left: 7px;
 }
 
 .reservation-delete {
@@ -933,10 +974,6 @@ select:focus-visible {
         padding-left: 15px;
     }
 
-    .admin-main {
-        margin-left: 220px;
-    }
-
     .dashboard-content {
         padding-right: 25px;
         padding-left: 25px;
@@ -1014,7 +1051,6 @@ select:focus-visible {
 
     .admin-main {
         min-height: auto;
-        margin-left: 0;
     }
 
     .admin-header-simple {
