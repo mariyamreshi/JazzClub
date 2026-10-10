@@ -9,6 +9,7 @@ const employeeController = require('../controllers/employee.controller');
 const employeeShiftController = require('../controllers/employee-shift.controller');
 const menuController = require('../controllers/menu.controller');
 const orderController = require('../controllers/order.controller');
+const paymentController = require('../controllers/payment.controller');
 
 // Home & Health routes (from your friend)
 router.get('/', home.index);
@@ -37,7 +38,9 @@ router.delete('/api/menu-items/:itemId', menuController.deleteItem);
 
 // Guest table ordering. Each order owns one or more ORDER_ITEM rows.
 router.get('/api/tables', orderController.listTables);
+router.get('/api/orders', orderController.listOrders);
 router.post('/api/orders', orderController.createOrder);
+router.post('/api/payments', paymentController.createPayment);
 
 // Reservation routes (your part)
 router.get('/api/reservations', reservationController.listReservations);

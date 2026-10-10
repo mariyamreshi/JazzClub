@@ -29,6 +29,15 @@ async function listTables(req, res, next) {
   }
 }
 
+async function listOrders(req, res, next) {
+  res.set('Cache-Control', 'no-store');
+  try {
+    res.json({ data: await order.listOpen() });
+  } catch (error) {
+    next(error);
+  }
+}
+
 async function createOrder(req, res, next) {
   const { value, error } = validateOrder(req.body || {});
   if (error) {
@@ -51,4 +60,4 @@ async function createOrder(req, res, next) {
   }
 }
 
-module.exports = { listTables, createOrder, validateOrder };
+module.exports = { listTables, listOrders, createOrder, validateOrder };

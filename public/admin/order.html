@@ -85,7 +85,7 @@
                 <p class="eyebrow">GARNET'S HOUSE · ADMIN</p>
                 <h1>Order <span>Management</span></h1>
                 <p class="header-description">
-                    Track customer orders, table numbers and payments.
+                    Live table orders placed from the customer menu.
                 </p>
             </div>
         </header>
@@ -95,23 +95,23 @@
         <!-- Summary -->
         <section class="order-stats">
             <article class="stat-card">
-                <p>Total Orders</p>
+                <p>Open Tables</p>
                 <h2 id="totalOrders">0</h2>
             </article>
 
             <article class="stat-card">
-                <p>In Progress</p>
-                <h2 id="activeOrders">0</h2>
+                <p>Open Items</p>
+                <h2 id="totalOrderItems">0</h2>
             </article>
 
             <article class="stat-card">
-                <p>Unpaid Orders</p>
-                <h2 id="unpaidOrders">0</h2>
+                <p>Paid Orders</p>
+                <h2 id="paidOrders">0</h2>
             </article>
 
             <article class="stat-card">
-                <p>Payments Received</p>
-                <h2 id="paymentsReceived">฿0</h2>
+                <p>Open Order Value</p>
+                <h2 id="totalOrderValue">$0.00</h2>
             </article>
         </section>
 
@@ -134,19 +134,15 @@
                     <option value="all">All Order Status</option>
                     <option value="pending">Pending</option>
                     <option value="preparing">Preparing</option>
-                    <option value="ready">Ready</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                </select>
-
-                <select id="paymentFilter" aria-label="Filter by payment status">
-                    <option value="all">All Payments</option>
-                    <option value="unpaid">Unpaid</option>
-                    <option value="partial">Partially Paid</option>
+                    <option value="served">Served</option>
                     <option value="paid">Paid</option>
                 </select>
+                <button id="refreshOrders" class="order-refresh" type="button">Refresh</button>
             </div>
         </section>
+
+        <p id="orderLoadStatus" class="order-load-status" role="status" aria-live="polite">Loading orders...</p>
+        <p id="orderLoadError" class="order-load-error" role="alert" hidden></p>
 
         <!-- Orders -->
         <section id="ordersList" class="admin-orders-list"
@@ -156,84 +152,45 @@
         <!-- Empty State -->
         <section id="emptyOrders" class="empty-orders" hidden>
             <h2>No Orders Found</h2>
+            <p>Customer orders will appear here after they order from the menu.</p>
             <a href="/menu.html" class="btn-menu">View Customer Menu</a>
         </section>
 
     </main>
 </div>
 
-<!-- Payment Popup -->
-<div class="modal-overlay" id="paymentModal" hidden>
-    <section class="payment-modal"
-             role="dialog"
-             aria-modal="true"
-             aria-labelledby="paymentModalTitle">
+<dialog id="paymentDialog" class="payment-modal" aria-labelledby="paymentModalTitle">
+    <button type="button" class="modal-close" id="closePaymentModal" aria-label="Close">&times;</button>
+    <p class="eyebrow">PAYMENT INFORMATION</p>
+    <h2 id="paymentModalTitle">Collect payment</h2>
+    <p class="modal-description" id="paymentOrderInfo">Order details</p>
 
-        <button type="button" class="modal-close"
-                id="closePaymentModal" aria-label="Close">
-            &times;
-        </button>
+    <div class="payment-summary">
+        <div><span>Table</span><strong id="paymentTable">—</strong></div>
+        <div><span>Order</span><strong id="paymentOrderId">—</strong></div>
+        <div class="balance-row"><span>Amount due</span><strong id="paymentTotal">$0.00</strong></div>
+    </div>
 
-        <p class="eyebrow">PAYMENT INFORMATION</p>
-        <h2 id="paymentModalTitle">Payment Details</h2>
-        <p class="modal-description" id="paymentOrderInfo">
-            Order details
-        </p>
+    <form id="paymentForm">
+        <label for="paymentMethod">Payment method</label>
+        <select id="paymentMethod" required>
+            <option value="">Select payment method</option>
+            <option value="Cash">Cash</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="PromptPay">PromptPay</option>
+        </select>
 
-        <div class="payment-summary">
-            <div>
-                <span>Order Total</span>
-                <strong id="paymentTotal">฿0</strong>
-            </div>
+        <label for="paidAmountInput">Amount received</label>
+        <input type="number" id="paidAmountInput" min="0.01" max="99999999.99" step="0.01" required>
+        <p class="input-hint">The amount must equal the complete table order total.</p>
+        <p id="paymentError" class="payment-error" role="alert" hidden></p>
 
-            <div>
-                <span>Amount Paid</span>
-                <strong id="paymentPaid">฿0</strong>
-            </div>
-
-            <div class="balance-row">
-                <span>Balance Due</span>
-                <strong id="paymentBalance">฿0</strong>
-            </div>
+        <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="cancelPaymentBtn">Cancel</button>
+            <button type="submit" class="btn-save-payment" id="confirmPayment">Confirm payment</button>
         </div>
-
-        <div class="payment-status-row">
-            <span>Payment Status</span>
-            <span id="paymentStatusBadge" class="payment-badge unpaid">
-                Unpaid
-            </span>
-        </div>
-
-        <form id="paymentForm">
-            <label for="paidAmountInput">Update Amount Paid (฿)</label>
-
-            <input
-                    type="number"
-                    id="paidAmountInput"
-                    min="0"
-                    step="0.01"
-                    required
-            >
-
-            <p class="input-hint">
-                Enter the total amount received from the customer.
-            </p>
-
-            <p id="paymentError" class="payment-error" hidden></p>
-
-            <div class="modal-actions">
-                <button type="button" class="btn-secondary"
-                        id="cancelPaymentBtn">
-                    Cancel
-                </button>
-
-                <button type="submit" class="btn-save-payment">
-                    Save Payment
-                </button>
-            </div>
-        </form>
-    </section>
-</div>
+    </form>
+</dialog>
 
 </body>
 </html>

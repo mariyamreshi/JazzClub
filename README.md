@@ -144,7 +144,10 @@ ORDER BY r.reservation_id DESC;
 | PUT | `/api/menu-items/:itemId` | แก้ไขชื่อ หมวดหมู่ ราคา และจำนวนสต็อก |
 | DELETE | `/api/menu-items/:itemId` | ลบรายการเมนูถาวรและตอบ HTTP 204 |
 | GET | `/api/tables` | รายการโต๊ะที่พร้อมรับออเดอร์สำหรับ pop-up หน้าเมนู |
-| POST | `/api/orders` | สร้าง Order/Order_Item ตาม Table ID และตัด stock ใน transaction เดียวกัน |
+| GET | `/api/orders` | ออเดอร์ที่ยังไม่ยกเลิก พร้อมรายการรวมตามโต๊ะและข้อมูลการชำระเงินสำหรับหน้า Admin |
+| POST | `/api/orders` | เพิ่มรายการลง Order ที่เปิดอยู่ของ Table ID เดิม หรือสร้าง Order ใหม่สำหรับโต๊ะอื่น พร้อมตัด stock ใน transaction เดียวกัน |
+| POST | `/api/payments` | บันทึกการชำระเต็มจำนวนหนึ่งครั้งต่อ Order และเปลี่ยนสถานะ Order เป็น `paid` ใน transaction เดียวกัน |
+| GET | `/admin/order.html` | หน้า Admin Order จาก MySQL พร้อมปุ่มคิดเงิน pop-up และรีเฟรชอัตโนมัติทุก 3 วินาที |
 | GET | `/admin/employees.html` | หน้าจัดการ Employee พร้อมค้นหา กรอง เพิ่ม แก้ไข และลบ |
 | GET | `/api/employees` | รายการ Employee จาก MySQL ตาม field ใน ERD |
 | GET | `/api/employees/:employeeId` | Employee ตาม ID หรือ HTTP 404 เมื่อไม่พบ |
