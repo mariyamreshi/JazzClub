@@ -297,6 +297,14 @@
     background: #c6855e;
 }
 
+.employee-status.inactive {
+    color: #8b8580;
+}
+
+.employee-status.inactive::before {
+    background: #aaa39c;
+}
+
 .upcoming-shift strong {
     color: #42352e;
     font-size: .72rem;
@@ -310,10 +318,50 @@
     cursor: pointer;
 }
 
+.employee-row-actions {
+    min-width: 150px;
+    white-space: nowrap;
+}
+
+.employee-row-button {
+    min-height: 34px;
+    padding: 8px 12px;
+    font-size: .74rem;
+}
+
+.employee-row-button + .employee-row-button {
+    margin-left: 7px;
+}
+
+.employee-delete {
+    padding: 11px 17px;
+    border: 1px solid #b64040;
+    border-radius: 9px;
+    background: #a52a2a;
+    color: #fff;
+    font: 600 .82rem Inter, sans-serif;
+    cursor: pointer;
+}
+
+.employee-delete:hover:not(:disabled) {
+    background: #812020;
+}
+
 .employee-empty {
     padding: 45px;
     color: #817a72;
     text-align: center;
+}
+
+.employee-load-error,
+.employee-form-error {
+    margin: 14px 22px;
+    padding: 11px 13px;
+    border: 1px solid #efc5c5;
+    border-radius: 8px;
+    background: #fff5f5;
+    color: #9c2f2f;
+    font-size: .8rem;
 }
 
 /* Add/edit employee modal */
@@ -336,6 +384,31 @@
     display: flex;
     flex-direction: column;
     gap: 18px;
+}
+
+.employee-delete-dialog h2 {
+    margin-bottom: 14px;
+    font: 600 1.6rem 'Playfair Display', serif;
+}
+
+.employee-delete-dialog > p:not(.employee-form-error) {
+    margin: 10px 0;
+    color: #726b63;
+    line-height: 1.55;
+}
+
+#deleteEmployeeSummary {
+    padding: 13px 15px;
+    border-left: 3px solid #937341;
+    background: #faf7f1;
+    color: #392c26;
+    font-weight: 600;
+}
+
+.employee-dialog button:disabled,
+.employee-filters button:disabled {
+    opacity: .55;
+    cursor: wait;
 }
 
 .dialog-top {

@@ -72,4 +72,4 @@ SQL อยู่ใน Model และใช้ connection pool จาก `src/c
 
 ## สถานะ
 
-ตอนนี้มีหน้าแรก ระบบจอง Show และ Menu ที่เชื่อม MySQL แล้ว Customer/Table/Reservation และ Artist/Show ถูกแยกตารางตาม ERD ส่วน Employee, Shift, Schedule, Order, Order Item และ Payment ยังไม่ได้พัฒนา
+ตอนนี้มีหน้าแรก ระบบจอง Show, Menu และ Employee ที่เชื่อม MySQL แล้ว Customer/Table/Reservation, Artist/Show และ Employee ใช้ตารางตาม ERD ส่วน Shift, Schedule, Order, Order Item และ Payment ยังไม่ได้พัฒนา

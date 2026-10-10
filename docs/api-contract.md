@@ -126,6 +126,14 @@ API เพิ่ม/แก้ไข/ลบ Show สำหรับหน้า�
 
 หน้าเมนูลูกค้าเริ่มที่หมวด Recommended และรองรับการค้นหาร่วมกับตัวกรอง หน้า Admin แสดงจำนวนรายการ จำนวนรายการที่มีสต็อก และสต็อกรวม พร้อมกรองตามชื่อ หมวดหมู่ หรือสถานะสต็อกได้ เมื่อตั้ง `stock_quantity` เป็น 0 รายการจะหายจากหน้าลูกค้าแต่ยังอยู่ใน Admin
 
+## API พนักงานที่ใช้งานได้
+
+`GET /api/employees` คืน Employee ทุกคนจาก MySQL โดยแต่ละรายการมี `employee_id`, `employee_name`, `phone`, `status` และ `employment_type` ตรงกับ ERD ส่วน `GET /api/employees/:employeeId` คืนรายการตาม ID
+
+`POST /api/employees` เพิ่ม Employee, `PUT /api/employees/:employeeId` แก้ไข และ `DELETE /api/employees/:employeeId` ลบรายการ หน้า `/admin/employees.html` ใช้ API ชุดนี้สำหรับค้นหา กรอง และจัดการข้อมูล
+
+สถานะที่รับได้คือ `Active`, `On leave`, `Inactive` และประเภทการจ้างคือ `Full-time`, `Part-time` เบอร์โทรต้องมีตัวเลข 7–15 หลักและไม่ซ้ำกับ Employee คนอื่น ข้อมูลไม่ถูกต้องตอบ HTTP 400, เบอร์ซ้ำตอบ 409, ไม่พบ ID ตอบ 404 และลบ Employee ที่ถูก Shift อ้างอิงตอบ 409
+
 ## API ส่วนอื่น
 
 Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"server":"ok"}}` และ `GET /api/health/db` ตอบ `{"data":{"database":"ok"}}` เมื่อเชื่อม MySQL ได้ หรือ HTTP 503 พร้อม error code `DATABASE_UNAVAILABLE` เมื่อไม่พร้อม
@@ -136,7 +144,7 @@ Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"se
 | --- | --- | --- |
 | ลูกค้า/โต๊ะ/การจอง | `/api/customers`, `/api/tables`, `/api/reservations` | Garnet |
 | ศิลปิน/การแสดง/ผู้เข้าชม | `/api/artists`, `/api/shows`, `/api/show-attendance` | Fifa |
-| พนักงาน/เวร | `/api/employees`, `/api/employee-shifts` | Mary |
+| เวรพนักงาน | `/api/employee-shifts` | Mary |
 | stock | `/api/stock` | Mary |
 | ออเดอร์/รายการ/ชำระเงิน | `/api/orders`, `/api/orders/:id/items`, `/api/payments` | Garnet |
 | โต๊ะว่าง | `/api/reports/table-availability` | Fifa + Garnet |

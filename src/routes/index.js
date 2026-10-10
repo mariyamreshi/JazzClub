@@ -5,6 +5,7 @@ const home = require('../controllers/home.controller');
 const health = require('../controllers/health.controller');
 const reservationController = require('../controllers/reservation.controller');
 const showController = require('../controllers/show.controller');
+const employeeController = require('../controllers/employee.controller');
 const menuController = require('../controllers/menu.controller');
 
 // Home & Health routes (from your friend)
@@ -13,6 +14,12 @@ router.get('/api/health', health.server);
 router.get('/api/health/db', health.database);
 router.get('/api/shows', showController.listShows);
 router.get('/api/shows/:showId', showController.getShow);
+
+router.get('/api/employees', employeeController.listEmployees);
+router.get('/api/employees/:employeeId', employeeController.getEmployee);
+router.post('/api/employees', employeeController.createEmployee);
+router.put('/api/employees/:employeeId', employeeController.updateEmployee);
+router.delete('/api/employees/:employeeId', employeeController.deleteEmployee);
 
 // Guest menu and admin menu management.
 router.get('/api/menu-items', menuController.listPublic);

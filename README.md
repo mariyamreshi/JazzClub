@@ -101,13 +101,13 @@ npm run db:check
 - `ER_ACCESS_DENIED_ERROR`: บัญชี รหัสผ่าน หรือสิทธิ์ไม่ตรง
 - `ER_BAD_DB_ERROR`: ยังไม่มีฐานข้อมูลชื่อตาม `DB_NAME`
 
-สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้าง `customers`, `club_tables`, `reservations`, `artists`, `shows` และ `menu_items` ตาม ERD ถ้ายังไม่มี
+สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้าง `customers`, `club_tables`, `reservations`, `artists`, `shows`, `employees` และ `menu_items` ตาม ERD ถ้ายังไม่มี
 
 ถ้าฐานข้อมูลมี `menu_items` รุ่นก่อนหน้า `db:init` จะรัน `003-align-menu-item-with-erd.sql` เพื่อย้ายสถานะเดิมเป็น `category`/`stock_quantity` และปรับตารางให้เหลือฟิลด์ตาม ERD บัญชีที่ใช้รันคำสั่งนี้จึงต้องมีสิทธิ์ `ALTER` สำหรับการ migration
 
 ฐานข้อมูลรุ่นก่อนหน้าที่เก็บชื่อแขก/โต๊ะไว้ใน `reservations` และชื่อศิลปินไว้ใน `shows` จะใช้ `004-normalize-reservations-and-shows.sql` แยกข้อมูลไปยัง Customer, Table และ Artist พร้อมรักษา ID เดิมและเพิ่ม Foreign Key การจองซ้ำตรวจตามโต๊ะ วัน และเวลาที่ตรงกัน
 
-รัน `npm run db:seed` เพื่อเพิ่ม Show ตัวอย่าง 5 รายการและเมนูตัวอย่าง 10 รายการในหมวด Recommended, Seasonal, Cocktail, Liquor, Dessert และ Appetizer รันซ้ำจะข้ามข้อมูลที่ตรงกับตัวอย่างเดิม หรือใช้ `npm run db:setup` เพื่อสร้างตารางและเติมตัวอย่างต่อกัน
+รัน `npm run db:seed` เพื่อเพิ่ม Show ตัวอย่าง 5 รายการ, Employee 4 รายการ และเมนูตัวอย่าง 10 รายการในหมวด Recommended, Seasonal, Cocktail, Liquor, Dessert และ Appetizer รันซ้ำจะข้ามข้อมูลที่ตรงกับตัวอย่างเดิม หรือใช้ `npm run db:setup` เพื่อสร้างตารางและเติมตัวอย่างต่อกัน
 
 หน้า `/show.html` ดึง Show พร้อม `artist_id`, `artist_name`, `artist_type`, `genre`, `performance_date`, `start_time` และ `end_time` ผ่าน `GET /api/shows` เรียงตามวันและเวลา ส่วนหน้าแอดมินเพิ่ม Show ยังไม่ได้พัฒนา
 
@@ -143,6 +143,12 @@ ORDER BY r.reservation_id DESC;
 | POST | `/api/menu-items` | เพิ่มรายการเมนูและตอบ HTTP 201 |
 | PUT | `/api/menu-items/:itemId` | แก้ไขชื่อ หมวดหมู่ ราคา และจำนวนสต็อก |
 | DELETE | `/api/menu-items/:itemId` | ลบรายการเมนูถาวรและตอบ HTTP 204 |
+| GET | `/admin/employees.html` | หน้าจัดการ Employee พร้อมค้นหา กรอง เพิ่ม แก้ไข และลบ |
+| GET | `/api/employees` | รายการ Employee จาก MySQL ตาม field ใน ERD |
+| GET | `/api/employees/:employeeId` | Employee ตาม ID หรือ HTTP 404 เมื่อไม่พบ |
+| POST | `/api/employees` | เพิ่ม Employee และตอบ HTTP 201 |
+| PUT | `/api/employees/:employeeId` | แก้ไขชื่อ เบอร์โทร สถานะ และประเภทการจ้าง |
+| DELETE | `/api/employees/:employeeId` | ลบ Employee ที่ไม่ได้ถูก Shift อ้างอิง |
 | POST | `/api/reservations` | บันทึก Customer และ Reservation ที่อ้างอิง Table ด้วย Foreign Key |
 | GET | `/api/reservations/availability?date=YYYY-MM-DD&time=HH:mm` | รายการรหัสโต๊ะที่ถูกจองในวันและเวลาที่เลือก |
 | GET | `/api/health` | HTTP 200 เมื่อ Express ทำงาน ไม่ตรวจ MySQL |

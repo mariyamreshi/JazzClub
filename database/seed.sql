@@ -43,6 +43,23 @@ SELECT artist_id, '2026-10-24', '21:00:00', '23:00:00' FROM artists
 WHERE artist_name = 'Riverfront Jazz Ensemble'
   AND NOT EXISTS (SELECT 1 FROM shows WHERE performance_date = '2026-10-24' AND start_time = '21:00:00');
 
+-- Employee records aligned with the EMPLOYEE entity in the ERD.
+INSERT INTO employees (employee_name, phone, status, employment_type)
+SELECT 'Mali Prasert', '081-555-0142', 'Active', 'Full-time'
+WHERE NOT EXISTS (SELECT 1 FROM employees WHERE phone = '081-555-0142');
+
+INSERT INTO employees (employee_name, phone, status, employment_type)
+SELECT 'Niran Chaiyasit', '081-555-0188', 'Active', 'Full-time'
+WHERE NOT EXISTS (SELECT 1 FROM employees WHERE phone = '081-555-0188');
+
+INSERT INTO employees (employee_name, phone, status, employment_type)
+SELECT 'Pimchanok Saelim', '081-555-0215', 'On leave', 'Part-time'
+WHERE NOT EXISTS (SELECT 1 FROM employees WHERE phone = '081-555-0215');
+
+INSERT INTO employees (employee_name, phone, status, employment_type)
+SELECT 'Krit Anan', '081-555-0249', 'Inactive', 'Part-time'
+WHERE NOT EXISTS (SELECT 1 FROM employees WHERE phone = '081-555-0249');
+
 -- Guest menu aligned with the MENU_ITEM entity in the ERD.
 -- Re-running the seed skips items with the same name.
 INSERT INTO menu_items (item_name, category, price, stock_quantity)
