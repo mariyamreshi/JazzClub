@@ -140,7 +140,9 @@ API เพิ่ม/แก้ไข/ลบ Show สำหรับหน้า�
 }
 ```
 
-เมื่อสำเร็จ ระบบสร้างหนึ่งแถวใน `orders`, สร้างรายการใน `order_items`, เก็บ `price_at_time` และตัด `menu_items.stock_quantity` ภายใน transaction เดียวกัน ยอด `total` คำนวณจากราคาขณะสั่งคูณจำนวนสินค้า
+เมื่อสำเร็จ ระบบค้นหา Order สถานะ `pending`, `preparing` หรือ `served` ของโต๊ะนั้นก่อน ถ้ามีอยู่จะเพิ่มจำนวนใน `order_items` เดิม หรือเพิ่มรายการเมนูใหม่เข้า Order เดิม ถ้ายังไม่มีจึงสร้าง Order ใหม่สำหรับโต๊ะนั้น ระบบเก็บ `price_at_time`, ตัด `menu_items.stock_quantity` และคำนวณยอดรวมใหม่ภายใน transaction เดียวกัน
+
+`GET /api/orders` คืน Order ที่ไม่ถูกยกเลิก โดยแต่ละ Order มี `table_id`, `total`, `payment` และ array `items` ที่รวม quantity ของเมนูชนิดเดียวกันแล้ว หน้า `/admin/order.html` เรียก API นี้ทุก 3 วินาที จึงแสดงคำสั่งซื้อเพิ่มเติมของโต๊ะเดิมใน card เดิม แยก card เมื่อเป็นคนละโต๊ะ และเก็บ Order ที่ชำระแล้วไว้เป็นประวัติ
 
 - สำเร็จ: HTTP 201 พร้อม `order_id`, `table_id`, `status`, `total` และรายละเอียดรายการ
 - ข้อมูลไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
@@ -148,6 +150,25 @@ API เพิ่ม/แก้ไข/ลบ Show สำหรับหน้า�
 - โต๊ะไม่พร้อมหรือสต็อกไม่พอ: HTTP 409 (`TABLE_NOT_AVAILABLE`, `INSUFFICIENT_STOCK`)
 
 ERD ฉบับแก้ไขต้องเพิ่ม `table_id` เป็น FK ใน `ORDER` และเพิ่มความสัมพันธ์ `TABLE (1) — (N) ORDER` ส่วน `PAYMENT` คง `order_id` เป็น FK โดยไม่เพิ่ม `table_id` เพราะหาโต๊ะผ่าน `PAYMENT → ORDER → TABLE` ได้
+
+## API ชำระเงินที่ใช้งานได้
+
+`POST /api/payments` รับข้อมูลดังนี้:
+
+```json
+{
+  "order_id": 4,
+  "payment_method": "PromptPay",
+  "amount": "14.00"
+}
+```
+
+รองรับวิธีชำระ `Cash`, `Credit Card` และ `PromptPay` จำนวนเงินต้องเท่ากับยอดรวมปัจจุบันของ Order ระบบล็อก Order, เพิ่ม Payment และเปลี่ยนสถานะ Order เป็น `paid` ภายใน transaction เดียวกัน โดยหนึ่ง Order ชำระได้ครั้งเดียว หน้า Admin เปิด pop-up จากปุ่ม `Collect payment` และเติมยอดที่ต้องชำระให้อัตโนมัติ
+
+- สำเร็จ: HTTP 201 พร้อม `payment_id`, `order_id`, `table_id`, `payment_method`, `amount` และ `payment_time`
+- ข้อมูลไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
+- ไม่พบ Order: HTTP 404 (`ORDER_NOT_FOUND`)
+- Order ถูกยกเลิก ยอดไม่ตรง หรือชำระแล้ว: HTTP 409 (`ORDER_NOT_PAYABLE`, `PAYMENT_AMOUNT_MISMATCH`, `PAYMENT_EXISTS`)
 
 ## API พนักงานที่ใช้งานได้
 
@@ -169,7 +190,7 @@ Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"se
 | ศิลปิน/การแสดง/ผู้เข้าชม | `/api/artists`, `/api/shows`, `/api/show-attendance` | Fifa |
 | เวรพนักงาน | `/api/employee-shifts` | Mary |
 | stock | `/api/stock` | Mary |
-| จัดการออเดอร์/ชำระเงิน | `GET/PUT /api/orders`, `/api/orders/:id/items`, `/api/payments` | Garnet |
+| จัดการออเดอร์เพิ่มเติม | `PUT /api/orders`, `/api/orders/:id/items` | Garnet |
 | โต๊ะว่าง | `/api/reports/table-availability` | Fifa + Garnet |
 | ความพร้อมของ show | `/api/reports/show-readiness` | Mary + Garnet |
 | ออเดอร์/ชำระเงินต่อการจอง | `/api/reports/reservation-summary` | Mary + Garnet |

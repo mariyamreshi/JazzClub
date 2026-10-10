@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .filter(item => item.stock_quantity > 0);
             renderMenu();
             document.getElementById('orderSuccessSummary').textContent =
-                `Order #${placed.order_id}: ${quantity} × ${selectedItem.item_name} for table ${placed.table_id}. Total $${placed.total}.`;
+                `Added ${quantity} × ${selectedItem.item_name} to table ${placed.table_id}. Table order total $${placed.total}.`;
             orderForm.hidden = true;
             orderSuccess.hidden = false;
         } catch (error) {
