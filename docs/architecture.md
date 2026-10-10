@@ -72,4 +72,4 @@ SQL อยู่ใน Model และใช้ connection pool จาก `src/c
 
 ## สถานะ
 
-ตอนนี้มีหน้าแรก, static serving, `/api/health`, `/api/health/db` และ connection pool แล้ว ทดสอบ MySQL จริงด้วย `npm run db:check` หลังตั้ง `.env` และเตรียม database/account ส่วน CRUD และตารางธุรกิจยังไม่ได้พัฒนา
+ตอนนี้มีหน้าแรก ระบบจอง Show และ Menu ที่เชื่อม MySQL แล้ว Customer/Table/Reservation และ Artist/Show ถูกแยกตารางตาม ERD ส่วน Employee, Shift, Schedule, Order, Order Item และ Payment ยังไม่ได้พัฒนา

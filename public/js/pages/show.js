@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const item = template.content.firstElementChild.cloneNode(true);
             item.dataset.showId = String(show.show_id);
             item.querySelector('.arrow-btn').href = `/reserve.html?show_id=${encodeURIComponent(show.show_id)}`;
-            item.querySelector('.band-title').textContent = show.artist;
+            item.querySelector('.band-title').textContent = show.artist_name;
             item.querySelector('.genre-tag').textContent = show.genre;
 
             const date = item.querySelector('.date-badge');
-            date.dateTime = show.show_date;
-            date.textContent = dateFormatter.format(new Date(`${show.show_date}T00:00:00Z`)).toUpperCase();
+            date.dateTime = show.performance_date;
+            date.textContent = dateFormatter.format(new Date(`${show.performance_date}T00:00:00Z`)).toUpperCase();
 
             const time = item.querySelector('.start-time');
             const [hours, minutes] = show.start_time.split(':');

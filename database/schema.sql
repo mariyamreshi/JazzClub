@@ -1,25 +1,61 @@
--- Reservation form data. Date and time use the club's local time (Asia/Bangkok).
-CREATE TABLE IF NOT EXISTS reservations (
-  id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  guest_name VARCHAR(100) NOT NULL,
-  phone_number VARCHAR(25) NOT NULL,
-  zone VARCHAR(50) NOT NULL,
-  table_number VARCHAR(10) NOT NULL,
-  `date` DATE NOT NULL,
-  `time` TIME NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY reservations_date_table_unique (`date`, table_number)
+-- Core customer and table data used by reservations.
+CREATE TABLE IF NOT EXISTS customers (
+  customer_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  phone VARCHAR(25) NOT NULL,
+  address VARCHAR(255) NULL,
+  membership_status VARCHAR(30) NOT NULL DEFAULT 'non-member',
+  PRIMARY KEY (customer_id),
+  UNIQUE KEY customers_phone_unique (phone)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Live shows, using the club's local date and start time (Asia/Bangkok).
+CREATE TABLE IF NOT EXISTS club_tables (
+  table_id VARCHAR(10) NOT NULL,
+  capacity SMALLINT UNSIGNED NOT NULL,
+  zone VARCHAR(50) NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'available',
+  PRIMARY KEY (table_id),
+  CONSTRAINT club_tables_capacity_positive CHECK (capacity > 0)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Reservation date/time uses the club's local time (Asia/Bangkok).
+CREATE TABLE IF NOT EXISTS reservations (
+  reservation_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  customer_id INT UNSIGNED NOT NULL,
+  table_id VARCHAR(10) NOT NULL,
+  date_time DATETIME NOT NULL,
+  status VARCHAR(20) NOT NULL DEFAULT 'confirmed',
+  PRIMARY KEY (reservation_id),
+  UNIQUE KEY reservations_table_datetime_unique (table_id, date_time),
+  KEY reservations_customer (customer_id),
+  CONSTRAINT reservations_customer_fk FOREIGN KEY (customer_id)
+    REFERENCES customers (customer_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT reservations_table_fk FOREIGN KEY (table_id)
+    REFERENCES club_tables (table_id) ON UPDATE CASCADE ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS artists (
+  artist_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  artist_name VARCHAR(150) NOT NULL,
+  artist_type VARCHAR(50) NOT NULL DEFAULT 'guest',
+  genre VARCHAR(100) NOT NULL,
+  PRIMARY KEY (artist_id),
+  UNIQUE KEY artists_name_unique (artist_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Live shows, using the club's local date and time (Asia/Bangkok).
 CREATE TABLE IF NOT EXISTS shows (
   show_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  show_date DATE NOT NULL,
-  artist VARCHAR(150) NOT NULL,
-  genre VARCHAR(100) NOT NULL,
+  artist_id INT UNSIGNED NOT NULL,
+  performance_date DATE NOT NULL,
   start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
   PRIMARY KEY (show_id),
-  KEY shows_schedule (show_date, start_time)
+  KEY shows_schedule (performance_date, start_time),
+  KEY shows_artist (artist_id),
+  CONSTRAINT shows_artist_fk FOREIGN KEY (artist_id)
+    REFERENCES artists (artist_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT shows_time_order CHECK (end_time > start_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Food and drink menu shown on the guest site and managed by admin.
@@ -31,5 +67,6 @@ CREATE TABLE IF NOT EXISTS menu_items (
   stock_quantity INT UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (item_id),
   UNIQUE KEY menu_items_name_unique (item_name),
-  KEY menu_items_category_stock (category, stock_quantity)
+  KEY menu_items_category_stock (category, stock_quantity),
+  CONSTRAINT menu_items_price_positive CHECK (price > 0)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

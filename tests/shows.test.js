@@ -17,11 +17,12 @@ after(async () => {
 });
 
 test('shows API returns database fields as local date/time strings', async t => {
-  const data = [{ show_id: 7, show_date: '2026-10-16', artist: 'Example Trio', genre: 'Jazz', start_time: '20:30' }];
+  const data = [{ show_id: 7, artist_id: 3, artist_name: 'Example Trio', artist_type: 'group', genre: 'Jazz', performance_date: '2026-10-16', start_time: '20:30', end_time: '22:30' }];
   t.mock.method(db, 'execute', async sql => {
-    assert.match(sql, /DATE_FORMAT\(show_date, '%Y-%m-%d'\)/);
-    assert.match(sql, /TIME_FORMAT\(start_time, '%H:%i'\)/);
-    assert.match(sql, /ORDER BY show_date, start_time, show_id/);
+    assert.match(sql, /JOIN artists/);
+    assert.match(sql, /DATE_FORMAT\(s\.performance_date, '%Y-%m-%d'\)/);
+    assert.match(sql, /TIME_FORMAT\(s\.end_time, '%H:%i'\)/);
+    assert.match(sql, /ORDER BY s\.performance_date, s\.start_time, s\.show_id/);
     return [data];
   });
   const response = await fetch(`${baseURL}/api/shows`);
@@ -53,9 +54,11 @@ test('show page, page script and stylesheet are served', async () => {
 });
 
 test('show details look up a bound ID and return the selected SQL row', async t => {
-  const show = { show_id: 2, show_date: '2026-10-17', artist: 'Midnight Blue Trio', genre: 'Bebop & Standards', start_time: '21:00' };
+  const show = { show_id: 2, artist_id: 2, artist_name: 'Midnight Blue Trio', artist_type: 'group', genre: 'Bebop & Standards', performance_date: '2026-10-17', start_time: '21:00', end_time: '23:00' };
   t.mock.method(db, 'execute', async (sql, values) => {
-    assert.match(sql, /FROM shows WHERE show_id = \?/);
+    assert.match(sql, /FROM shows s/);
+    assert.match(sql, /JOIN artists/);
+    assert.match(sql, /WHERE s\.show_id = \?/);
     assert.deepEqual(values, [2]);
     return [[show]];
   });

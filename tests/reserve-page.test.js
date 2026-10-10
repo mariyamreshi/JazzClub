@@ -5,7 +5,7 @@ const vm = require('node:vm');
 const path = require('node:path');
 
 // Small DOM stand-in for exercising submission behavior without a browser dependency.
-function page(fetch, availability = async date => ({ ok: true, json: async () => ({ data: { date, booked_tables: [] } }) }), search = '', initialDate = '2026-12-09') {
+function page(fetch, availability = async (date, time) => ({ ok: true, json: async () => ({ data: { date, time, booked_tables: [] } }) }), search = '', initialDate = '2026-12-09') {
   function element(value = '') {
     const classes = new Set();
     return {
@@ -41,8 +41,11 @@ function page(fetch, availability = async date => ({ ok: true, json: async () =>
     querySelectorAll: () => [table],
     addEventListener: (event, handler) => { ready = handler(); },
   };
-  const context = vm.createContext({ document, window: { location: { search } }, URLSearchParams, fetch: (url, options) => url.startsWith('/api/reservations/availability')
-    ? availability(new URL(url, 'http://localhost').searchParams.get('date')) : fetch(url, options) });
+  const context = vm.createContext({ document, window: { location: { search } }, URLSearchParams, fetch: (url, options) => {
+    if (!url.startsWith('/api/reservations/availability')) return fetch(url, options);
+    const params = new URL(url, 'http://localhost').searchParams;
+    return availability(params.get('date'), params.get('time'));
+  } });
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../public/js/pages/reserve.js'), 'utf8'), context);
   return { ids, button, table, ready, close: () => context.closeConfirmation(), submit: () => ids.reservationForm.handlers.submit({ preventDefault() {} }) };
 }
@@ -102,11 +105,11 @@ test('requires a table before sending a reservation', async () => {
   assert.equal(ui.ids.confirmationCard.classList.contains('hidden'), true);
 });
 
-const availabilityResult = (date, tables) => ({ ok: true, json: async () => ({ data: { date, booked_tables: tables } }) });
+const availabilityResult = (date, time, tables) => ({ ok: true, json: async () => ({ data: { date, time, booked_tables: tables } }) });
 
 test('booked tables are disabled for the selected day and available on another day', async () => {
-  const ui = page(async () => assert.fail('Booked tables cannot be submitted'), async date =>
-    availabilityResult(date, date === '2026-12-09' ? ['F01'] : []));
+  const ui = page(async () => assert.fail('Booked tables cannot be submitted'), async (date, time) =>
+    availabilityResult(date, time, date === '2026-12-09' ? ['F01'] : []));
   await ui.ready;
   assert.equal(ui.table.classList.contains('booked'), true);
   assert.equal(ui.table['aria-disabled'], 'true');
@@ -131,9 +134,9 @@ test('late availability responses cannot overwrite the most recently selected da
   assert.equal(ui.table.classList.contains('selected'), false);
   ui.ids.resDate.value = '2026-10-16';
   const changed = ui.ids.resDate.handlers.change();
-  pending.get('2026-10-16')(availabilityResult('2026-10-16', ['F01']));
+  pending.get('2026-10-16')(availabilityResult('2026-10-16', '20:30', ['F01']));
   await changed;
-  pending.get('2026-12-09')(availabilityResult('2026-12-09', []));
+  pending.get('2026-12-09')(availabilityResult('2026-12-09', '20:30', []));
   await ui.ready;
   assert.equal(ui.table.classList.contains('booked'), true);
   assert.equal(ui.ids.resDate.value, '2026-10-16');
@@ -141,9 +144,9 @@ test('late availability responses cannot overwrite the most recently selected da
 
 test('failed availability blocks booking until retry succeeds', async () => {
   let failing = true;
-  const ui = page(async () => assert.fail('No booking while availability is unknown'), async date => {
+  const ui = page(async () => assert.fail('No booking while availability is unknown'), async (date, time) => {
     if (failing) throw new Error('Offline');
-    return availabilityResult(date, []);
+    return availabilityResult(date, time, []);
   });
   await ui.ready;
   assert.equal(ui.button.disabled, true);
@@ -160,7 +163,7 @@ test('failed availability blocks booking until retry succeeds', async () => {
 test('a booking conflict refreshes the floor plan and does not confirm', async () => {
   let checks = 0;
   const ui = page(async () => ({ ok: false, status: 409, json: async () => ({ error: { message: 'Already booked' } }) }),
-    async date => availabilityResult(date, ++checks > 1 ? ['F01'] : []));
+    async (date, time) => availabilityResult(date, time, ++checks > 1 ? ['F01'] : []));
   await ui.ready;
   ui.table.handlers.click();
   await ui.submit();
@@ -175,7 +178,7 @@ test('successful booking and closing the pass keep the chosen date and reload it
   const ui = page(async (url, options) => {
     saved = true;
     return { ok: true, json: async () => ({ data: { id: 1, ...JSON.parse(options.body) } }) };
-  }, async date => availabilityResult(date, saved ? ['F01'] : []));
+  }, async (date, time) => availabilityResult(date, time, saved ? ['F01'] : []));
   await ui.ready;
   ui.ids.resDate.value = '2026-10-16';
   await ui.ids.resDate.handlers.change();
@@ -188,7 +191,7 @@ test('successful booking and closing the pass keep the chosen date and reload it
   assert.equal(ui.ids.confirmationCard.classList.contains('hidden'), true);
 });
 
-const selectedShow = { show_id: 2, show_date: '2026-10-17', artist: 'Midnight Blue Trio', genre: 'Bebop & Standards', start_time: '22:15' };
+const selectedShow = { show_id: 2, artist_id: 2, performance_date: '2026-10-17', artist_name: 'Midnight Blue Trio', artist_type: 'group', genre: 'Bebop & Standards', start_time: '22:15', end_time: '23:45' };
 
 test('selected SQL show fills card, date, new start time option and confirmation before loading tables', async () => {
   const dates = [];
@@ -198,9 +201,9 @@ test('selected SQL show fills card, date, new start time option and confirmation
     assert.equal(url, '/api/reservations');
     submitted = JSON.parse(options.body);
     return { ok: true, json: async () => ({ data: { id: 99, ...submitted } }) };
-  }, async date => {
+  }, async (date, time) => {
     dates.push(date);
-    return availabilityResult(date, []);
+    return availabilityResult(date, time, []);
   }, '?show_id=2');
   await ui.ready;
   assert.deepEqual(dates, ['2026-10-17']);
@@ -213,12 +216,12 @@ test('selected SQL show fills card, date, new start time option and confirmation
   assert.equal(ui.ids.showMeta.textContent, '17 Oct 2026 · 10:15 PM');
   ui.table.handlers.click();
   await ui.submit();
-  assert.equal(submitted.date, selectedShow.show_date);
+  assert.equal(submitted.date, selectedShow.performance_date);
   assert.equal(submitted.time, selectedShow.start_time);
-  assert.equal(ui.ids.confirmShowArtist.textContent, selectedShow.artist);
+  assert.equal(ui.ids.confirmShowArtist.textContent, selectedShow.artist_name);
   assert.equal(ui.ids.confirmShowGenre.textContent, selectedShow.genre);
   await ui.close();
-  assert.equal(ui.ids.resDate.value, selectedShow.show_date);
+  assert.equal(ui.ids.resDate.value, selectedShow.performance_date);
   assert.equal(ui.ids.resTime.value, selectedShow.start_time);
   assert.equal(ui.ids.resDate.readOnly, true);
 });
@@ -274,7 +277,7 @@ test('retry loads the selected show after a network failure', async () => {
   await ui.ready;
   assert.equal(ui.ids.retryShow.hidden, false);
   await ui.ids.retryShow.handlers.click();
-  assert.equal(ui.ids.resDate.value, selectedShow.show_date);
+  assert.equal(ui.ids.resDate.value, selectedShow.performance_date);
   assert.equal(ui.ids.showStatus.hidden, true);
   assert.equal(ui.button.disabled, false);
 });
