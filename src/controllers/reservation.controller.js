@@ -7,6 +7,7 @@ const tablesByZone = {
   'VIP Lounge': ['VIP-1', 'VIP-2'],
   'Bar Counter': ['B01', 'B02', 'B03', 'B04'],
 };
+const reservationTimes = new Set(['20:00', '20:30', '21:00']);
 
 function validDate(value) {
   if (typeof value !== 'string') return false;
@@ -35,8 +36,8 @@ function validateReservation(body = {}) {
     return invalid('Please select a valid table and its zone.');
   }
   if (!validDate(date)) return invalid('Please enter a valid date in YYYY-MM-DD format.');
-  if (!/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(time)) {
-    return invalid('Please enter a valid time in HH:mm format.');
+  if (!reservationTimes.has(time)) {
+    return invalid('Please select 20:00, 20:30 or 21:00.');
   }
 
   return { reservation };
@@ -45,8 +46,11 @@ function validateReservation(body = {}) {
 function reservationError(error, res, next) {
   if (error.code === 'ER_DUP_ENTRY') {
     return res.status(409).json({
-      error: { code: 'TABLE_ALREADY_BOOKED', message: 'This table is already booked for the selected date. Please choose another table.' },
+      error: { code: 'TABLE_ALREADY_BOOKED', message: 'This table is already booked for the selected date and time. Please choose another table or time.' },
     });
+  }
+  if (error.code === 'TABLE_NOT_FOUND') {
+    return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: error.message } });
   }
   next(error);
 }
@@ -67,15 +71,20 @@ async function createReservation(req, res, next) {
 }
 
 async function getAvailability(req, res, next) {
-  const { date } = req.query;
+  const { date, time } = req.query;
   if (!validDate(date)) {
     return res.status(400).json({
       error: { code: 'VALIDATION_ERROR', message: 'Please enter a valid date in YYYY-MM-DD format.' },
     });
   }
+  if (typeof time !== 'string' || !reservationTimes.has(time)) {
+    return res.status(400).json({
+      error: { code: 'VALIDATION_ERROR', message: 'Please select 20:00, 20:30 or 21:00.' },
+    });
+  }
   res.set('Cache-Control', 'no-store');
   try {
-    res.json({ data: { date, booked_tables: await reservations.bookedTables(date) } });
+    res.json({ data: { date, time, booked_tables: await reservations.bookedTables(date, time) } });
   } catch (error) {
     next(error);
   }

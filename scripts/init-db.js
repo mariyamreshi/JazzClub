@@ -29,25 +29,24 @@ async function initDatabase() {
         await connection.query(statement);
       }
       // CREATE TABLE IF NOT EXISTS does not update an existing installation.
-      const [indexes] = await connection.query(
-        "SHOW INDEX FROM reservations WHERE Key_name = 'reservations_date_table_unique'"
-      );
-      if (indexes.length === 0) {
-        const [duplicates] = await connection.query(
-          'SELECT 1 FROM reservations GROUP BY `date`, table_number HAVING COUNT(*) > 1 LIMIT 1'
-        );
-        if (duplicates.length > 0) {
-          throw new Error('Existing reservations contain duplicate table/date pairs. Review these bookings before adding the daily booking constraint. No reservations were deleted.');
-        }
-        const migration = fs.readFileSync(path.join(__dirname, '../database/migrations/001-reservation-per-day.sql'), 'utf8');
-        await connection.query(migration);
-      }
       const [stockColumns] = await connection.query(
         "SHOW COLUMNS FROM menu_items LIKE 'stock_quantity'"
       );
       if (stockColumns.length === 0) {
         const migration = fs.readFileSync(
           path.join(__dirname, '../database/migrations/003-align-menu-item-with-erd.sql'),
+          'utf8'
+        );
+        for (const statement of sqlStatements(migration)) {
+          await connection.query(statement);
+        }
+      }
+      const [normalizedReservationColumns] = await connection.query(
+        "SHOW COLUMNS FROM reservations LIKE 'customer_id'"
+      );
+      if (normalizedReservationColumns.length === 0) {
+        const migration = fs.readFileSync(
+          path.join(__dirname, '../database/migrations/004-normalize-reservations-and-shows.sql'),
           'utf8'
         );
         for (const statement of sqlStatements(migration)) {

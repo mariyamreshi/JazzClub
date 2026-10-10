@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let showReady = !hasShow;
     let selectedShow = null;
     let loadingShow = false;
-    let loadedDate = null;
+    let loadedSlot = null;
     let requestNumber = 0;
 
     function updateControls() {
-        const unavailable = !showReady || isSubmitting || loadedDate !== dateInput.value;
+        const unavailable = !showReady || isSubmitting || loadedSlot !== `${dateInput.value}|${timeInput.value}`;
         submitButton.disabled = unavailable;
         dateInput.disabled = isSubmitting || !showReady;
         dateInput.readOnly = Boolean(selectedShow);
@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     refreshAvailability = async () => {
         const request = ++requestNumber;
         const date = dateInput.value;
-        loadedDate = null;
+        const time = timeInput.value;
+        loadedSlot = null;
         clearTableSelection();
         tables.forEach(table => table.classList.remove('booked'));
         retry.hidden = true;
@@ -53,28 +54,28 @@ document.addEventListener('DOMContentLoaded', () => {
             status.textContent = 'Select a valid show before choosing a table.';
             return;
         }
-        if (!date) {
-            status.textContent = 'Please choose a date to see available tables.';
+        if (!date || !time) {
+            status.textContent = 'Please choose a date and time to see available tables.';
             return;
         }
         status.textContent = 'Checking available tables...';
         try {
-            const response = await fetch(`/api/reservations/availability?date=${encodeURIComponent(date)}`, { cache: 'no-store' });
+            const response = await fetch(`/api/reservations/availability?date=${encodeURIComponent(date)}&time=${encodeURIComponent(time)}`, { cache: 'no-store' });
             const result = await response.json();
             if (!response.ok) throw new Error('Unable to check available tables. Please try again.');
-            if (result.data?.date !== date || !Array.isArray(result.data.booked_tables)) {
+            if (result.data?.date !== date || result.data?.time !== time || !Array.isArray(result.data.booked_tables)) {
                 throw new Error('Unable to check available tables. Please try again.');
             }
             // Ignore an old response if the user has already selected a different date.
-            if (request !== requestNumber || dateInput.value !== date) return;
+            if (request !== requestNumber || dateInput.value !== date || timeInput.value !== time) return;
             const booked = new Set(result.data.booked_tables);
             tables.forEach(table => {
                 if (booked.has(table.dataset.code)) table.classList.add('booked');
             });
-            loadedDate = date;
-            status.textContent = 'Grey tables are booked for this date. Please select an available table.';
+            loadedSlot = `${date}|${time}`;
+            status.textContent = 'Grey tables are booked for this date and time. Please select an available table.';
         } catch {
-            if (request !== requestNumber || dateInput.value !== date) return;
+            if (request !== requestNumber || dateInput.value !== date || timeInput.value !== time) return;
             status.textContent = 'Unable to check available tables. Please try again.';
             retry.hidden = false;
         } finally {
@@ -86,10 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMessage.hidden = true;
         return refreshAvailability();
     });
+    timeInput.addEventListener('change', () => {
+        errorMessage.hidden = true;
+        return refreshAvailability();
+    });
     retry.addEventListener('click', () => refreshAvailability());
     tables.forEach(table => {
         table.addEventListener('click', () => {
-            if (!showReady || isSubmitting || loadedDate !== dateInput.value || table.classList.contains('booked')) return;
+            if (!showReady || isSubmitting || loadedSlot !== `${dateInput.value}|${timeInput.value}` || table.classList.contains('booked')) return;
             clearTableSelection();
             table.classList.add('selected');
             document.getElementById('selectedTableTitle').textContent = `Table ${table.dataset.code}`;
@@ -99,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
-        if (!showReady || isSubmitting || loadedDate !== dateInput.value || !confirmation.classList.contains('hidden')) return;
+        if (!showReady || isSubmitting || loadedSlot !== `${dateInput.value}|${timeInput.value}` || !confirmation.classList.contains('hidden')) return;
         errorMessage.hidden = true;
         errorMessage.textContent = '';
         const selected = document.querySelector('.table-card.selected, .node-item.selected');
@@ -173,13 +178,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Unable to load show details. Please try again.');
             }
             const { data: show } = await response.json();
-            if (!show || String(show.show_id) !== showId || !/^\d{4}-\d{2}-\d{2}$/.test(show.show_date)
+            if (!show || String(show.show_id) !== showId || !/^\d{4}-\d{2}-\d{2}$/.test(show.performance_date)
                 || !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(show.start_time)
-                || typeof show.artist !== 'string' || typeof show.genre !== 'string') {
+                || typeof show.artist_name !== 'string' || typeof show.genre !== 'string') {
                 throw new Error('Unable to load show details. Please try again.');
             }
             selectedShow = show;
-            dateInput.value = show.show_date;
+            dateInput.value = show.performance_date;
             const [hours, minutes] = show.start_time.split(':');
             const timeLabel = `${Number(hours) % 12 || 12}:${minutes} ${Number(hours) >= 12 ? 'PM' : 'AM'}`;
             if (!Array.from(timeInput.options).some(option => option.value === show.start_time)) {
@@ -191,12 +196,12 @@ document.addEventListener('DOMContentLoaded', () => {
             timeInput.value = show.start_time;
             const dateLabel = new Intl.DateTimeFormat('en-GB', {
                 day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC',
-            }).format(new Date(`${show.show_date}T00:00:00Z`));
+            }).format(new Date(`${show.performance_date}T00:00:00Z`));
             document.getElementById('showGenre').textContent = show.genre;
-            document.getElementById('showArtist').textContent = show.artist;
+            document.getElementById('showArtist').textContent = show.artist_name;
             document.getElementById('showMeta').textContent = `${dateLabel} · ${timeLabel}`;
             document.getElementById('confirmShowGenre').textContent = show.genre;
-            document.getElementById('confirmShowArtist').textContent = show.artist;
+            document.getElementById('confirmShowArtist').textContent = show.artist_name;
             showReady = true;
             showStatus.hidden = true;
             await refreshAvailability();

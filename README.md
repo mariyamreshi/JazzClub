@@ -101,20 +101,25 @@ npm run db:check
 - `ER_ACCESS_DENIED_ERROR`: บัญชี รหัสผ่าน หรือสิทธิ์ไม่ตรง
 - `ER_BAD_DB_ERROR`: ยังไม่มีฐานข้อมูลชื่อตาม `DB_NAME`
 
-สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้างตาราง `reservations`, `shows` และ `menu_items` ถ้ายังไม่มี โดยไม่ลบข้อมูลเดิม คำสั่งนี้ยังเพิ่ม unique key สำหรับหนึ่งโต๊ะต่อวันในฐานข้อมูลเดิมด้วย หากมีข้อมูลจองซ้ำจะหยุดและแจ้งให้ตรวจสอบ โดยไม่ลบข้อมูลใด ๆ
+สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้าง `customers`, `club_tables`, `reservations`, `artists`, `shows` และ `menu_items` ตาม ERD ถ้ายังไม่มี
 
 ถ้าฐานข้อมูลมี `menu_items` รุ่นก่อนหน้า `db:init` จะรัน `003-align-menu-item-with-erd.sql` เพื่อย้ายสถานะเดิมเป็น `category`/`stock_quantity` และปรับตารางให้เหลือฟิลด์ตาม ERD บัญชีที่ใช้รันคำสั่งนี้จึงต้องมีสิทธิ์ `ALTER` สำหรับการ migration
 
+ฐานข้อมูลรุ่นก่อนหน้าที่เก็บชื่อแขก/โต๊ะไว้ใน `reservations` และชื่อศิลปินไว้ใน `shows` จะใช้ `004-normalize-reservations-and-shows.sql` แยกข้อมูลไปยัง Customer, Table และ Artist พร้อมรักษา ID เดิมและเพิ่ม Foreign Key การจองซ้ำตรวจตามโต๊ะ วัน และเวลาที่ตรงกัน
+
 รัน `npm run db:seed` เพื่อเพิ่ม Show ตัวอย่าง 5 รายการและเมนูตัวอย่าง 10 รายการในหมวด Recommended, Seasonal, Cocktail, Liquor, Dessert และ Appetizer รันซ้ำจะข้ามข้อมูลที่ตรงกับตัวอย่างเดิม หรือใช้ `npm run db:setup` เพื่อสร้างตารางและเติมตัวอย่างต่อกัน
 
-หน้า `/show.html` ดึง `show_id`, `show_date`, `artist`, `genre`, `start_time` จาก MySQL ผ่าน `GET /api/shows` เรียงตามวันและเวลา เมื่อเพิ่ม Show ในฐานข้อมูลแล้วรีเฟรชหน้าจะเห็นรายการเพิ่มโดยไม่ต้องแก้ HTML ส่วนหน้าแอดมินเพิ่ม Show ยังไม่ได้พัฒนา
+หน้า `/show.html` ดึง Show พร้อม `artist_id`, `artist_name`, `artist_type`, `genre`, `performance_date`, `start_time` และ `end_time` ผ่าน `GET /api/shows` เรียงตามวันและเวลา ส่วนหน้าแอดมินเพิ่ม Show ยังไม่ได้พัฒนา
 
 เปิด `/reserve.html` เลือกโต๊ะ กรอกชื่อ เบอร์โทร วันที่และเวลา แล้วกดยืนยัน ข้อมูลจะถูกบันทึกลง MySQL ตรวจข้อมูลใน SQL editor ได้ด้วย:
 
 ```sql
-SELECT id, guest_name, phone_number, zone, table_number, `date`, `time`
-FROM reservations
-ORDER BY id DESC;
+SELECT r.reservation_id, c.name, c.phone, t.table_id, t.zone,
+       r.date_time, r.status
+FROM reservations r
+JOIN customers c ON c.customer_id = r.customer_id
+JOIN club_tables t ON t.table_id = r.table_id
+ORDER BY r.reservation_id DESC;
 ```
 
 ## Endpoints ที่ใช้งานได้
@@ -126,7 +131,7 @@ ORDER BY id DESC;
 | GET | `/admin/reservations.html` | รายการจองสำหรับ Admin พร้อมค้นหา กรองวันที่ Add reservation, Edit และ Delete (ยืนยันก่อนลบ) |
 | GET | `/admin/overview.html` | Overview ที่มีรายการจองจาก API เดียวกัน อัปเดตทุก 10 วินาทีขณะเปิดหน้า |
 | GET | `/api/reservations` | รายการจองจาก MySQL พร้อมข้อมูลทั้ง 6 ช่องและ id |
-| PUT | `/api/reservations/:id` | แก้ไขข้อมูลการจอง ตรวจโต๊ะ/วันซ้ำก่อนบันทึก |
+| PUT | `/api/reservations/:id` | แก้ไขข้อมูลการจอง ตรวจโต๊ะ/วัน/เวลาซ้ำก่อนบันทึก |
 | DELETE | `/api/reservations/:id` | ลบรายการถาวรและคืนโต๊ะให้จองได้ |
 | GET | `/show.html` | หน้ารายการแสดงจากฐานข้อมูล |
 | GET | `/api/shows` | รายการ Show เรียงตามวันและเวลา |
@@ -138,8 +143,8 @@ ORDER BY id DESC;
 | POST | `/api/menu-items` | เพิ่มรายการเมนูและตอบ HTTP 201 |
 | PUT | `/api/menu-items/:itemId` | แก้ไขชื่อ หมวดหมู่ ราคา และจำนวนสต็อก |
 | DELETE | `/api/menu-items/:itemId` | ลบรายการเมนูถาวรและตอบ HTTP 204 |
-| POST | `/api/reservations` | บันทึกการจองลง MySQL และตอบ HTTP 201 หรือ HTTP 409 เมื่อโต๊ะถูกจองวันนั้นแล้ว |
-| GET | `/api/reservations/availability?date=YYYY-MM-DD` | รายการรหัสโต๊ะที่ถูกจองในวันที่เลือก |
+| POST | `/api/reservations` | บันทึก Customer และ Reservation ที่อ้างอิง Table ด้วย Foreign Key |
+| GET | `/api/reservations/availability?date=YYYY-MM-DD&time=HH:mm` | รายการรหัสโต๊ะที่ถูกจองในวันและเวลาที่เลือก |
 | GET | `/api/health` | HTTP 200 เมื่อ Express ทำงาน ไม่ตรวจ MySQL |
 | GET | `/api/health/db` | HTTP 200 เมื่อ `SELECT 1` สำเร็จ หรือ HTTP 503 เมื่อฐานข้อมูลไม่พร้อม |
 

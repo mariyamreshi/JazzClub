@@ -1,38 +1,47 @@
--- Fictional shows. Re-running the seed skips matching rows and preserves existing data.
-INSERT INTO shows (show_date, artist, genre, start_time)
-SELECT '2026-10-16', 'The Araya Quartet', 'Contemporary Jazz', '20:30:00'
-WHERE NOT EXISTS (
-  SELECT 1 FROM shows WHERE show_date = '2026-10-16' AND artist = 'The Araya Quartet'
-    AND genre = 'Contemporary Jazz' AND start_time = '20:30:00'
-);
+-- Physical tables used by the reservation floor plan.
+INSERT INTO club_tables (table_id, capacity, zone, status) VALUES
+  ('F01', 8, 'Front Stage', 'available'), ('F02', 8, 'Front Stage', 'available'),
+  ('F03', 8, 'Front Stage', 'available'), ('F04', 8, 'Front Stage', 'available'),
+  ('M01', 8, 'Main Floor', 'available'), ('M02', 8, 'Main Floor', 'available'),
+  ('M03', 8, 'Main Floor', 'available'),
+  ('VIP-1', 12, 'VIP Lounge', 'available'), ('VIP-2', 12, 'VIP Lounge', 'available'),
+  ('B01', 1, 'Bar Counter', 'available'), ('B02', 1, 'Bar Counter', 'available'),
+  ('B03', 1, 'Bar Counter', 'available'), ('B04', 1, 'Bar Counter', 'available')
+ON DUPLICATE KEY UPDATE capacity = VALUES(capacity), zone = VALUES(zone);
 
-INSERT INTO shows (show_date, artist, genre, start_time)
-SELECT '2026-10-17', 'Midnight Blue Trio', 'Bebop & Standards', '21:00:00'
-WHERE NOT EXISTS (
-  SELECT 1 FROM shows WHERE show_date = '2026-10-17' AND artist = 'Midnight Blue Trio'
-    AND genre = 'Bebop & Standards' AND start_time = '21:00:00'
-);
+-- Fictional artists and shows. Re-running the seed preserves existing IDs.
+INSERT INTO artists (artist_name, artist_type, genre) VALUES
+  ('The Araya Quartet', 'group', 'Contemporary Jazz'),
+  ('Midnight Blue Trio', 'group', 'Bebop & Standards'),
+  ('Nina & The Brass', 'group', 'Soul Jazz'),
+  ('Chiang Mai Swing Collective', 'group', 'Swing'),
+  ('Riverfront Jazz Ensemble', 'group', 'Latin Jazz')
+ON DUPLICATE KEY UPDATE artist_type = VALUES(artist_type), genre = VALUES(genre);
 
-INSERT INTO shows (show_date, artist, genre, start_time)
-SELECT '2026-10-18', 'Nina & The Brass', 'Soul Jazz', '20:00:00'
-WHERE NOT EXISTS (
-  SELECT 1 FROM shows WHERE show_date = '2026-10-18' AND artist = 'Nina & The Brass'
-    AND genre = 'Soul Jazz' AND start_time = '20:00:00'
-);
+INSERT INTO shows (artist_id, performance_date, start_time, end_time)
+SELECT artist_id, '2026-10-16', '20:30:00', '22:30:00' FROM artists
+WHERE artist_name = 'The Araya Quartet'
+  AND NOT EXISTS (SELECT 1 FROM shows WHERE performance_date = '2026-10-16' AND start_time = '20:30:00');
 
-INSERT INTO shows (show_date, artist, genre, start_time)
-SELECT '2026-10-23', 'Chiang Mai Swing Collective', 'Swing', '20:30:00'
-WHERE NOT EXISTS (
-  SELECT 1 FROM shows WHERE show_date = '2026-10-23' AND artist = 'Chiang Mai Swing Collective'
-    AND genre = 'Swing' AND start_time = '20:30:00'
-);
+INSERT INTO shows (artist_id, performance_date, start_time, end_time)
+SELECT artist_id, '2026-10-17', '21:00:00', '23:00:00' FROM artists
+WHERE artist_name = 'Midnight Blue Trio'
+  AND NOT EXISTS (SELECT 1 FROM shows WHERE performance_date = '2026-10-17' AND start_time = '21:00:00');
 
-INSERT INTO shows (show_date, artist, genre, start_time)
-SELECT '2026-10-24', 'Riverfront Jazz Ensemble', 'Latin Jazz', '21:00:00'
-WHERE NOT EXISTS (
-  SELECT 1 FROM shows WHERE show_date = '2026-10-24' AND artist = 'Riverfront Jazz Ensemble'
-    AND genre = 'Latin Jazz' AND start_time = '21:00:00'
-);
+INSERT INTO shows (artist_id, performance_date, start_time, end_time)
+SELECT artist_id, '2026-10-18', '20:00:00', '22:00:00' FROM artists
+WHERE artist_name = 'Nina & The Brass'
+  AND NOT EXISTS (SELECT 1 FROM shows WHERE performance_date = '2026-10-18' AND start_time = '20:00:00');
+
+INSERT INTO shows (artist_id, performance_date, start_time, end_time)
+SELECT artist_id, '2026-10-23', '20:30:00', '22:30:00' FROM artists
+WHERE artist_name = 'Chiang Mai Swing Collective'
+  AND NOT EXISTS (SELECT 1 FROM shows WHERE performance_date = '2026-10-23' AND start_time = '20:30:00');
+
+INSERT INTO shows (artist_id, performance_date, start_time, end_time)
+SELECT artist_id, '2026-10-24', '21:00:00', '23:00:00' FROM artists
+WHERE artist_name = 'Riverfront Jazz Ensemble'
+  AND NOT EXISTS (SELECT 1 FROM shows WHERE performance_date = '2026-10-24' AND start_time = '21:00:00');
 
 -- Guest menu aligned with the MENU_ITEM entity in the ERD.
 -- Re-running the seed skips items with the same name.

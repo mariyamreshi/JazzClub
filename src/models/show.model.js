@@ -1,21 +1,26 @@
 const db = require('../config/db');
 
+const selectFields = `s.show_id, s.artist_id, a.artist_name, a.artist_type, a.genre,
+  DATE_FORMAT(s.performance_date, '%Y-%m-%d') AS performance_date,
+  TIME_FORMAT(s.start_time, '%H:%i') AS start_time,
+  TIME_FORMAT(s.end_time, '%H:%i') AS end_time`;
+
 async function list() {
-  // Return local date/time strings so the browser does not shift the show date.
   const [rows] = await db.execute(
-    `SELECT show_id, DATE_FORMAT(show_date, '%Y-%m-%d') AS show_date,
-            artist, genre, TIME_FORMAT(start_time, '%H:%i') AS start_time
-     FROM shows
-     ORDER BY show_date, start_time, show_id`
+    `SELECT ${selectFields}
+     FROM shows s
+     JOIN artists a ON a.artist_id = s.artist_id
+     ORDER BY s.performance_date, s.start_time, s.show_id`
   );
   return rows;
 }
 
 async function findById(showId) {
   const [rows] = await db.execute(
-    `SELECT show_id, DATE_FORMAT(show_date, '%Y-%m-%d') AS show_date,
-            artist, genre, TIME_FORMAT(start_time, '%H:%i') AS start_time
-     FROM shows WHERE show_id = ?`,
+    `SELECT ${selectFields}
+     FROM shows s
+     JOIN artists a ON a.artist_id = s.artist_id
+     WHERE s.show_id = ?`,
     [showId]
   );
   return rows[0] || null;

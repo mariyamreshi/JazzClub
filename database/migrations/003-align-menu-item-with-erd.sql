@@ -14,4 +14,5 @@ ALTER TABLE menu_items
   DROP COLUMN is_available,
   DROP COLUMN created_at,
   DROP COLUMN updated_at,
-  ADD KEY menu_items_category_stock (category, stock_quantity);
+  ADD KEY menu_items_category_stock (category, stock_quantity),
+  ADD CONSTRAINT menu_items_price_positive CHECK (price > 0);
