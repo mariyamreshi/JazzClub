@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garnet's House - Employees</title>
+    <link rel="stylesheet" href="/css/admin/admin.css">
+    <link rel="stylesheet" href="/css/admin/employees.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-text">
+                <h1>Garnet's House</h1>
+                <span>JAZZ CLUB</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">CLUB MANAGEMENT</div>
+            <a href="/admin/overview.html" class="nav-item"><span class="nav-icon">▦</span> Overview</a>
+            <a href="/admin/reservations.html" class="nav-item"><span class="nav-icon">▣</span> Reservations</a>
+            <a href="/admin/shows.html" class="nav-item"><span class="nav-icon">♫</span> Shows &amp; artists</a>
+            <a href="/admin/menu.html" class="nav-item"><span class="nav-icon">♜</span> Menu</a>
+            <a href="/admin/orders.html" class="nav-item"><span class="nav-icon">▤</span> Orders</a>
+            <a href="/admin/inventory.html" class="nav-item"><span class="nav-icon">⬡</span> Inventory <span class="badge warning">3</span></a>
+            <a href="/admin/employees.html" class="nav-item active" aria-current="page"><span class="nav-icon">♧</span> Employees</a>
+            <a href="/admin/shifts.html" class="nav-item"><span class="nav-icon">▦</span> Shifts</a>
+
+            <div class="nav-section-label">REPORTS</div>
+            <a href="/admin/performance.html" class="nav-item"><span class="nav-icon">▥</span> Performance</a>
+        </nav>
+
+        <div class="sidebar-footer-widgets">
+            <div class="user-profile-bar">
+                <div class="avatar-circle">MR</div>
+                <div class="profile-info">
+                    <div class="profile-name">Mariyam Reshi</div>
+                    <div class="profile-role">Club Manager</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header-simple">
+            <a href="/" class="btn-guest-site">Guest website</a>
+        </header>
+
+        <div class="employees-content">
+            <div class="employees-heading">
+                <div>
+                    <div class="employees-eyebrow">CLUB MANAGEMENT <span>/</span> EMPLOYEES</div>
+                    <h1>Employees</h1>
+                    <p>Manage your team and employee details.</p>
+                </div>
+                <button type="button" id="addEmployee" class="employee-primary">
+                    + Add employee
+                </button>
+
+                <dialog id="employeeDialog" class="employee-dialog">
+                    <form id="employeeForm">
+                        <div class="dialog-top">
+                            <div>
+                                <div class="employees-eyebrow">EMPLOYEE RECORD</div>
+                                <h2>Add employee</h2>
+                            </div>
+                            <button type="button" id="closeEmployee" class="dialog-close" aria-label="Close">
+                                ×
+                            </button>
+                        </div>
+
+                        <label>
+                            Employee ID
+                            <input id="employeeId" name="employee_id" readonly>
+                        </label>
+
+                        <label>
+                            Employee name
+                            <input id="employeeName" name="employee_name" type="text" required>
+                        </label>
+
+                        <label>
+                            Phone
+                            <input id="employeePhone" name="phone" type="tel" required>
+                        </label>
+
+                        <label>
+                            Status
+                            <select id="employeeStatus" name="status" required>
+                                <option value="Active">Active</option>
+                                <option value="On leave">On leave</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Employment type
+                            <select id="employmentType" name="employment_type" required>
+                                <option value="Full-time">Full-time</option>
+                                <option value="Part-time">Part-time</option>
+                            </select>
+                        </label>
+
+                        <div class="employee-dialog-actions">
+                            <button type="button" id="cancelEmployee" class="employee-secondary">Cancel</button>
+                            <button type="submit" class="employee-primary">Save employee</button>
+                        </div>
+                    </form>
+                </dialog>
+            </div>
+
+           
+
+            <section class="employee-directory">
+                <div class="employee-controls">
+                    <label class="employee-search">
+                        <span aria-hidden="true">⌕</span>
+                        <input id="employeeSearch" type="search"
+                               placeholder="Search by employee ID, name, or phone…"
+                               aria-label="Search employees">
+                    </label>
+
+                    <div class="employee-filters">
+                        <select id="typeFilter" aria-label="Filter by employment type">
+                            <option value="all">All types</option>
+                            <option>Full-time</option>
+                            <option>Part-time</option>
+                        </select>
+                        <select id="statusFilter" aria-label="Filter by employment status">
+                            <option value="all">All statuses</option>
+                            <option>Active</option>
+                            <option>On leave</option>
+                        </select>
+                        <select id="roleFilter" aria-label="Filter by shift role">
+                            <option value="all">All roles</option>
+                            <option>Floor server</option>
+                            <option>Bartender</option>
+                            <option>Kitchen staff</option>
+                            <option>Reservations staff</option>
+                            <option>Stock keeper</option>
+                            <option>Artist coordinator</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="employee-count" id="resultCount" aria-live="polite">8 employees</div>
+
+                <div class="employee-table-wrap">
+                    <table class="employee-table">
+                        <thead>
+                        <tr>
+                            <th>EMPLOYEE</th>
+                            <th>EMPLOYMENT TYPE</th>
+                            <th>STATUS</th>
+                            <th>UPCOMING SHIFT</th>
+                            <th><span class="sr-only">Details</span></th>
+                        </tr>
+                        </thead>
+                        <tbody id="employeeRows"></tbody>
+                    </table>
+                </div>
+
+                <div class="employee-empty" id="emptyState" hidden>
+                    No employees match your search or filters.
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<dialog class="employee-dialog" id="employeeDialog">
+    <form id="employeeForm">
+        <div class="dialog-top">
+            <div>
+                <div class="employees-eyebrow">EMPLOYEE RECORD</div>
+                <h2 id="dialogTitle">Employee details</h2>
+            </div>
+            <button type="button" class="dialog-close" id="closeEmployee" aria-label="Close">×</button>
+        </div>
+
+        <div class="employee-fields">
+            <label>
+                Employee ID
+                <input id="employeeId" name="employee_id" readonly>
+            </label>
+
+            <label>
+                Employee name
+                <input id="employeeName" name="employee_name" type="text" required>
+            </label>
+
+            <label>
+                Phone
+                <input id="employeePhone" name="phone" type="tel" required>
+            </label>
+
+            <label>
+                Status
+                <select id="employeeStatus" name="status" required>
+                    <option value="Active">Active</option>
+                    <option value="On leave">On leave</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </label>
+
+            <label>
+                Employment type
+                <select id="employmentType" name="employment_type" required>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                </select>
+            </label>
+        </div>
+
+        <p class="record-note">Shift role, show, date, and hours are assigned on the Shifts page.</p>
+
+        <div class="employee-dialog-actions">
+            <button type="button" class="employee-secondary" id="cancelEmployee">Cancel</button>
+            <button type="submit" class="employee-primary">Save employee</button>
+        </div>
+    </form>
+</dialog>
+
+<script src="/js/pages/admin-employees.js"></script>
+</body>
+</html>
