@@ -6,171 +6,120 @@
     <title>Garnet's House - Shifts</title>
     <link rel="stylesheet" href="/css/admin/admin.css">
     <link rel="stylesheet" href="/css/admin/employees.css">
+    <link rel="stylesheet" href="/css/admin/admin-shifts.css">
     <link rel="stylesheet" href="/css/admin/navbar.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="admin-body">
 <div class="admin-layout">
     <aside class="admin-sidebar">
-        <div class="sidebar-brand">
-            <div class="brand-text">
-                <h1>Garnet's House</h1>
-                <span>JAZZ CLUB</span>
-            </div>
-        </div>
-
+        <div class="sidebar-brand"><div class="brand-text"><h1>Garnet's House</h1><span>JAZZ CLUB</span></div></div>
         <nav class="sidebar-nav">
             <div class="nav-section-label">CLUB MANAGEMENT</div>
-            <a href="/admin/overview.html" class="nav-item">
-                <span class="nav-icon">📊</span> Overview
-            </a>
-            <a href="/admin/reservations.html" class="nav-item">
-                <span class="nav-icon">📅</span> Reservations
-                <span class="badge" id="reservationCount">—</span>
-            </a>
-            <a href="/admin/shows.html" class="nav-item">
-                <span class="nav-icon">🎷</span> Shows & artists
-            </a>
-            <a href="/admin/menu.html" class="nav-item">
-                <span class="nav-icon">🍽️</span> Menu
-            </a>
-            <a href="/admin/order.html" class="nav-item">
-                <span class="nav-icon">📋</span> Orders
-            </a>
-            <a href="/admin/employees.html" class="nav-item">
-                <span class="nav-icon">👥</span> Employees
-            </a>
-            <a href="/admin/shifts.html" class="nav-item active" aria-current="page">
-                <span class="nav-icon">🗓️</span> Shifts
-            </a>
+            <a href="/admin/overview.html" class="nav-item"><span class="nav-icon">📊</span> Overview</a>
+            <a href="/admin/reservations.html" class="nav-item"><span class="nav-icon">📅</span> Reservations</a>
+            <a href="/admin/shows.html" class="nav-item"><span class="nav-icon">🎷</span> Shows & artists</a>
+            <a href="/admin/menu.html" class="nav-item"><span class="nav-icon">🍽️</span> Menu</a>
+            <a href="/admin/order.html" class="nav-item"><span class="nav-icon">📋</span> Orders</a>
+            <a href="/admin/employees.html" class="nav-item"><span class="nav-icon">👥</span> Employees</a>
+            <a href="/admin/shifts.html" class="nav-item active" aria-current="page"><span class="nav-icon">🗓️</span> Shifts</a>
         </nav>
-
-        <div class="sidebar-footer-widgets">
-            <div class="user-profile-bar">
-                <div class="avatar-circle">MR</div>
-                <div class="profile-info">
-                    <div class="profile-name">Mariyam Reshi</div>
-                    <div class="profile-role">Club Manager</div>
-                </div>
-            </div>
-        </div>
+        <div class="sidebar-footer-widgets"><div class="user-profile-bar">
+            <div class="avatar-circle">MR</div>
+            <div class="profile-info"><div class="profile-name">Mariyam Reshi</div><div class="profile-role">Club Manager</div></div>
+        </div></div>
     </aside>
 
     <main class="admin-main">
         <header class="admin-header-simple"><a href="/" class="btn-guest-site">Guest website</a></header>
-
         <div class="employees-content">
             <div class="employees-heading">
                 <div>
-                    <div class="employees-eyebrow">CLUB MANAGEMENT <span>/</span> SHIFTS</div>
+                    <div class="employees-eyebrow">CLUB MANAGEMENT <span>/</span> EMPLOYEE SHIFT</div>
                     <h1>Shifts</h1>
-                    <p>Set how many people each role needs for the day, then assign employees to cover the show.</p>
+                    <p>Assign employees to shows using the EMPLOYEE_SHIFT records from the ERD.</p>
                 </div>
-                <button class="employee-primary" id="createShift">＋ Create shift</button>
+                <button type="button" class="employee-primary" id="addShift">+ Add shift</button>
             </div>
 
+            <section class="shift-summary" aria-label="Weekly shift summary">
+                <article><span>Assignments</span><strong id="shiftCount">0</strong></article>
+                <article><span>Employees scheduled</span><strong id="scheduledEmployees">0</strong></article>
+                <article><span>Shows covered</span><strong id="coveredShows">0</strong></article>
+            </section>
 
-
-            <section class="shift-panel">
-                <div class="shift-panel-heading">
-                    <div>
-                        <div class="employees-eyebrow">WEEKLY VIEW</div>
-                        <h2 id="weekTitle">Loading week…</h2>
-                    </div>
-                    <div class="week-actions">
-                        <select class="shift-role-filter" id="shiftRoleFilter" aria-label="Filter shifts by role">
-                            <option value="all">All roles</option>
-                        </select>
-                        <button class="employee-secondary" id="previousWeek" aria-label="Previous week">‹</button>
-                        <button class="employee-secondary" id="currentWeek">Today</button>
-                        <button class="employee-secondary" id="nextWeek" aria-label="Next week">›</button>
+            <section class="employee-directory shift-directory">
+                <div class="shift-week-heading">
+                    <div><div class="employees-eyebrow">WEEKLY VIEW</div><h2 id="weekTitle">Loading week…</h2></div>
+                    <div class="shift-week-actions">
+                        <button type="button" class="employee-secondary" id="previousWeek" aria-label="Previous week">‹</button>
+                        <button type="button" class="employee-secondary" id="currentWeek">Today</button>
+                        <button type="button" class="employee-secondary" id="nextWeek" aria-label="Next week">›</button>
                     </div>
                 </div>
 
-                <div class="shift-grid" id="shiftGrid" aria-live="polite"></div>
+                <div class="employee-controls">
+                    <label class="employee-search">
+                        <span aria-hidden="true">⌕</span>
+                        <input id="shiftSearch" type="search" placeholder="Search employee, artist, role, or shift ID…" aria-label="Search shifts">
+                    </label>
+                    <div class="employee-filters">
+                        <select id="shiftRoleFilter" aria-label="Filter by role"><option value="all">All roles</option></select>
+                        <button type="button" id="refreshShifts" class="employee-secondary">Refresh</button>
+                    </div>
+                </div>
 
+                <div class="employee-count" id="shiftResultCount" aria-live="polite">Loading shifts…</div>
+                <p class="employee-load-error" id="shiftLoadError" role="alert" hidden></p>
+                <div class="employee-table-wrap">
+                    <table class="employee-table shift-table">
+                        <thead><tr><th>SHIFT</th><th>EMPLOYEE</th><th>SHOW</th><th>ROLE</th><th>DATE &amp; TIME</th><th>ACTIONS</th></tr></thead>
+                        <tbody id="shiftRows" aria-busy="true"></tbody>
+                    </table>
+                </div>
+                <div class="employee-empty" id="shiftEmpty" hidden>No shifts match this week or the selected filters.</div>
             </section>
-
-
         </div>
     </main>
 </div>
 
-<dialog class="employee-dialog" id="shiftDialog">
+<dialog class="employee-dialog shift-dialog" id="shiftDialog" aria-labelledby="shiftDialogTitle">
     <form id="shiftForm">
         <div class="dialog-top">
-            <div>
-                <div class="employees-eyebrow">EMPLOYEE_SHIFT RECORD</div>
-                <h2 id="shiftDialogTitle">Add employee to role</h2>
-            </div>
-            <button class="dialog-close" id="closeShift" type="button" aria-label="Close">×</button>
+            <div><div class="employees-eyebrow">EMPLOYEE_SHIFT RECORD</div><h2 id="shiftDialogTitle">Shift details</h2></div>
+            <button type="button" class="dialog-close" id="closeShift" aria-label="Close">×</button>
         </div>
-        <p>Assign an employee to this role and show. The shift ID is generated when you save.</p>
+        <p class="shift-dialog-description">Each shift belongs to one employee and one show. The shift date follows the selected show date.</p>
         <div class="employee-fields">
-            <label>Shift ID<input id="shiftId" value="Generated on save" readonly></label>
-            <label>Employee
-                <select id="shiftEmployee" required><option value="">Loading employees…</option></select>
-            </label>
-            <label>Show
-                <select id="shiftShow" required><option value="">Loading shows…</option></select>
-            </label>
-            <label>Role
-                <select id="shiftRole" required>
-                    <option>Floor server</option><option>Bartender</option><option>Kitchen staff</option>
-                    <option>Reservations staff</option><option>Stock keeper</option><option>Artist coordinator</option>
-                </select>
-            </label>
-            <label>Shift date<input id="shiftDate" type="date" required></label>
-            <label>Start time<input id="shiftStart" type="time" required></label>
-            <label>End time<input id="shiftEnd" type="time" required></label>
+            <label>Shift ID<input id="shiftId" name="shift_id" readonly placeholder="Assigned after save"></label>
+            <label>Employee<select id="shiftEmployee" name="employee_id" required><option value="">Loading employees…</option></select></label>
+            <label class="shift-field-wide">Show<select id="shiftShow" name="show_id" required><option value="">Loading shows…</option></select></label>
+            <label>Role<select id="shiftRole" name="role" required>
+                <option value="Floor server">Floor server</option><option value="Bartender">Bartender</option>
+                <option value="Kitchen staff">Kitchen staff</option><option value="Reservations staff">Reservations staff</option>
+                <option value="Stock keeper">Stock keeper</option><option value="Artist coordinator">Artist coordinator</option>
+            </select></label>
+            <label>Shift date<input id="shiftDate" name="shift_date" type="date" readonly required></label>
+            <label>Start time<input id="shiftStart" name="start_time" type="time" required></label>
+            <label>End time<input id="shiftEnd" name="end_time" type="time" required></label>
         </div>
-        <p class="record-note" id="shiftMessage" role="status"></p>
+        <p id="shiftFormError" class="employee-form-error" role="alert" hidden></p>
         <div class="employee-dialog-actions">
-            <button class="employee-secondary" id="cancelShift" type="button">Cancel</button>
-            <button class="employee-primary" id="saveShift" type="submit">Save shift</button>
+            <button type="button" class="employee-secondary" id="cancelShift">Cancel</button>
+            <button type="submit" class="employee-primary" id="saveShift">Save shift</button>
         </div>
     </form>
 </dialog>
 
-<dialog class="employee-dialog role-target-dialog" id="roleTargetDialog" aria-labelledby="roleTargetTitle">
-    <form id="roleTargetForm">
-        <div class="dialog-top">
-            <div>
-                <div class="employees-eyebrow">DAILY STAFFING PLAN</div>
-                <h2 id="roleTargetTitle">Set role target</h2>
-            </div>
-            <button class="dialog-close" id="closeRoleTarget" type="button" aria-label="Close">×</button>
-        </div>
-        <p id="roleTargetSummary" class="record-note"></p>
-        <label class="role-target-field">Employees needed
-            <input id="roleTargetCount" type="number" min="0" max="999" step="1" required>
-        </label>
-        <p class="record-note">This is a staffing goal, not a maximum. You can assign extra employees if the event needs them.</p>
-        <p class="record-note" id="roleTargetMessage" role="status"></p>
-        <div class="employee-dialog-actions">
-            <button class="employee-secondary" id="cancelRoleTarget" type="button">Cancel</button>
-            <button class="employee-primary" id="saveRoleTarget" type="submit">Save target</button>
-        </div>
-    </form>
-</dialog>
-
-<dialog class="employee-dialog role-target-dialog" id="removeShiftDialog" aria-labelledby="removeShiftTitle">
-    <form id="removeShiftForm">
-        <div class="dialog-top">
-            <div>
-                <div class="employees-eyebrow">SHIFT ASSIGNMENT</div>
-                <h2 id="removeShiftTitle">Remove employee from shift?</h2>
-            </div>
-            <button class="dialog-close" id="closeRemoveShift" type="button" aria-label="Close">×</button>
-        </div>
-        <p id="removeShiftSummary" class="record-note"></p>
-        <p class="record-note">This only removes the shift assignment. The employee’s record stays in Employees.</p>
-        <p class="record-note" id="removeShiftMessage" role="status"></p>
-        <div class="employee-dialog-actions">
-            <button class="employee-secondary" id="cancelRemoveShift" type="button">Keep assignment</button>
-            <button class="employee-delete" id="confirmRemoveShift" type="submit">Remove assignment</button>
-        </div>
-    </form>
+<dialog class="employee-dialog employee-delete-dialog" id="deleteShiftDialog" aria-labelledby="deleteShiftTitle">
+    <h2 id="deleteShiftTitle">Delete shift?</h2>
+    <p id="deleteShiftSummary"></p>
+    <p>This permanently removes only this EMPLOYEE_SHIFT assignment.</p>
+    <p id="deleteShiftError" class="employee-form-error" role="alert" hidden></p>
+    <div class="employee-dialog-actions">
+        <button type="button" class="employee-secondary" id="cancelShiftDelete">Cancel</button>
+        <button type="button" class="employee-delete" id="confirmShiftDelete">Delete shift</button>
+    </div>
 </dialog>
 
 <script src="/js/pages/admin-shifts.js"></script>

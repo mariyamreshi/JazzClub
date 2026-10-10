@@ -154,6 +154,12 @@ ORDER BY r.reservation_id DESC;
 | POST | `/api/employees` | เพิ่ม Employee และตอบ HTTP 201 |
 | PUT | `/api/employees/:employeeId` | แก้ไขชื่อ เบอร์โทร สถานะ และประเภทการจ้าง |
 | DELETE | `/api/employees/:employeeId` | ลบ Employee ที่ไม่ได้ถูก Shift อ้างอิง |
+| GET | `/admin/shifts.html` | หน้าจัดการ Employee Shift รายสัปดาห์ พร้อมค้นหา กรอง เพิ่ม แก้ไข และลบ |
+| GET | `/api/employee-shifts?from=YYYY-MM-DD&to=YYYY-MM-DD` | Shift ในช่วงวันที่ พร้อมชื่อ Employee และข้อมูล Show |
+| GET | `/api/employee-shifts/:shiftId` | Shift ตาม ID หรือ HTTP 404 เมื่อไม่พบ |
+| POST | `/api/employee-shifts` | เพิ่ม Shift ตามฟิลด์ใน ERD และตอบ HTTP 201 |
+| PUT | `/api/employee-shifts/:shiftId` | แก้ไข Employee, Show, Role, วันที่ และเวลา |
+| DELETE | `/api/employee-shifts/:shiftId` | ลบเฉพาะ Shift assignment และตอบ HTTP 204 |
 | POST | `/api/reservations` | บันทึก Customer และ Reservation ที่อ้างอิง Table ด้วย Foreign Key |
 | GET | `/api/reservations/availability?date=YYYY-MM-DD&time=HH:mm` | รายการรหัสโต๊ะที่ถูกจองในวันและเวลาที่เลือก |
 | GET | `/api/health` | HTTP 200 เมื่อ Express ทำงาน ไม่ตรวจ MySQL |

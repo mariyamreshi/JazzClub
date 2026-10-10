@@ -1,0 +1,62 @@
+.shift-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.shift-summary article {
+    min-height: 104px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #e9e4dc;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.shift-summary span { color: #877e75; font-size: .72rem; font-weight: 600; text-transform: uppercase; letter-spacing: .55px; }
+.shift-summary strong { color: #392a24; font: 600 1.9rem 'Playfair Display', serif; }
+.shift-directory { padding-top: 0; }
+
+.shift-week-heading {
+    padding: 22px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #eee8df;
+}
+
+.shift-week-heading h2 { margin-top: 7px; color: #392a24; font: 600 1.45rem 'Playfair Display', serif; }
+.shift-week-actions { display: flex; gap: 8px; }
+.shift-week-actions .employee-secondary { padding: 9px 14px; }
+.shift-table th:nth-child(1) { width: 9%; }
+.shift-table th:nth-child(2) { width: 18%; }
+.shift-table th:nth-child(3) { width: 23%; }
+.shift-table th:nth-child(4) { width: 15%; }
+.shift-table th:nth-child(5) { width: 19%; }
+
+.shift-id { color: #765a48; font-weight: 700; }
+.shift-person, .shift-show, .shift-when { display: grid; gap: 4px; }
+.shift-person strong, .shift-show strong, .shift-when strong { color: #493b33; font-size: .8rem; }
+.shift-person small, .shift-show small, .shift-when small { color: #938a82; font-size: .69rem; }
+.shift-role-pill { display: inline-flex; padding: 6px 9px; border-radius: 999px; background: #f4eee5; color: #725b48; font-size: .7rem; font-weight: 600; }
+.shift-dialog { width: min(640px, calc(100vw - 32px)); }
+.shift-dialog-description { margin: -6px 0 2px; color: #8a8279; font-size: .77rem; line-height: 1.6; }
+.shift-field-wide { grid-column: 1 / -1; }
+.shift-dialog input[readonly] { cursor: default; }
+
+@media (max-width: 900px) {
+    .shift-summary { grid-template-columns: 1fr; }
+    .shift-summary article { min-height: 88px; }
+    .shift-table { min-width: 940px; }
+}
+
+@media (max-width: 640px) {
+    .shift-week-heading { align-items: flex-start; flex-direction: column; }
+    .shift-week-actions { width: 100%; }
+    .shift-week-actions button { flex: 1; }
+    .shift-field-wide { grid-column: auto; }
+}

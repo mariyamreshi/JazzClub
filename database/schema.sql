@@ -85,13 +85,24 @@ CREATE TABLE IF NOT EXISTS employee_schedules (
   CONSTRAINT employee_schedules_time_order CHECK (end_time > start_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Planned staffing target for each role on each club date.
-CREATE TABLE IF NOT EXISTS employee_role_targets (
-  target_date DATE NOT NULL,
+-- EMPLOYEE_SHIFT from the ERD. Each assignment belongs to one employee and
+-- one show, while an employee and a show can each have many assignments.
+CREATE TABLE IF NOT EXISTS employee_shifts (
+  shift_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  employee_id INT UNSIGNED NOT NULL,
+  show_id INT UNSIGNED NOT NULL,
   role VARCHAR(60) NOT NULL,
-  target_count SMALLINT UNSIGNED NOT NULL,
-  PRIMARY KEY (target_date, role),
-  CONSTRAINT employee_role_targets_count_valid CHECK (target_count <= 999)
+  shift_date DATE NOT NULL,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  PRIMARY KEY (shift_id),
+  KEY employee_shifts_employee_date (employee_id, shift_date),
+  KEY employee_shifts_show (show_id),
+  CONSTRAINT employee_shifts_employee_fk FOREIGN KEY (employee_id)
+    REFERENCES employees (employee_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT employee_shifts_show_fk FOREIGN KEY (show_id)
+    REFERENCES shows (show_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT employee_shifts_time_order CHECK (end_time > start_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Food and drink menu shown on the guest site and managed by admin.

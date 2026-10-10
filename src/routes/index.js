@@ -24,10 +24,10 @@ router.post('/api/employees', employeeController.createEmployee);
 router.put('/api/employees/:employeeId', employeeController.updateEmployee);
 router.delete('/api/employees/:employeeId', employeeController.deleteEmployee);
 router.get('/api/employee-shifts', employeeShiftController.list);
+router.get('/api/employee-shifts/:shiftId', employeeShiftController.getOne);
 router.post('/api/employee-shifts', employeeShiftController.create);
+router.put('/api/employee-shifts/:shiftId', employeeShiftController.update);
 router.delete('/api/employee-shifts/:shiftId', employeeShiftController.remove);
-router.get('/api/employee-role-targets', employeeShiftController.listRoleTargets);
-router.put('/api/employee-role-targets', employeeShiftController.saveRoleTarget);
 
 // Guest menu and admin menu management.
 router.get('/api/menu-items', menuController.listPublic);

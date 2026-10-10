@@ -56,17 +56,7 @@ async function initDatabase() {
       const [shiftTable] = await connection.query("SHOW TABLES LIKE 'employee_shifts'");
       if (shiftTable.length === 0) {
         const migration = fs.readFileSync(
-          path.join(__dirname, '../database/migrations/006-employee-schedules-and-shifts.sql'),
-          'utf8'
-        );
-        for (const statement of sqlStatements(migration)) {
-          await connection.query(statement);
-        }
-      }
-      const [roleTargetTable] = await connection.query("SHOW TABLES LIKE 'employee_role_targets'");
-      if (roleTargetTable.length === 0) {
-        const migration = fs.readFileSync(
-          path.join(__dirname, '../database/migrations/007-employee-role-targets.sql'),
+          path.join(__dirname, '../database/migrations/009-create-employee-schedules-and-shifts.sql'),
           'utf8'
         );
         for (const statement of sqlStatements(migration)) {

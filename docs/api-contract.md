@@ -178,6 +178,30 @@ ERD ฉบับแก้ไขต้องเพิ่ม `table_id` เป็�
 
 สถานะที่รับได้คือ `Active`, `On leave`, `Inactive` และประเภทการจ้างคือ `Full-time`, `Part-time` เบอร์โทรต้องมีตัวเลข 7–15 หลักและไม่ซ้ำกับ Employee คนอื่น ข้อมูลไม่ถูกต้องตอบ HTTP 400, เบอร์ซ้ำตอบ 409, ไม่พบ ID ตอบ 404 และลบ Employee ที่ถูก Shift อ้างอิงตอบ 409
 
+## API เวรพนักงานที่ใช้งานได้
+
+`GET /api/employee-shifts?from=2026-10-12&to=2026-10-18` คืน Shift ในช่วงวันที่ โดยแต่ละรายการมีฟิลด์ตาม ERD คือ `shift_id`, `employee_id`, `show_id`, `role`, `shift_date`, `start_time`, `end_time` และมีชื่อ Employee, Artist กับเวลา Show ที่ join มาเพื่อแสดงในหน้า Admin ส่วน `GET /api/employee-shifts/:shiftId` คืน Shift เดียวตาม ID
+
+`POST /api/employee-shifts` และ `PUT /api/employee-shifts/:shiftId` รับข้อมูลดังนี้:
+
+```json
+{
+  "employee_id": 1,
+  "show_id": 2,
+  "role": "Bartender",
+  "shift_date": "2026-10-17",
+  "start_time": "19:00",
+  "end_time": "23:30"
+}
+```
+
+ระบบอนุญาตเฉพาะ Employee สถานะ `Active`, กำหนดให้ `shift_date` ตรงกับวันของ Show และป้องกันช่วงเวลาทับซ้อนของ Employee คนเดียวกัน การเพิ่มและแก้ไขตรวจ FK กับตาราง `employees` และ `shows` ใน transaction ส่วน `DELETE /api/employee-shifts/:shiftId` ลบเฉพาะ assignment
+
+- เพิ่มสำเร็จ: HTTP 201; แก้ไขสำเร็จ: HTTP 200; ลบสำเร็จ: HTTP 204
+- ข้อมูลหรือ ID ไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
+- ไม่พบ Employee, Show หรือ Shift: HTTP 404 (`EMPLOYEE_NOT_FOUND`, `SHOW_NOT_FOUND`, `SHIFT_NOT_FOUND`)
+- Employee ไม่ Active, วันไม่ตรง Show หรือเวลาทับซ้อน: HTTP 409 (`EMPLOYEE_NOT_ACTIVE`, `SHIFT_DATE_MISMATCH`, `SHIFT_OVERLAP`)
+
 ## API ส่วนอื่น
 
 Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"server":"ok"}}` และ `GET /api/health/db` ตอบ `{"data":{"database":"ok"}}` เมื่อเชื่อม MySQL ได้ หรือ HTTP 503 พร้อม error code `DATABASE_UNAVAILABLE` เมื่อไม่พร้อม
@@ -188,7 +212,6 @@ Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"se
 | --- | --- | --- |
 | ลูกค้า/การจอง | `/api/customers`, `/api/reservations` | Garnet |
 | ศิลปิน/การแสดง/ผู้เข้าชม | `/api/artists`, `/api/shows`, `/api/show-attendance` | Fifa |
-| เวรพนักงาน | `/api/employee-shifts` | Mary |
 | stock | `/api/stock` | Mary |
 | จัดการออเดอร์เพิ่มเติม | `PUT /api/orders`, `/api/orders/:id/items` | Garnet |
 | โต๊ะว่าง | `/api/reports/table-availability` | Fifa + Garnet |
