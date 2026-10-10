@@ -67,6 +67,57 @@
     </div>
 </main>
 
+<dialog id="orderDialog" class="order-dialog" aria-labelledby="orderDialogTitle">
+    <div class="order-dialog-header">
+        <div>
+            <span class="order-eyebrow">TABLE ORDER</span>
+            <h2 id="orderDialogTitle">Order an item</h2>
+        </div>
+        <button id="closeOrderDialog" class="order-dialog-close" type="button" aria-label="Close">×</button>
+    </div>
+
+    <form id="orderForm">
+        <div class="order-item-summary">
+            <div>
+                <span id="orderItemCategory" class="dish-category"></span>
+                <strong id="orderItemName"></strong>
+            </div>
+            <span id="orderItemPrice" class="order-item-price"></span>
+        </div>
+
+        <label class="order-field" for="orderTableId">
+            <span>Table ID</span>
+            <select id="orderTableId" required>
+                <option value="">Loading tables...</option>
+            </select>
+            <small>Select the table shown on your table card.</small>
+        </label>
+
+        <label class="order-field" for="orderQuantity">
+            <span>Quantity</span>
+            <input id="orderQuantity" type="number" min="1" max="99" step="1" value="1" required>
+        </label>
+
+        <div class="order-total-row">
+            <span>Order total</span>
+            <strong id="orderTotal">$0.00</strong>
+        </div>
+        <p id="orderError" class="order-error" role="alert" hidden></p>
+
+        <div class="order-dialog-actions">
+            <button id="cancelOrder" class="order-secondary" type="button">Cancel</button>
+            <button id="submitOrder" class="order-primary" type="submit">Place order</button>
+        </div>
+    </form>
+
+    <div id="orderSuccess" class="order-success" hidden>
+        <span class="order-success-mark">✓</span>
+        <h3>Order placed</h3>
+        <p id="orderSuccessSummary"></p>
+        <button id="finishOrder" class="order-primary" type="button">Back to menu</button>
+    </div>
+</dialog>
+
 <script src="/js/pages/menu.js" defer></script>
 </body>
 </html>

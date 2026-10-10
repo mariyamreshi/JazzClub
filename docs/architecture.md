@@ -72,4 +72,4 @@ SQL อยู่ใน Model และใช้ connection pool จาก `src/c
 
 ## สถานะ
 
-ตอนนี้มีหน้าแรก ระบบจอง Show, Menu และ Employee ที่เชื่อม MySQL แล้ว Customer/Table/Reservation, Artist/Show และ Employee ใช้ตารางตาม ERD ส่วน Shift, Schedule, Order, Order Item และ Payment ยังไม่ได้พัฒนา
+ตอนนี้มีหน้าแรก ระบบจอง Show, Menu, Employee และการสั่งเมนูตามโต๊ะที่เชื่อม MySQL แล้ว Customer/Table/Reservation, Artist/Show และ Employee ใช้ตารางตาม ERD ส่วน Order/Order Item เพิ่ม `orders.table_id` เพื่อรองรับการสั่งจากโต๊ะโดยตรง ขณะที่ Shift, Schedule และ Payment ยังไม่ได้พัฒนา

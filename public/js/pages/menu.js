@@ -6,9 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const search = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchBtn');
     const filters = Array.from(document.querySelectorAll('.filter-btn'));
+    const orderDialog = document.getElementById('orderDialog');
+    const orderForm = document.getElementById('orderForm');
+    const orderSuccess = document.getElementById('orderSuccess');
+    const orderTableId = document.getElementById('orderTableId');
+    const orderQuantity = document.getElementById('orderQuantity');
+    const orderError = document.getElementById('orderError');
+    const submitOrder = document.getElementById('submitOrder');
+    const closeOrderDialog = document.getElementById('closeOrderDialog');
     let menuItems = [];
     let activeCategory = 'recommended';
     let loading = false;
+    let submitting = false;
+    let selectedItem = null;
 
     const categoryLabels = {
         recommended: 'Recommended', seasonal: 'Seasonal', cocktail: 'Cocktail', liquor: 'Liquor',
@@ -54,8 +64,92 @@ document.addEventListener('DOMContentLoaded', () => {
         info.appendChild(createTextElement('span', 'dish-category', categoryLabels[item.category] || item.category));
         info.appendChild(createTextElement('h3', 'dish-name', item.item_name));
         info.appendChild(createTextElement('span', 'dish-price', `$${Number(item.price).toFixed(2)}`));
+
+        const orderButton = createTextElement('button', 'order-card-button', 'Order');
+        orderButton.type = 'button';
+        orderButton.setAttribute('aria-label', `Order ${item.item_name}`);
+        orderButton.addEventListener('click', () => openOrderDialog(item));
+        info.appendChild(orderButton);
         card.append(imageWrapper, info);
         return card;
+    }
+
+    function updateOrderTotal() {
+        const quantity = Number(orderQuantity.value);
+        const total = selectedItem && Number.isInteger(quantity) && quantity > 0
+            ? Number(selectedItem.price) * quantity
+            : 0;
+        document.getElementById('orderTotal').textContent = `$${total.toFixed(2)}`;
+    }
+
+    function setSubmitting(value) {
+        submitting = value;
+        submitOrder.disabled = value;
+        document.getElementById('cancelOrder').disabled = value;
+        closeOrderDialog.disabled = value;
+        orderTableId.disabled = value;
+        orderQuantity.disabled = value;
+        submitOrder.textContent = value ? 'Placing order...' : 'Place order';
+    }
+
+    async function loadOrderTables() {
+        orderTableId.disabled = true;
+        orderTableId.replaceChildren(createTextElement('option', '', 'Loading tables...'));
+        orderTableId.firstElementChild.value = '';
+        try {
+            const response = await fetch('/api/tables', { cache: 'no-store' });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok || !Array.isArray(result.data)) throw new Error('Unable to load tables.');
+
+            const prompt = createTextElement('option', '', 'Select your table');
+            prompt.value = '';
+            const options = result.data.map(table => {
+                const option = createTextElement('option', '', `${table.table_id} — ${table.zone} (${table.capacity} seats)`);
+                option.value = table.table_id;
+                return option;
+            });
+            orderTableId.replaceChildren(prompt, ...options);
+            orderTableId.disabled = submitting || options.length === 0;
+            if (!options.length) throw new Error('No tables are available for ordering.');
+        } catch (error) {
+            const option = createTextElement('option', '', 'Tables unavailable');
+            option.value = '';
+            orderTableId.replaceChildren(option);
+            orderError.textContent = error.message;
+            orderError.hidden = false;
+        }
+    }
+
+    function openOrderDialog(item) {
+        selectedItem = item;
+        orderForm.reset();
+        orderForm.hidden = false;
+        orderSuccess.hidden = true;
+        orderError.hidden = true;
+        orderQuantity.value = '1';
+        orderQuantity.max = String(Math.min(99, item.stock_quantity));
+        document.getElementById('orderDialogTitle').textContent = `Order ${item.item_name}`;
+        document.getElementById('orderItemCategory').textContent = categoryLabels[item.category] || item.category;
+        document.getElementById('orderItemName').textContent = item.item_name;
+        document.getElementById('orderItemPrice').textContent = `$${Number(item.price).toFixed(2)} each`;
+        updateOrderTotal();
+        orderDialog.showModal();
+        loadOrderTables();
+    }
+
+    function closeOrder() {
+        if (!submitting) orderDialog.close();
+    }
+
+    async function requestOrder(payload) {
+        const response = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok) throw new Error(result.error?.message || 'Unable to place your order. Please try again.');
+        return result.data;
     }
 
     function renderMenu() {
@@ -110,5 +204,42 @@ document.addEventListener('DOMContentLoaded', () => {
     search.addEventListener('input', renderMenu);
     searchButton.addEventListener('click', renderMenu);
     retry.addEventListener('click', loadMenu);
+    orderQuantity.addEventListener('input', updateOrderTotal);
+    closeOrderDialog.addEventListener('click', closeOrder);
+    document.getElementById('cancelOrder').addEventListener('click', closeOrder);
+    document.getElementById('finishOrder').addEventListener('click', closeOrder);
+    orderDialog.addEventListener('cancel', event => {
+        if (submitting) event.preventDefault();
+    });
+    orderForm.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (submitting || !selectedItem || !orderForm.reportValidity()) return;
+
+        orderError.hidden = true;
+        setSubmitting(true);
+        const quantity = Number(orderQuantity.value);
+        try {
+            const placed = await requestOrder({
+                table_id: orderTableId.value,
+                item_id: selectedItem.item_id,
+                quantity,
+            });
+            menuItems = menuItems
+                .map(item => item.item_id === selectedItem.item_id
+                    ? { ...item, stock_quantity: item.stock_quantity - quantity }
+                    : item)
+                .filter(item => item.stock_quantity > 0);
+            renderMenu();
+            document.getElementById('orderSuccessSummary').textContent =
+                `Order #${placed.order_id}: ${quantity} × ${selectedItem.item_name} for table ${placed.table_id}. Total $${placed.total}.`;
+            orderForm.hidden = true;
+            orderSuccess.hidden = false;
+        } catch (error) {
+            orderError.textContent = error.message;
+            orderError.hidden = false;
+        } finally {
+            setSubmitting(false);
+        }
+    });
     return loadMenu();
 });

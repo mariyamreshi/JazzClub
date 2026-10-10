@@ -4,7 +4,7 @@
 
 ## สถานะ
 
-ตอนนี้เปิดหน้าแรก หน้าจอง หน้า Show และหน้าเมนูผ่าน Express ได้ ระบบจองและเมนูเชื่อม MySQL แล้ว หน้าเมนูลูกค้าอ่านเฉพาะรายการที่มีสต็อก ค้นหาและกรองตามหมวดหมู่ได้ ส่วน `/admin/menu.html` เพิ่ม แก้ไขสต็อก และลบรายการเมนูได้จากฐานข้อมูล
+ตอนนี้เปิดหน้าแรก หน้าจอง หน้า Show และหน้าเมนูผ่าน Express ได้ ระบบจองและเมนูเชื่อม MySQL แล้ว หน้าเมนูลูกค้าอ่านเฉพาะรายการที่มีสต็อก ค้นหา กรอง และสั่งอาหารตาม Table ID ได้ ส่วน `/admin/menu.html` เพิ่ม แก้ไขสต็อก และลบรายการเมนูได้จากฐานข้อมูล
 
 ใช้ stack ตาม proposal: **HTML/CSS/JavaScript + Node.js/Express + MySQL** และเริ่มพัฒนาบน localhost โดยไม่มี login/roles หรือแอปมือถือ
 
@@ -101,7 +101,7 @@ npm run db:check
 - `ER_ACCESS_DENIED_ERROR`: บัญชี รหัสผ่าน หรือสิทธิ์ไม่ตรง
 - `ER_BAD_DB_ERROR`: ยังไม่มีฐานข้อมูลชื่อตาม `DB_NAME`
 
-สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้าง `customers`, `club_tables`, `reservations`, `artists`, `shows`, `employees` และ `menu_items` ตาม ERD ถ้ายังไม่มี
+สร้างตารางด้วย `npm run db:init` หลังเชื่อมฐานข้อมูลได้ คำสั่งอ่าน `database/schema.sql` และสร้าง `customers`, `club_tables`, `reservations`, `artists`, `shows`, `employees`, `menu_items`, `orders` และ `order_items` ถ้ายังไม่มี โดย `orders.table_id` เป็นส่วนเพิ่มจาก ERD เดิมเพื่อระบุว่าออเดอร์เป็นของโต๊ะใด
 
 ถ้าฐานข้อมูลมี `menu_items` รุ่นก่อนหน้า `db:init` จะรัน `003-align-menu-item-with-erd.sql` เพื่อย้ายสถานะเดิมเป็น `category`/`stock_quantity` และปรับตารางให้เหลือฟิลด์ตาม ERD บัญชีที่ใช้รันคำสั่งนี้จึงต้องมีสิทธิ์ `ALTER` สำหรับการ migration
 
@@ -143,6 +143,8 @@ ORDER BY r.reservation_id DESC;
 | POST | `/api/menu-items` | เพิ่มรายการเมนูและตอบ HTTP 201 |
 | PUT | `/api/menu-items/:itemId` | แก้ไขชื่อ หมวดหมู่ ราคา และจำนวนสต็อก |
 | DELETE | `/api/menu-items/:itemId` | ลบรายการเมนูถาวรและตอบ HTTP 204 |
+| GET | `/api/tables` | รายการโต๊ะที่พร้อมรับออเดอร์สำหรับ pop-up หน้าเมนู |
+| POST | `/api/orders` | สร้าง Order/Order_Item ตาม Table ID และตัด stock ใน transaction เดียวกัน |
 | GET | `/admin/employees.html` | หน้าจัดการ Employee พร้อมค้นหา กรอง เพิ่ม แก้ไข และลบ |
 | GET | `/api/employees` | รายการ Employee จาก MySQL ตาม field ใน ERD |
 | GET | `/api/employees/:employeeId` | Employee ตาม ID หรือ HTTP 404 เมื่อไม่พบ |

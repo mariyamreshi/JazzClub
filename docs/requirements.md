@@ -33,7 +33,7 @@
 
 ## ตรวจ ERD รอบถัดไป
 
-- เติม Payment และเส้นเชื่อมที่ยังไม่ครบในภาพ เช่น Reservation → Order และ Customer → Show_Attendance
+- เติม Payment และเส้นเชื่อมที่ยังไม่ครบในภาพ เช่น Table → Order และ Customer → Show_Attendance โดย Payment อ้าง Order ผ่าน `order_id`
 - เติม keys/attributes ของ Order_Item และ Show_Attendance ให้ครบตามความหมายที่ตกลง
 - ทบทวน cardinality ของ Employee_Shift ให้สอดคล้องกับตารางความสัมพันธ์
 - ตรวจ 3NF, foreign keys, uniqueness, status และกติกาเวลา แล้วบันทึก data dictionary ใน `docs/erd/`

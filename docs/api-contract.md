@@ -126,6 +126,29 @@ API เพิ่ม/แก้ไข/ลบ Show สำหรับหน้า�
 
 หน้าเมนูลูกค้าเริ่มที่หมวด Recommended และรองรับการค้นหาร่วมกับตัวกรอง หน้า Admin แสดงจำนวนรายการ จำนวนรายการที่มีสต็อก และสต็อกรวม พร้อมกรองตามชื่อ หมวดหมู่ หรือสถานะสต็อกได้ เมื่อตั้ง `stock_quantity` เป็น 0 รายการจะหายจากหน้าลูกค้าแต่ยังอยู่ใน Admin
 
+## API สั่งอาหารตามโต๊ะที่ใช้งานได้
+
+`GET /api/tables` คืน `table_id`, `capacity` และ `zone` ของโต๊ะสถานะ `available` เพื่อสร้างตัวเลือก Table ID ใน pop-up หน้าเมนู
+
+`POST /api/orders` รับข้อมูลดังนี้:
+
+```json
+{
+  "table_id": "F01",
+  "item_id": 7,
+  "quantity": 2
+}
+```
+
+เมื่อสำเร็จ ระบบสร้างหนึ่งแถวใน `orders`, สร้างรายการใน `order_items`, เก็บ `price_at_time` และตัด `menu_items.stock_quantity` ภายใน transaction เดียวกัน ยอด `total` คำนวณจากราคาขณะสั่งคูณจำนวนสินค้า
+
+- สำเร็จ: HTTP 201 พร้อม `order_id`, `table_id`, `status`, `total` และรายละเอียดรายการ
+- ข้อมูลไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
+- ไม่พบโต๊ะหรือเมนู: HTTP 404 (`TABLE_NOT_FOUND`, `MENU_ITEM_NOT_FOUND`)
+- โต๊ะไม่พร้อมหรือสต็อกไม่พอ: HTTP 409 (`TABLE_NOT_AVAILABLE`, `INSUFFICIENT_STOCK`)
+
+ERD ฉบับแก้ไขต้องเพิ่ม `table_id` เป็น FK ใน `ORDER` และเพิ่มความสัมพันธ์ `TABLE (1) — (N) ORDER` ส่วน `PAYMENT` คง `order_id` เป็น FK โดยไม่เพิ่ม `table_id` เพราะหาโต๊ะผ่าน `PAYMENT → ORDER → TABLE` ได้
+
 ## API พนักงานที่ใช้งานได้
 
 `GET /api/employees` คืน Employee ทุกคนจาก MySQL โดยแต่ละรายการมี `employee_id`, `employee_name`, `phone`, `status` และ `employment_type` ตรงกับ ERD ส่วน `GET /api/employees/:employeeId` คืนรายการตาม ID
@@ -142,11 +165,11 @@ Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"se
 
 | กลุ่ม | Resource path ที่เสนอ | ผู้ดูแลเบื้องต้น |
 | --- | --- | --- |
-| ลูกค้า/โต๊ะ/การจอง | `/api/customers`, `/api/tables`, `/api/reservations` | Garnet |
+| ลูกค้า/การจอง | `/api/customers`, `/api/reservations` | Garnet |
 | ศิลปิน/การแสดง/ผู้เข้าชม | `/api/artists`, `/api/shows`, `/api/show-attendance` | Fifa |
 | เวรพนักงาน | `/api/employee-shifts` | Mary |
 | stock | `/api/stock` | Mary |
-| ออเดอร์/รายการ/ชำระเงิน | `/api/orders`, `/api/orders/:id/items`, `/api/payments` | Garnet |
+| จัดการออเดอร์/ชำระเงิน | `GET/PUT /api/orders`, `/api/orders/:id/items`, `/api/payments` | Garnet |
 | โต๊ะว่าง | `/api/reports/table-availability` | Fifa + Garnet |
 | ความพร้อมของ show | `/api/reports/show-readiness` | Mary + Garnet |
 | ออเดอร์/ชำระเงินต่อการจอง | `/api/reports/reservation-summary` | Mary + Garnet |
