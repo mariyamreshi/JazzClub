@@ -94,6 +94,11 @@ async function deleteItem(req, res, next) {
     }
     res.status(204).end();
   } catch (error) {
+    if (error.code === 'ER_ROW_IS_REFERENCED_2') {
+      return res.status(409).json({
+        error: { code: 'MENU_ITEM_IN_USE', message: 'This item belongs to an order and cannot be deleted.' },
+      });
+    }
     next(error);
   }
 }
