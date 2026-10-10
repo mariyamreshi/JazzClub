@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const roles = ['Floor server', 'Bartender', 'Kitchen staff', 'Reservations staff', 'Stock keeper', 'Artist coordinator'];
     const get = id => document.getElementById(id);
-    const rows = get('shiftRows');
+    const grid = get('scheduleGrid');
     const search = get('shiftSearch');
     const roleFilter = get('shiftRoleFilter');
     const dialog = get('shiftDialog');
@@ -91,74 +91,113 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function render() {
         const query = search.value.trim().toLocaleLowerCase();
-        const filtered = shifts.filter(shift => {
+        const { from } = weekRange();
+        const days = Array.from({ length: 7 }, (_, index) => {
+            const date = new Date(`${from}T12:00:00`);
+            date.setDate(date.getDate() + index);
+            return date;
+        });
+        const visible = shifts.filter(shift => {
             const searchable = [displayId(shift.shift_id), shift.employee_name, shift.artist_name, shift.role, shift.shift_date].join(' ').toLocaleLowerCase();
             return searchable.includes(query) && (roleFilter.value === 'all' || shift.role === roleFilter.value);
         });
+        const header = document.createElement('div');
+        header.className = 'schedule-corner';
+        header.textContent = 'ROLE / TARGET';
+        const children = [header];
+        for (const day of days) {
+            const cell = document.createElement('div');
+            cell.className = 'schedule-day';
+            const weekday = document.createElement('span');
+            weekday.textContent = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(day).toUpperCase();
+            const number = document.createElement('strong');
+            number.textContent = String(day.getDate());
+            const note = document.createElement('small');
+            note.textContent = 'No show listed';
+            cell.append(weekday, number, note);
+            children.push(cell);
+        }
+        const tones = ['green', 'gold', 'rose', 'blue', 'olive', 'green'];
+        roles.forEach((role, roleIndex) => {
+            if (roleFilter.value !== 'all' && roleFilter.value !== role) return;
+            const roleCell = document.createElement('div');
+            roleCell.className = 'schedule-role';
+            roleCell.dataset.tone = tones[roleIndex];
+            const title = document.createElement('strong');
+            title.textContent = role;
+            const subtitle = document.createElement('small');
+            subtitle.textContent = 'Daily coverage';
+            roleCell.append(title, subtitle);
+            children.push(roleCell);
 
-        rows.replaceChildren(...filtered.map(shift => {
-            const row = document.createElement('tr');
-            const id = document.createElement('td');
-            id.className = 'shift-id';
-            id.textContent = displayId(shift.shift_id);
+            days.forEach(day => {
+                const date = `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
+                const cell = document.createElement('div');
+                cell.className = 'schedule-cell';
+                const assignments = visible.filter(shift => shift.role === role && shift.shift_date === date);
+                const target = role === 'Floor server' && date === '2026-10-05' ? 5 : null;
+                const summary = document.createElement('div');
+                summary.className = 'schedule-summary';
+                summary.append(document.createTextNode(target === null ? `${assignments.length} assigned · target not set` : `${assignments.length} / ${target} assigned`));
+                if (target !== null && assignments.length < target) {
+                    const open = document.createElement('span');
+                    open.className = 'schedule-open-count';
+                    open.textContent = `${target - assignments.length} open`;
+                    summary.append(open);
+                }
+                const sub = document.createElement('small');
+                sub.textContent = target === null ? 'Set a target' : `${target} person target`;
+                summary.append(sub);
+                const settings = document.createElement('button');
+                settings.className = 'schedule-settings';
+                settings.type = 'button';
+                settings.textContent = '⚙';
+                settings.setAttribute('aria-label', `Set ${role} target for ${date}`);
+                settings.addEventListener('click', () => {
+                    const value = window.prompt(`Daily target for ${role}`, target ?? '');
+                    if (value !== null && (value === '' || /^\d+$/.test(value))) {
+                        settings.title = value ? `${value} person target` : 'Target not set';
+                        if (value) sub.textContent = `${value} person target`;
+                    }
+                });
+                cell.append(summary, settings);
 
-            const employee = document.createElement('td');
-            const person = document.createElement('div');
-            person.className = 'employee-person';
-            const avatar = document.createElement('span');
-            avatar.className = `employee-avatar tone-${shift.employee_id % 4}`;
-            avatar.textContent = initials(shift.employee_name);
-            const personText = document.createElement('span');
-            personText.className = 'shift-person';
-            const employeeName = document.createElement('strong');
-            employeeName.textContent = shift.employee_name;
-            const employeeId = document.createElement('small');
-            employeeId.textContent = `Employee E${String(shift.employee_id).padStart(3, '0')}`;
-            personText.append(employeeName, employeeId);
-            person.append(avatar, personText);
-            employee.appendChild(person);
-
-            const show = document.createElement('td');
-            const showText = document.createElement('div');
-            showText.className = 'shift-show';
-            const artist = document.createElement('strong');
-            artist.textContent = shift.artist_name;
-            const showMeta = document.createElement('small');
-            showMeta.textContent = `Show #${shift.show_id} · ${shift.show_start_time}–${shift.show_end_time}`;
-            showText.append(artist, showMeta);
-            show.appendChild(showText);
-
-            const role = document.createElement('td');
-            const rolePill = document.createElement('span');
-            rolePill.className = 'shift-role-pill';
-            rolePill.textContent = shift.role;
-            role.appendChild(rolePill);
-
-            const when = document.createElement('td');
-            const whenText = document.createElement('div');
-            whenText.className = 'shift-when';
-            const date = document.createElement('strong');
-            date.textContent = formatDate(shift.shift_date);
-            const time = document.createElement('small');
-            time.textContent = `${shift.start_time}–${shift.end_time}`;
-            whenText.append(date, time);
-            when.appendChild(whenText);
-
-            const actions = document.createElement('td');
-            actions.className = 'employee-row-actions';
-            actions.append(
-                makeButton('Edit', 'employee-secondary employee-row-button', shift, openEdit),
-                makeButton('Delete', 'employee-delete employee-row-button', shift, openDelete)
-            );
-            row.append(id, employee, show, role, when, actions);
-            return row;
-        }));
-
+                assignments.forEach(shift => {
+                    const chip = document.createElement('div');
+                    chip.className = 'schedule-assignment';
+                    const avatar = document.createElement('span');
+                    avatar.className = 'schedule-avatar';
+                    avatar.textContent = initials(shift.employee_name);
+                    const info = document.createElement('span');
+                    info.className = 'schedule-person';
+                    const name = document.createElement('strong');
+                    name.textContent = shift.employee_name;
+                    const time = document.createElement('small');
+                    time.textContent = `${shift.start_time}–${shift.end_time}`;
+                    info.append(name, time);
+                    const edit = makeButton('✎', 'schedule-edit', shift, openEdit);
+                    edit.setAttribute('aria-label', `Edit shift ${displayId(shift.shift_id)}`);
+                    const remove = makeButton('×', 'schedule-remove', shift, openDelete);
+                    remove.setAttribute('aria-label', `Remove shift ${displayId(shift.shift_id)}`);
+                    chip.append(avatar, info, edit, remove);
+                    cell.append(chip);
+                });
+                const assign = document.createElement('button');
+                assign.className = 'schedule-assign';
+                assign.type = 'button';
+                assign.textContent = '＋ Assign';
+                assign.addEventListener('click', () => openAdd({ role, date }));
+                cell.append(assign);
+                children.push(cell);
+            });
+        });
+        grid.replaceChildren(...children);
+        grid.setAttribute('aria-busy', loading ? 'true' : 'false');
         get('shiftCount').textContent = String(shifts.length);
         get('scheduledEmployees').textContent = String(new Set(shifts.map(shift => shift.employee_id)).size);
         get('coveredShows').textContent = String(new Set(shifts.map(shift => shift.show_id)).size);
-        get('shiftResultCount').textContent = loading ? 'Loading shifts…' : `${filtered.length} of ${shifts.length} shift assignments`;
-        get('shiftEmpty').hidden = filtered.length > 0 || loading;
+        get('shiftResultCount').textContent = loading ? 'Loading shifts…' : `${visible.length} of ${shifts.length} shift assignments`;
+        get('shiftEmpty').hidden = visible.length > 0 || loading;
     }
 
     function showWeekTitle(end) {
@@ -172,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loading = true;
         get('refreshShifts').disabled = true;
         get('shiftLoadError').hidden = true;
-        rows.setAttribute('aria-busy', 'true');
+        grid.setAttribute('aria-busy', 'true');
         const { from, to, end } = weekRange();
         showWeekTitle(end);
         render();
@@ -190,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } finally {
             loading = false;
             get('refreshShifts').disabled = false;
-            rows.setAttribute('aria-busy', 'false');
+            grid.setAttribute('aria-busy', 'false');
             render();
         }
     }
@@ -209,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function openAdd() {
+    function openAdd(prefill = {}) {
         if (saving) return;
         editingId = null;
         form.reset();
@@ -218,8 +257,10 @@ document.addEventListener('DOMContentLoaded', () => {
         formError.hidden = true;
         const { from, to } = weekRange();
         const defaultShow = shows.find(show => show.performance_date >= from && show.performance_date <= to) || shows[0];
-        if (defaultShow) showSelect.value = String(defaultShow.show_id);
+        const chosenShow = (prefill.date && shows.find(show => show.performance_date === prefill.date)) || defaultShow;
+        if (chosenShow) showSelect.value = String(chosenShow.show_id);
         setShowFields({ updateTimes: true });
+        if (prefill.role) fields.role.value = prefill.role;
         dialog.showModal();
     }
 

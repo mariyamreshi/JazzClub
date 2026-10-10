@@ -60,3 +60,55 @@
     .shift-week-actions button { flex: 1; }
     .shift-field-wide { grid-column: auto; }
 }
+
+/* Weekly role-by-day assignment schedule */
+.shift-directory { padding-top: 0; }
+.shift-directory .shift-week-heading { padding: 26px 30px 20px; }
+.shift-directory .shift-week-heading h2 { font-size: 1.7rem; }
+.shift-directory .employee-controls { padding: 18px 30px; }
+.shift-directory .employee-search { height: 50px; max-width: 690px; }
+.shift-directory .employee-filters select { min-width: 205px; min-height: 50px; }
+.schedule-scroll { overflow-x: auto; }
+.schedule-grid { display: grid; grid-template-columns: 210px repeat(7, minmax(245px, 1fr)); min-width: 1925px; }
+.schedule-grid > * { border-right: 1px solid #e9e4dc; border-bottom: 1px solid #e9e4dc; }
+.schedule-corner, .schedule-day { min-height: 148px; background: #fbfaf8; }
+.schedule-corner { display: flex; align-items: flex-end; padding: 20px; color: #898178; font-size: .68rem; font-weight: 800; letter-spacing: 1px; }
+.schedule-day { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 12px; text-align: center; }
+.schedule-day span { color: #918980; font-size: .65rem; font-weight: 800; letter-spacing: .6px; }
+.schedule-day strong { margin: 8px 0 2px; color: #382822; font: 600 1.8rem 'Playfair Display', serif; }
+.schedule-day small { color: #898178; font-size: .72rem; }
+.schedule-role { position: relative; display: flex; flex-direction: column; justify-content: center; min-height: 167px; padding: 18px 22px 18px 25px; background: #fff; }
+.schedule-role::before { position: absolute; inset: 0 auto 0 0; width: 4px; background: #6e8981; content: ''; }
+.schedule-role[data-tone="gold"]::before { background: #d0a13e; }
+.schedule-role[data-tone="rose"]::before { background: #ae6f65; }
+.schedule-role[data-tone="blue"]::before { background: #738998; }
+.schedule-role[data-tone="olive"]::before { background: #87934f; }
+.schedule-role strong { color: #443831; font-size: .91rem; }
+.schedule-role small { margin-top: 6px; color: #958d83; font-size: .72rem; }
+.schedule-cell { position: relative; min-height: 167px; padding: 13px 13px 12px; background: #fff; }
+.schedule-summary { padding-right: 35px; color: #817a72; font-size: .7rem; font-weight: 700; line-height: 1.6; }
+.schedule-summary small { display: block; color: #958d83; font-size: .7rem; font-weight: 500; }
+.schedule-open-count { display: block; color: #bd7467; }
+.schedule-settings { position: absolute; top: 12px; right: 11px; width: 37px; height: 37px; border: 1px solid #e9e4dc; border-radius: 50%; background: #fff; color: #8b8177; cursor: pointer; }
+.schedule-assignment { display: flex; align-items: center; gap: 10px; min-height: 61px; margin-top: 9px; padding: 7px 10px; border: 1px solid #eee8de; border-radius: 11px; background: #f8f6f0; }
+.schedule-avatar { display: grid; flex: 0 0 40px; height: 40px; place-items: center; border-radius: 50%; background: #dfeae5; color: #5e7b72; font-size: .67rem; font-weight: 800; }
+.schedule-person { min-width: 0; flex: 1; }
+.schedule-person strong { display: block; overflow: hidden; color: #4a4038; font-size: .73rem; text-overflow: ellipsis; white-space: nowrap; }
+.schedule-person small { display: block; margin-top: 3px; color: #8b8379; font-size: .65rem; white-space: nowrap; }
+.schedule-edit, .schedule-remove { padding: 0; border: 0; background: transparent; color: #968d83; cursor: pointer; }
+.schedule-edit { font-size: .85rem; }
+.schedule-remove { font-size: 1.2rem; }
+.schedule-assign { width: 100%; height: 43px; margin-top: 10px; border: 1px dashed #ded6ca; border-radius: 10px; background: #fff; color: #81786e; font-size: .75rem; font-weight: 700; cursor: pointer; }
+.schedule-assign:hover, .schedule-settings:hover { background: #faf8f3; }
+@media (max-width: 1050px) {
+    .shift-directory .employee-controls { align-items: stretch; flex-direction: column; }
+    .shift-directory .employee-search { max-width: none; }
+    .shift-directory .employee-filters { display: flex; }
+    .shift-directory .employee-filters select { flex: 1; }
+}
+@media (max-width: 640px) {
+    .shift-directory .shift-week-heading { align-items: flex-start; flex-direction: column; padding: 20px; }
+    .shift-directory .shift-week-heading h2 { font-size: 1.25rem; }
+    .shift-directory .employee-controls { padding: 15px; }
+    .shift-directory .employee-filters { display: grid; grid-template-columns: 1fr auto; }
+}

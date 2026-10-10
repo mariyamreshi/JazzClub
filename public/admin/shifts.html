@@ -71,11 +71,8 @@
 
                 <div class="employee-count" id="shiftResultCount" aria-live="polite">Loading shifts…</div>
                 <p class="employee-load-error" id="shiftLoadError" role="alert" hidden></p>
-                <div class="employee-table-wrap">
-                    <table class="employee-table shift-table">
-                        <thead><tr><th>SHIFT</th><th>EMPLOYEE</th><th>SHOW</th><th>ROLE</th><th>DATE &amp; TIME</th><th>ACTIONS</th></tr></thead>
-                        <tbody id="shiftRows" aria-busy="true"></tbody>
-                    </table>
+                <div class="schedule-scroll">
+                    <div class="schedule-grid" id="scheduleGrid" aria-live="polite" aria-busy="true"></div>
                 </div>
                 <div class="employee-empty" id="shiftEmpty" hidden>No shifts match this week or the selected filters.</div>
             </section>
