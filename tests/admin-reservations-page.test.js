@@ -283,7 +283,7 @@ test('Add uses an empty form, pauses refresh, posts six fields and displays the 
   assert.equal(ui.ids.editTable.value, 'F01');
   ui.ids.editGuestName.value = ' New Guest ';
   ui.ids.editPhoneNumber.value = '0811111111';
-  ui.ids.editTime.value = '21:15';
+  ui.ids.editTime.value = '21:00';
   ui.ids.editZone.value = 'VIP Lounge';
   ui.ids.editZone.handlers.change();
   ui.ids.editTable.value = 'VIP-2';
@@ -291,7 +291,7 @@ test('Add uses an empty form, pauses refresh, posts six fields and displays the 
   await ui.windowHandlers.focus();
   assert.equal(calls, 1);
   await ui.ids.editReservationForm.handlers.submit(submitEvent);
-  assert.deepEqual(posted, { guest_name: 'New Guest', phone_number: '0811111111', date: '2026-10-18', time: '21:15', zone: 'VIP Lounge', table_number: 'VIP-2' });
+  assert.deepEqual(posted, { guest_name: 'New Guest', phone_number: '0811111111', date: '2026-10-18', time: '21:00', zone: 'VIP Lounge', table_number: 'VIP-2' });
   assert.equal(ui.ids.editReservationDialog.open, false);
   assert.equal(ui.ids.reservationCount.textContent, '3');
   assert.equal(ui.ids.guestSearchInput.value, '');

@@ -2,6 +2,14 @@ const fs = require('fs');
 const path = require('path');
 const db = require('../src/config/db');
 
+function sqlStatements(contents) {
+  return contents
+    .replace(/^\s*--.*$/gm, '')
+    .split(';')
+    .map(statement => statement.trim())
+    .filter(Boolean);
+}
+
 async function initDatabase() {
   try {
     console.log('🔧 Initializing database schema...');
@@ -11,11 +19,7 @@ async function initDatabase() {
     const schemaSQL = fs.readFileSync(schemaPath, 'utf-8');
 
     // แยก SQL statements (แต่ละ statement จบด้วย ;)
-    const statements = schemaSQL
-      .replace(/^\s*--.*$/gm, '')
-      .split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
+    const statements = sqlStatements(schemaSQL);
 
     // รัน SQL ทีละ statement
     const connection = await db.getConnection();
@@ -37,6 +41,18 @@ async function initDatabase() {
         }
         const migration = fs.readFileSync(path.join(__dirname, '../database/migrations/001-reservation-per-day.sql'), 'utf8');
         await connection.query(migration);
+      }
+      const [stockColumns] = await connection.query(
+        "SHOW COLUMNS FROM menu_items LIKE 'stock_quantity'"
+      );
+      if (stockColumns.length === 0) {
+        const migration = fs.readFileSync(
+          path.join(__dirname, '../database/migrations/003-align-menu-item-with-erd.sql'),
+          'utf8'
+        );
+        for (const statement of sqlStatements(migration)) {
+          await connection.query(statement);
+        }
       }
       console.log('✅ Database schema initialized successfully!');
     } finally {

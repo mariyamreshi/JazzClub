@@ -92,6 +92,38 @@ API รายละเอียดคืน `{"data":{...}}` ที่มี 5 �
 การบันทึกการจองยังเก็บ 6 ช่องตามเดิม โดยยังไม่ได้เพิ่ม foreign key `show_id` ในตาราง `reservations`
 API เพิ่ม/แก้ไข/ลบ Show สำหรับหน้าแอดมินยังไม่ได้พัฒนา
 
+## API เมนูที่ใช้งานได้
+
+`GET /api/menu-items` คืนเฉพาะรายการที่ `stock_quantity > 0` สำหรับหน้า `/menu.html` เรียงตามหมวดหมู่และชื่อ ส่วน `GET /api/admin/menu-items` คืนทุกรายการสำหรับหน้า `/admin/menu.html`
+
+แต่ละรายการตรงกับ `MENU_ITEM` ใน ERD และมีเฉพาะ `item_id`, `item_name`, `category`, `price` และ `stock_quantity` ราคาเป็นข้อความทศนิยมสองตำแหน่ง และสต็อกเป็นจำนวนเต็มตั้งแต่ 0 ขึ้นไป หมวดหมู่ที่รับได้คือ `recommended`, `seasonal`, `cocktail`, `liquor`, `dessert` และ `appetizer`
+
+```json
+{
+  "data": [
+    {
+      "item_id": 1,
+      "item_name": "Truffle Cream Pasta",
+      "category": "recommended",
+      "price": "18.50",
+      "stock_quantity": 12
+    }
+  ]
+}
+```
+
+`POST /api/menu-items` เพิ่มรายการใหม่, `PUT /api/menu-items/:itemId` แก้ไข และ `DELETE /api/menu-items/:itemId` ลบถาวร POST/PUT รับข้อมูลครบทุกช่องยกเว้น `item_id` ชื่อต้องไม่ซ้ำ ราคาต้องมากกว่าศูนย์ และ `stock_quantity` ต้องเป็นจำนวนเต็มไม่ติดลบ
+
+- POST สำเร็จ: HTTP 201 พร้อมรายการที่สร้าง
+- PUT สำเร็จ: HTTP 200 พร้อมรายการหลังแก้ไข
+- DELETE สำเร็จ: HTTP 204 ไม่มี body
+- ข้อมูลหรือ ID ไม่ถูกต้อง: HTTP 400 (`VALIDATION_ERROR`)
+- ชื่อซ้ำ: HTTP 409 (`MENU_ITEM_ALREADY_EXISTS`)
+- ไม่พบรายการ: HTTP 404 (`MENU_ITEM_NOT_FOUND`)
+- ฐานข้อมูลล้มเหลว: HTTP 500 (`INTERNAL_ERROR`)
+
+หน้าเมนูลูกค้าเริ่มที่หมวด Recommended และรองรับการค้นหาร่วมกับตัวกรอง หน้า Admin แสดงจำนวนรายการ จำนวนรายการที่มีสต็อก และสต็อกรวม พร้อมกรองตามชื่อ หมวดหมู่ หรือสถานะสต็อกได้ เมื่อตั้ง `stock_quantity` เป็น 0 รายการจะหายจากหน้าลูกค้าแต่ยังอยู่ใน Admin
+
 ## API ส่วนอื่น
 
 Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"server":"ok"}}` และ `GET /api/health/db` ตอบ `{"data":{"database":"ok"}}` เมื่อเชื่อม MySQL ได้ หรือ HTTP 503 พร้อม error code `DATABASE_UNAVAILABLE` เมื่อไม่พร้อม
@@ -103,7 +135,7 @@ Endpoints ที่มีแล้ว: `GET /api/health` ตอบ `{"data":{"se
 | ลูกค้า/โต๊ะ/การจอง | `/api/customers`, `/api/tables`, `/api/reservations` | Garnet |
 | ศิลปิน/การแสดง/ผู้เข้าชม | `/api/artists`, `/api/shows`, `/api/show-attendance` | Fifa |
 | พนักงาน/เวร | `/api/employees`, `/api/employee-shifts` | Mary |
-| เมนู/stock | `/api/menu-items` | Mary |
+| stock | `/api/stock` | Mary |
 | ออเดอร์/รายการ/ชำระเงิน | `/api/orders`, `/api/orders/:id/items`, `/api/payments` | Garnet |
 | โต๊ะว่าง | `/api/reports/table-availability` | Fifa + Garnet |
 | ความพร้อมของ show | `/api/reports/show-readiness` | Mary + Garnet |

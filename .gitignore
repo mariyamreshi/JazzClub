@@ -7,7 +7,6 @@ out/
 
 # Local configuration and credentials
 .env
-!.env
 
 # Editor and OS files
 .idea/

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garnet's House - Menu Management</title>
+    <link rel="stylesheet" href="/css/admin/admin.css">
+    <link rel="stylesheet" href="/css/admin/menu.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+<div class="admin-layout">
+    <aside class="admin-sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-text">
+                <h1>Garnet's House</h1>
+                <span>JAZZ CLUB</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">CLUB MANAGEMENT</div>
+            <a href="/admin/overview.html" class="nav-item"><span class="nav-icon">📊</span> Overview</a>
+            <a href="/admin/reservations.html" class="nav-item"><span class="nav-icon">📅</span> Reservations</a>
+            <a href="/admin/shows.html" class="nav-item"><span class="nav-icon">🎷</span> Shows & artists</a>
+            <a href="/admin/menu.html" class="nav-item active"><span class="nav-icon">🍽️</span> Menu</a>
+            <a href="/admin/orders.html" class="nav-item"><span class="nav-icon">📋</span> Orders</a>
+            <a href="/admin/inventory.html" class="nav-item"><span class="nav-icon">📦</span> Inventory</a>
+            <a href="/admin/team.html" class="nav-item"><span class="nav-icon">👥</span> Team & shifts</a>
+            <div class="nav-section-label">REPORTS</div>
+            <a href="/admin/performance.html" class="nav-item"><span class="nav-icon">📈</span> Performance</a>
+        </nav>
+        <div class="sidebar-footer-widgets">
+            <div class="user-profile-bar">
+                <div class="avatar-circle">MR</div>
+                <div class="profile-info">
+                    <div class="profile-name">Mariyam Reshi</div>
+                    <div class="profile-role">Club Manager</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header-simple menu-admin-header">
+            <a href="/menu.html" class="btn-guest-site">View guest menu</a>
+            <a href="/" class="btn-guest-site">Homepage</a>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="welcome-banner">
+                <div>
+                    <div class="banner-sub-date">FOOD &amp; BEVERAGE</div>
+                    <h1 class="banner-greeting">Menu Management</h1>
+                    <p class="banner-tagline">Manage items shown on the guest menu.</p>
+                </div>
+            </div>
+
+            <section class="menu-stat-grid" aria-label="Menu summary">
+                <div class="menu-stat"><span>Total items</span><strong id="menuTotalCount">—</strong></div>
+                <div class="menu-stat"><span>In-stock items</span><strong id="menuInStockCount">—</strong></div>
+                <div class="menu-stat"><span>Total stock</span><strong id="menuStockTotal">—</strong></div>
+            </section>
+
+            <section class="panel-card menu-panel">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-sub">ALL ITEMS</div>
+                        <h2 class="panel-title">Guest menu</h2>
+                    </div>
+                    <button id="addMenuItem" class="menu-primary" type="button">+ Add menu item</button>
+                </div>
+
+                <div class="menu-controls">
+                    <div class="table-search menu-search">
+                        <span class="search-icon">🔍</span>
+                        <input id="menuSearch" type="search" aria-label="Search menu items" placeholder="Search name or category">
+                    </div>
+                    <select id="menuCategoryFilter" aria-label="Filter by category">
+                        <option value="">All categories</option>
+                        <option value="recommended">Recommended</option>
+                        <option value="seasonal">Seasonal</option>
+                        <option value="cocktail">Cocktail</option>
+                        <option value="liquor">Liquor</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="appetizer">Appetizer</option>
+                    </select>
+                    <select id="menuStockFilter" aria-label="Filter by stock status">
+                        <option value="">All stock statuses</option>
+                        <option value="in-stock">In stock</option>
+                        <option value="out-of-stock">Out of stock</option>
+                    </select>
+                    <button id="refreshMenuItems" class="tab-btn" type="button">Refresh</button>
+                </div>
+
+                <p id="menuAdminStatus" class="reservation-list-status" role="status" aria-live="polite">Loading menu items...</p>
+                <div class="data-table-wrapper">
+                    <table class="data-table menu-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">ITEM</th>
+                            <th scope="col">CATEGORY</th>
+                            <th scope="col">PRICE</th>
+                            <th scope="col">STOCK</th>
+                            <th scope="col">STATUS</th>
+                            <th scope="col">ACTIONS</th>
+                        </tr>
+                        </thead>
+                        <tbody id="menuTableBody" aria-busy="true"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+<dialog id="menuItemDialog" class="menu-dialog" aria-labelledby="menuItemDialogTitle">
+    <form id="menuItemForm">
+        <h2 id="menuItemDialogTitle">Add menu item</h2>
+        <div class="menu-form-grid">
+            <label class="menu-field menu-field-wide">Item name
+                <input id="menuItemName" type="text" maxlength="120" required>
+            </label>
+            <label class="menu-field">Category
+                <select id="menuItemCategory" required>
+                    <option value="recommended">Recommended</option>
+                    <option value="seasonal">Seasonal</option>
+                    <option value="cocktail">Cocktail</option>
+                    <option value="liquor">Liquor</option>
+                    <option value="dessert">Dessert</option>
+                    <option value="appetizer">Appetizer</option>
+                </select>
+            </label>
+            <label class="menu-field">Price (USD)
+                <input id="menuItemPrice" type="number" min="0.01" max="99999.99" step="0.01" required>
+            </label>
+            <label class="menu-field">Stock quantity
+                <input id="menuItemStock" type="number" min="0" max="4294967295" step="1" required>
+            </label>
+        </div>
+        <p id="menuItemError" class="reservation-action-error" role="alert" hidden></p>
+        <div class="menu-dialog-actions">
+            <button id="cancelMenuItem" class="tab-btn" type="button">Cancel</button>
+            <button id="saveMenuItem" class="menu-primary" type="submit">Save item</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog id="deleteMenuItemDialog" class="menu-dialog menu-delete-dialog" aria-labelledby="deleteMenuItemTitle">
+    <h2 id="deleteMenuItemTitle">Delete menu item?</h2>
+    <p id="deleteMenuItemSummary"></p>
+    <p>This permanently removes the item from the menu.</p>
+    <p id="deleteMenuItemError" class="reservation-action-error" role="alert" hidden></p>
+    <div class="menu-dialog-actions">
+        <button id="cancelDeleteMenuItem" class="tab-btn" type="button">Cancel</button>
+        <button id="confirmDeleteMenuItem" class="menu-danger" type="button">Delete item</button>
+    </div>
+</dialog>
+
+<script src="/js/pages/admin-menu.js"></script>
+</body>
+</html>
