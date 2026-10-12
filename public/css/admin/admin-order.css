@@ -29,18 +29,16 @@ body.admin-body {
 
 .admin-layout {
     display: flex;
-    align-items: stretch;
     min-height: 100vh;
-    margin: 0;
-    padding: 0;
+    width: 100%;
 }
 
+
 .admin-main {
-    flex: 1;
     min-width: 0;
-    margin: 0;
-    padding: 0 45px 45px;
-    align-self: stretch;
+    min-height: 100vh;
+    flex: 1;
+    margin-left: 0;
 }
 .admin-header {
     margin-top: 0;
@@ -92,10 +90,7 @@ body.admin-body {
     white-space: nowrap;
 }
 
-.btn-guest-site:hover {
-    background: var(--gold);
-    color: white;
-}
+
 
 /* Summary cards */
 

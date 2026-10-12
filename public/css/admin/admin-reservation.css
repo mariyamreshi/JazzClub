@@ -73,42 +73,6 @@ select:focus-visible {
     flex: 1;
     margin-left: 0;
 }
-
-.admin-header-simple {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    min-height: 72px;
-    padding: 15px 40px;
-
-    background: var(--cream);
-    border-bottom: 1px solid var(--border);
-}
-
-.btn-guest-site {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 38px;
-    padding: 10px 18px;
-
-    border: 1px solid var(--gold-light);
-    background: transparent;
-    color: var(--text);
-
-    font-size: 11px;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.btn-guest-site:hover {
-    background: #211e1a;
-    border-color: #211e1a;
-    color: var(--white);
-}
-
 .dashboard-content {
     width: 100%;
     /* ปิด max-width 100% เดิม เพื่อให้คำนวณพื้นที่ได้ถูกต้อง */
@@ -551,7 +515,6 @@ select:focus-visible {
 .reservation-dialog-actions {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
     flex-wrap: wrap;
     gap: 10px;
 
@@ -756,7 +719,6 @@ select:focus-visible {
 
 #addReservationModal .modal-actions {
     display: flex;
-    justify-content: flex-end;
     gap: 10px;
 
     margin-top: 8px;

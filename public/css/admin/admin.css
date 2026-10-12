@@ -401,15 +401,6 @@ body.admin-body {
 }
 
 /* Reservation management */
-.admin-header-simple {
-    min-height: 70px;
-    background: var(--panel-bg);
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 32px;
-}
 
 .guest-list-panel .table-controls {
     flex-wrap: wrap;
