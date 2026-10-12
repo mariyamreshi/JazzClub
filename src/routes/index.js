@@ -7,6 +7,7 @@ const reservationController = require('../controllers/reservation.controller');
 const showController = require('../controllers/show.controller');
 const employeeController = require('../controllers/employee.controller');
 const employeeShiftController = require('../controllers/employee-shift.controller');
+const employeeScheduleController = require('../controllers/employee-schedule.controller');
 const menuController = require('../controllers/menu.controller');
 const orderController = require('../controllers/order.controller');
 const paymentController = require('../controllers/payment.controller');
@@ -17,6 +18,9 @@ router.get('/api/health', health.server);
 router.get('/api/health/db', health.database);
 router.get('/api/shows', showController.listShows);
 router.get('/api/shows/:showId', showController.getShow);
+router.post('/api/shows', showController.createShow);
+router.put('/api/shows/:showId', showController.updateShow);
+router.delete('/api/shows/:showId', showController.deleteShow);
 
 router.get('/api/employees', employeeController.listEmployees);
 router.get('/api/employees/:employeeId', employeeController.getEmployee);
@@ -28,6 +32,11 @@ router.get('/api/employee-shifts/:shiftId', employeeShiftController.getOne);
 router.post('/api/employee-shifts', employeeShiftController.create);
 router.put('/api/employee-shifts/:shiftId', employeeShiftController.update);
 router.delete('/api/employee-shifts/:shiftId', employeeShiftController.remove);
+router.get('/api/employee-schedules', employeeScheduleController.list);
+router.get('/api/employee-schedules/:scheduleId', employeeScheduleController.getOne);
+router.post('/api/employee-schedules', employeeScheduleController.create);
+router.put('/api/employee-schedules/:scheduleId', employeeScheduleController.update);
+router.delete('/api/employee-schedules/:scheduleId', employeeScheduleController.remove);
 
 // Guest menu and admin menu management.
 router.get('/api/menu-items', menuController.listPublic);

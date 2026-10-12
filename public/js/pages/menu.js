@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderDialog = document.getElementById('orderDialog');
     const orderForm = document.getElementById('orderForm');
     const orderSuccess = document.getElementById('orderSuccess');
-    const orderTableId = document.getElementById('orderTableId');
+    const orderReservationId = document.getElementById('orderReservationId');
     const orderQuantity = document.getElementById('orderQuantity');
     const orderError = document.getElementById('orderError');
     const submitOrder = document.getElementById('submitOrder');
@@ -87,37 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
         submitOrder.disabled = value;
         document.getElementById('cancelOrder').disabled = value;
         closeOrderDialog.disabled = value;
-        orderTableId.disabled = value;
+        orderReservationId.disabled = value;
         orderQuantity.disabled = value;
         submitOrder.textContent = value ? 'Placing order...' : 'Place order';
-    }
-
-    async function loadOrderTables() {
-        orderTableId.disabled = true;
-        orderTableId.replaceChildren(createTextElement('option', '', 'Loading tables...'));
-        orderTableId.firstElementChild.value = '';
-        try {
-            const response = await fetch('/api/tables', { cache: 'no-store' });
-            const result = await response.json().catch(() => ({}));
-            if (!response.ok || !Array.isArray(result.data)) throw new Error('Unable to load tables.');
-
-            const prompt = createTextElement('option', '', 'Select your table');
-            prompt.value = '';
-            const options = result.data.map(table => {
-                const option = createTextElement('option', '', `${table.table_id} — ${table.zone} (${table.capacity} seats)`);
-                option.value = table.table_id;
-                return option;
-            });
-            orderTableId.replaceChildren(prompt, ...options);
-            orderTableId.disabled = submitting || options.length === 0;
-            if (!options.length) throw new Error('No tables are available for ordering.');
-        } catch (error) {
-            const option = createTextElement('option', '', 'Tables unavailable');
-            option.value = '';
-            orderTableId.replaceChildren(option);
-            orderError.textContent = error.message;
-            orderError.hidden = false;
-        }
     }
 
     function openOrderDialog(item) {
@@ -134,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('orderItemPrice').textContent = `$${Number(item.price).toFixed(2)} each`;
         updateOrderTotal();
         orderDialog.showModal();
-        loadOrderTables();
     }
 
     function closeOrder() {
@@ -220,7 +191,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const quantity = Number(orderQuantity.value);
         try {
             const placed = await requestOrder({
-                table_id: orderTableId.value,
+                reservation_id: orderReservationId.value,
                 item_id: selectedItem.item_id,
                 quantity,
             });
@@ -231,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .filter(item => item.stock_quantity > 0);
             renderMenu();
             document.getElementById('orderSuccessSummary').textContent =
-                `Added ${quantity} × ${selectedItem.item_name} to table ${placed.table_id}. Table order total $${placed.total}.`;
+                `Added ${quantity} × ${selectedItem.item_name} to reservation R-${placed.reservation_id} at table ${placed.table_id}. Order total $${placed.total_amount}.`;
             orderForm.hidden = true;
             orderSuccess.hidden = false;
         } catch (error) {

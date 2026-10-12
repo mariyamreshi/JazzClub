@@ -316,6 +316,7 @@
 
 .show-meta {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
     font-size: 0.8rem;
     color: #727A75;
@@ -345,12 +346,66 @@
     color: #10B981;
 }
 
+.status-completed {
+    background: #F3F4F6;
+    color: #6B7280;
+}
+
+.status-soldout {
+    background: #FEE2E2;
+    color: #B91C1C;
+}
+
 .btn-dots {
     background: none;
     border: none;
     color: #A0A0A0;
     cursor: pointer;
     font-size: 1.1rem;
+}
+
+.show-card-right .btn-show-edit,
+.show-card-right .btn-show-delete {
+    flex: none;
+    padding: 8px 12px;
+}
+
+.shows-admin-status {
+    margin: 0 0 14px;
+    color: #727A75;
+    font-size: 0.9rem;
+}
+
+.show-form-status {
+    min-height: 1.2em;
+    margin: 0;
+    color: #B91C1C;
+    font-size: 0.8rem;
+}
+
+.btn-submit-res:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+@media (max-width: 760px) {
+    .show-item-card {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .show-details {
+        min-width: calc(100% - 90px);
+    }
+
+    .show-card-right {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Modal Overlay Styles */

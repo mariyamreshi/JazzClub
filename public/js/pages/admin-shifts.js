@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const header = document.createElement('div');
         header.className = 'schedule-corner';
-        header.textContent = 'ROLE / TARGET';
+        header.textContent = 'ROLE';
         const children = [header];
         for (const day of days) {
             const cell = document.createElement('div');
@@ -112,9 +112,33 @@ document.addEventListener('DOMContentLoaded', () => {
             weekday.textContent = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(day).toUpperCase();
             const number = document.createElement('strong');
             number.textContent = String(day.getDate());
-            const note = document.createElement('small');
-            note.textContent = 'No show listed';
-            cell.append(weekday, number, note);
+            const date = dateKey(day);
+            const dayShows = shows.filter(show => show.performance_date === date);
+            const showList = document.createElement('div');
+            showList.className = 'schedule-show-list';
+            if (!dayShows.length) {
+                const note = document.createElement('small');
+                note.textContent = 'No show';
+                showList.appendChild(note);
+            } else {
+                dayShows.forEach(show => {
+                    const showLine = document.createElement('div');
+                    showLine.className = 'schedule-show';
+                    const showName = document.createElement('span');
+                    showName.textContent = `${show.artist_name} · ${show.start_time} · ${show.reservation_count || 0} bookings`;
+                    showLine.appendChild(showName);
+                    if (!shifts.some(shift => shift.show_id === show.show_id)) {
+                        const warning = document.createElement('strong');
+                        warning.className = 'schedule-show-warning';
+                        warning.textContent = '!';
+                        warning.title = 'This show has no employee shifts';
+                        warning.setAttribute('aria-label', `${show.artist_name} has no employee shifts`);
+                        showLine.appendChild(warning);
+                    }
+                    showList.appendChild(showLine);
+                });
+            }
+            cell.append(weekday, number, showList);
             children.push(cell);
         }
         const tones = ['green', 'gold', 'rose', 'blue', 'olive', 'green'];
@@ -135,32 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cell = document.createElement('div');
                 cell.className = 'schedule-cell';
                 const assignments = visible.filter(shift => shift.role === role && shift.shift_date === date);
-                const target = role === 'Floor server' && date === '2026-10-05' ? 5 : null;
                 const summary = document.createElement('div');
                 summary.className = 'schedule-summary';
-                summary.append(document.createTextNode(target === null ? `${assignments.length} assigned · target not set` : `${assignments.length} / ${target} assigned`));
-                if (target !== null && assignments.length < target) {
-                    const open = document.createElement('span');
-                    open.className = 'schedule-open-count';
-                    open.textContent = `${target - assignments.length} open`;
-                    summary.append(open);
-                }
-                const sub = document.createElement('small');
-                sub.textContent = target === null ? 'Set a target' : `${target} person target`;
-                summary.append(sub);
-                const settings = document.createElement('button');
-                settings.className = 'schedule-settings';
-                settings.type = 'button';
-                settings.textContent = '⚙';
-                settings.setAttribute('aria-label', `Set ${role} target for ${date}`);
-                settings.addEventListener('click', () => {
-                    const value = window.prompt(`Daily target for ${role}`, target ?? '');
-                    if (value !== null && (value === '' || /^\d+$/.test(value))) {
-                        settings.title = value ? `${value} person target` : 'Target not set';
-                        if (value) sub.textContent = `${value} person target`;
-                    }
-                });
-                cell.append(summary, settings);
+                summary.textContent = `${assignments.length} assigned`;
+                cell.append(summary);
 
                 assignments.forEach(shift => {
                     const chip = document.createElement('div');
@@ -182,12 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     chip.append(avatar, info, edit, remove);
                     cell.append(chip);
                 });
-                const assign = document.createElement('button');
-                assign.className = 'schedule-assign';
-                assign.type = 'button';
-                assign.textContent = '＋ Assign';
-                assign.addEventListener('click', () => openAdd({ role, date }));
-                cell.append(assign);
+                if (shows.some(show => show.performance_date === date)) {
+                    const assign = document.createElement('button');
+                    assign.className = 'schedule-assign';
+                    assign.type = 'button';
+                    assign.textContent = '＋ Assign';
+                    assign.addEventListener('click', () => openAdd({ role, date }));
+                    cell.append(assign);
+                }
                 children.push(cell);
             });
         });

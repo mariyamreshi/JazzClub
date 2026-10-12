@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const info = document.createElement('div');
         info.append(
             createElement('h3', 'admin-order-number', `Table ${order.table_id}`),
-            createElement('p', 'admin-order-date', `Order #${order.order_id} · Opened ${formatDate(order.order_date)}`)
+            createElement('p', 'admin-order-date', `Order #${order.order_id} · Reservation R-${order.reservation_id} · ${formatDate(order.order_time)}`)
         );
         const badges = createElement('div', 'order-top-badges');
         badges.appendChild(createElement('span', `status-badge status-${order.status}`, readableStatus(order.status)));
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const total = document.createElement('div');
         total.append(
             createElement('span', 'order-total-label', 'Table Order Total'),
-            createElement('strong', 'order-total-value', money(order.total))
+            createElement('strong', 'order-total-value', money(order.total_amount))
         );
         footer.appendChild(total);
         if (order.payment) {
@@ -111,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('totalOrders').textContent = String(openOrders.length);
         document.getElementById('totalOrderItems').textContent = String(openOrders.reduce((sum, order) => sum + itemCount(order), 0));
         document.getElementById('paidOrders').textContent = String(orders.filter(order => order.status === 'paid').length);
-        document.getElementById('totalOrderValue').textContent = money(openOrders.reduce((sum, order) => sum + Number(order.total), 0));
+        document.getElementById('totalOrderValue').textContent = money(openOrders.reduce((sum, order) => sum + Number(order.total_amount), 0));
     }
 
     function renderOrders() {
@@ -152,8 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('paymentOrderInfo').textContent = `Settle the complete order for table ${order.table_id}.`;
         document.getElementById('paymentTable').textContent = order.table_id;
         document.getElementById('paymentOrderId').textContent = `#${order.order_id}`;
-        document.getElementById('paymentTotal').textContent = money(order.total);
-        paymentAmount.value = Number(order.total).toFixed(2);
+        document.getElementById('paymentTotal').textContent = money(order.total_amount);
+        paymentAmount.value = Number(order.total_amount).toFixed(2);
         paymentDialog.showModal();
     }
 

@@ -116,6 +116,7 @@
                         <thead>
                         <tr>
                             <th scope="col">GUEST</th>
+                            <th scope="col">SHOW</th>
                             <th scope="col">PHONE</th>
                             <th scope="col">DATE</th>
                             <th scope="col">TIME</th>
@@ -141,7 +142,8 @@
         <fieldset id="editReservationFields" class="reservation-edit-fields">
             <label>Guest name<input id="editGuestName" type="text" maxlength="100" required></label>
             <label>Phone number<input id="editPhoneNumber" type="tel" maxlength="25" required></label>
-            <label>Date<input id="editDate" type="date" required></label>
+            <label>Show<select id="editShow" required><option value="">Loading shows...</option></select></label>
+            <label>Date<input id="editDate" type="date" readonly required></label>
             <label>Arrival time<select id="editTime" required>
                 <option value="" disabled>Select arrival time</option>
                 <option value="20:00">20:00</option>

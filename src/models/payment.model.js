@@ -9,8 +9,10 @@ async function create({ order_id, payment_method, amount }) {
   try {
     await connection.beginTransaction();
     const [orders] = await connection.execute(
-      `SELECT order_id, table_id, status, total
-       FROM orders WHERE order_id = ? FOR UPDATE`,
+      `SELECT o.order_id, o.reservation_id, r.table_id, o.status, o.total_amount
+       FROM orders o
+       JOIN reservations r ON r.reservation_id = o.reservation_id
+       WHERE o.order_id = ? FOR UPDATE`,
       [order_id]
     );
     if (!orders.length) throw paymentError('ORDER_NOT_FOUND');
@@ -22,7 +24,7 @@ async function create({ order_id, payment_method, amount }) {
       [order_id]
     );
     if (order.status === 'paid' || existing.length) throw paymentError('PAYMENT_EXISTS');
-    if (Number(amount).toFixed(2) !== Number(order.total).toFixed(2)) {
+    if (Number(amount).toFixed(2) !== Number(order.total_amount).toFixed(2)) {
       throw paymentError('PAYMENT_AMOUNT_MISMATCH');
     }
 
@@ -43,6 +45,7 @@ async function create({ order_id, payment_method, amount }) {
       ...rows[0],
       payment_id: Number(rows[0].payment_id),
       order_id: Number(rows[0].order_id),
+      reservation_id: Number(order.reservation_id),
       amount: Number(rows[0].amount).toFixed(2),
       table_id: order.table_id,
     };
