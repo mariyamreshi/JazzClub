@@ -5,19 +5,16 @@ function validUnsignedId(value) {
 }
 
 function validateOrder(body = {}) {
-  const tableId = typeof body.table_id === 'string' ? body.table_id.trim().toUpperCase() : '';
   const quantity = Number(body.quantity);
 
-  if (!tableId || tableId.length > 10 || !/^[A-Z0-9-]+$/.test(tableId)) {
-    return { error: 'Please select a valid table ID.' };
-  }
+  if (!validUnsignedId(body.reservation_id)) return { error: 'Please enter a valid reservation ID.' };
   if (!validUnsignedId(body.item_id)) {
     return { error: 'Please select a valid menu item.' };
   }
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
     return { error: 'Quantity must be a whole number from 1 to 99.' };
   }
-  return { value: { table_id: tableId, item_id: Number(body.item_id), quantity } };
+  return { value: { reservation_id: Number(body.reservation_id), item_id: Number(body.item_id), quantity } };
 }
 
 async function listTables(req, res, next) {
@@ -47,8 +44,8 @@ async function createOrder(req, res, next) {
     res.status(201).json({ data: await order.create(value) });
   } catch (error) {
     const errors = {
-      TABLE_NOT_FOUND: [404, 'The selected table does not exist.'],
-      TABLE_NOT_AVAILABLE: [409, 'The selected table is not available for ordering.'],
+      RESERVATION_NOT_FOUND: [404, 'The reservation does not exist.'],
+      RESERVATION_NOT_ACTIVE: [409, 'Orders cannot be added to a cancelled or no-show reservation.'],
       MENU_ITEM_NOT_FOUND: [404, 'This menu item is no longer available.'],
       INSUFFICIENT_STOCK: [409, 'There is not enough stock for this quantity.'],
     };

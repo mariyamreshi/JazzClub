@@ -72,12 +72,6 @@
     font-weight: 600;
 }
 
-.nav-icon {
-    width: 22px;
-    flex: 0 0 22px;
-    text-align: center;
-    font-size: 1.05rem;
-}
 
 .nav-item .badge {
     margin-left: auto;
@@ -196,6 +190,27 @@
         min-height: auto;
     }
 }
+.admin-header-simple {
+    min-height: 70px;
+    background: var(--panel-bg);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 32px;
+}
+.btn-guest-site, .btn-date-picker {
+    background: #FFF;
+    border: 1px solid var(--border-light);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-decoration: none;
+    cursor: pointer;
+}
+
 
 @media (max-width: 400px) {
     .sidebar-nav {

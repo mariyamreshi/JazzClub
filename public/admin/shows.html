@@ -22,40 +22,23 @@
     <!-- LEFT SIDEBAR -->
     <aside class="admin-sidebar">
         <div class="sidebar-brand">
-            <div class="brand-logo-diamond">BL</div>
             <div class="brand-text">
-                <h1>Blue Lark</h1>
+                <h1>Garnet's House</h1>
                 <span>JAZZ CLUB</span>
             </div>
         </div>
 
+
         <nav class="sidebar-nav">
             <div class="nav-section-label">CLUB MANAGEMENT</div>
-            <a href="/admin/overview.html" class="nav-item">
-                <span class="nav-icon">📊</span> Overview
-            </a>
-            <a href="/admin/reservations.html" class="nav-item">
-                <span class="nav-icon">📅</span> Reservations
-                <span class="badge">12</span>
-            </a>
-            <a href="/admin/shows.html" class="nav-item active">
-                <span class="nav-icon">🎷</span> Shows & artists
-            </a>
-            <a href="/admin/menu.html" class="nav-item">
-                <span class="nav-icon">🍽️</span> Menu
-            </a>
-            <a href="/admin/order.html" class="nav-item">
-                <span class="nav-icon">📋</span> Orders
-            </a>
-
-            <a href="/admin/employees.html" class="nav-item">
-                <span class="nav-icon">👥</span> Employees
-            </a>
-            <a href="/admin/shifts.html" class="nav-item">
-                <span class="nav-icon">🗓️</span> Shifts
-            </a>
-
-
+            <a href="/admin/overview.html" class="nav-item"><span class="nav-icon">📊</span> Overview</a>
+            <a href="/admin/reservations.html" class="nav-item"><span class="nav-icon">📅</span> Reservations</a>
+            <a href="/admin/shows.html" class="nav-item active"><span class="nav-icon">🎷</span> Shows & artists</a>
+            <a href="/admin/menu.html" class="nav-item"><span class="nav-icon">🍽️</span> Menu</a>
+            <a href="/admin/order.html" class="nav-item"><span class="nav-icon">📋</span> Orders</a>
+            <a href="/admin/inventory.html" class="nav-item"><span class="nav-icon">📦</span> Inventory</a>
+            <a href="/admin/employees.html" class="nav-item"><span class="nav-icon">👥</span> Employees</a>
+            <a href="/admin/shifts.html" class="nav-item"><span class="nav-icon">🗓️</span> Shifts</a>
         </nav>
 
         <!-- Sidebar Bottom Widgets -->
@@ -77,9 +60,9 @@
         <!-- TOP NAVIGATION BAR -->
         <header class="admin-header">
 
-            <div class="header-actions">
-                <a href="/" class="btn-guest-site">Guest website</a>
-                <button type="button" id="openAddShowModalBtn" class="btn-primary-add">+ Add show</button>
+            <div class="admin-header-simple">
+                <a href="/" class="btn-guest-site">Homepage</a>
+                <button type="button" id="openAddShowModalBtn" class="btn-guest-site">+ Add show</button>
             </div>
         </header>
 
@@ -99,69 +82,30 @@
 
 
             <!-- SHOWS LIST -->
-            <div class="shows-list-container">
+            <p id="showsAdminStatus" class="shows-admin-status" role="status" aria-live="polite">Loading shows...</p>
+            <div id="adminShowsList" class="shows-list-container" aria-busy="true"></div>
 
-                <!-- Card 1 -->
-                <div class="show-item-card">
+            <template id="adminShowTemplate">
+                <article class="show-item-card">
                     <div class="show-date-box">
-                        <span class="date-num">12</span>
-                        <span class="date-month">Sep</span>
+                        <span class="date-num"></span>
+                        <span class="date-month"></span>
                     </div>
                     <div class="show-details">
-                        <span class="show-genre">CONTEMPORARY JAZZ</span>
-                        <h2 class="show-title">The Araya Quartet</h2>
+                        <span class="show-genre"></span>
+                        <h2 class="show-title"></h2>
                         <div class="show-meta">
-                            <span>🕒 8:30 PM</span>
-                            <span>👥 86 / 110 booked</span>
+                            <span class="show-time"></span>
+                            <span class="show-bookings"></span>
                         </div>
                     </div>
                     <div class="show-card-right">
-                        <span class="status-pill status-tonight">Tonight</span>
-                        <button class="btn-dots">•••</button>
+                        <span class="status-pill"></span>
+                        <button type="button" class="btn-show-edit">Edit</button>
+                        <button type="button" class="btn-show-delete">Delete</button>
                     </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="show-item-card">
-                    <div class="show-date-box">
-                        <span class="date-num">13</span>
-                        <span class="date-month">Sep</span>
-                    </div>
-                    <div class="show-details">
-                        <span class="show-genre">BEBOP & STANDARDS</span>
-                        <h2 class="show-title">Midnight Blue Trio</h2>
-                        <div class="show-meta">
-                            <span>🕒 9:00 PM</span>
-                            <span>👥 64 / 110 booked</span>
-                        </div>
-                    </div>
-                    <div class="show-card-right">
-                        <span class="status-pill status-onsale">On sale</span>
-                        <button class="btn-dots">•••</button>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="show-item-card">
-                    <div class="show-date-box">
-                        <span class="date-num">19</span>
-                        <span class="date-month">Sep</span>
-                    </div>
-                    <div class="show-details">
-                        <span class="show-genre">SOUL JAZZ</span>
-                        <h2 class="show-title">Nina & The Brass</h2>
-                        <div class="show-meta">
-                            <span>🕒 8:30 PM</span>
-                            <span>👥 91 / 110 booked</span>
-                        </div>
-                    </div>
-                    <div class="show-card-right">
-                        <span class="status-pill status-onsale">On sale</span>
-                        <button class="btn-dots">•••</button>
-                    </div>
-                </div>
-
-            </div>
+                </article>
+            </template>
 
         </div>
     </main>
@@ -174,56 +118,64 @@
         <div class="modal-header">
             <div>
                 <span class="panel-sub" style="color: #8C7B5D; font-size: 11px; font-weight: 700;">PROGRAMMING</span>
-                <h2 style="font-family: 'Playfair Display', serif; font-size: 24px; margin-top: 2px;">Add New Show</h2>
+                <h2 id="showModalTitle" style="font-family: 'Playfair Display', serif; font-size: 24px; margin-top: 2px;">Add New Show</h2>
             </div>
             <button type="button" class="btn-close-modal" id="closeShowModalBtn">&times;</button>
         </div>
 
-        <form id="addShowForm" class="modal-form">
+        <form id="showForm" class="modal-form">
             <div class="form-group">
                 <label>Artist / Show Title</label>
-                <input type="text" placeholder="e.g. Miles Davis Experience" required>
+                <input id="showArtistName" name="artist_name" type="text" maxlength="150" placeholder="e.g. Miles Davis Experience" required>
             </div>
 
-            <div class="form-group">
-                <label>Genre</label>
-                <input type="text" placeholder="e.g. HARD BOP / CONTEMPORARY" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Artist type</label>
+                    <select id="showArtistType" name="artist_type" required>
+                        <option value="group">Group</option>
+                        <option value="solo">Solo</option>
+                        <option value="duo">Duo</option>
+                        <option value="resident">Resident</option>
+                        <option value="guest">Guest</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Genre</label>
+                    <input id="showGenre" name="genre" type="text" maxlength="100" placeholder="e.g. Contemporary Jazz" required>
+                </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Date</label>
-                    <input type="date" required>
+                    <input id="showDate" name="performance_date" type="date" required>
                 </div>
                 <div class="form-group">
-                    <label>Time</label>
-                    <input type="text" placeholder="e.g. 8:30 PM" required>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Capacity</label>
-                    <input type="number" value="110" required>
-                </div>
-                <div class="form-group">
-                    <label>Status Badge</label>
-                    <select>
-                        <option value="On sale">On sale</option>
-                        <option value="Tonight">Tonight</option>
-                        <option value="Sold out">Sold out</option>
+                    <label>Start time</label>
+                    <select id="showStartTime" name="start_time" required>
+                        <option value="20:00">20:00</option>
+                        <option value="20:30">20:30</option>
+                        <option value="21:00">21:00</option>
                     </select>
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>End time</label>
+                <input id="showEndTime" name="end_time" type="time" value="23:00" required>
+            </div>
+
+            <p id="showFormStatus" class="show-form-status" role="alert"></p>
+
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" id="cancelShowModalBtn">Cancel</button>
-                <button type="submit" class="btn-submit-res">Save Show</button>
+                <button id="saveShowBtn" type="submit" class="btn-submit-res">Save Show</button>
             </div>
         </form>
     </div>
 </div>
 
-<script src="/js/pages/show.js"></script>
+<script src="/js/pages/admin-shows.js"></script>
 </body>
 </html>

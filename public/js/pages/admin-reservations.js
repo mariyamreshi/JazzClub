@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const status = document.getElementById('reservationListStatus');
     const add = document.getElementById('addReservation');
     let reservations = [];
+    let shows = [];
     let loaded = false;
     let loading = false;
     let saving = false;
@@ -22,11 +23,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const editFields = {
         guest_name: document.getElementById('editGuestName'),
         phone_number: document.getElementById('editPhoneNumber'),
+        show_id: document.getElementById('editShow'),
         date: document.getElementById('editDate'),
         time: document.getElementById('editTime'),
         zone: document.getElementById('editZone'),
         table_number: document.getElementById('editTable'),
     };
+
+    function showLabel(show) {
+        return `${show.artist_name} · ${show.performance_date} · ${show.start_time}`;
+    }
+
+    function fillShows() {
+        editFields.show_id.replaceChildren(...shows.map(show => {
+            const option = document.createElement('option');
+            option.value = show.show_id;
+            option.textContent = showLabel(show);
+            return option;
+        }));
+    }
+
+    function applySelectedShow() {
+        const show = shows.find(item => item.show_id === Number(editFields.show_id.value));
+        if (!show) return;
+        editFields.date.value = show.performance_date;
+        editFields.time.value = show.start_time;
+    }
     const tablesByZone = {
         'Front Stage': ['F01', 'F02', 'F03', 'F04'], 'Main Floor': ['M01', 'M02', 'M03'],
         'VIP Lounge': ['VIP-1', 'VIP-2'], 'Bar Counter': ['B01', 'B02', 'B03', 'B04'],
@@ -59,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         editFields.zone.value = reservation.zone;
         fillTables();
         for (const [field, input] of Object.entries(editFields)) input.value = reservation[field];
+        applySelectedShow();
         editError.hidden = true;
         editDialog.showModal();
     }
@@ -70,7 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('editReservationTitle').textContent = 'Add reservation';
         document.getElementById('saveReservationEdit').textContent = 'Add reservation';
         for (const input of Object.values(editFields)) input.value = '';
-        editFields.date.value = dateFilter.value;
+        if (shows[0]) editFields.show_id.value = shows[0].show_id;
+        applySelectedShow();
         editFields.zone.value = 'Front Stage';
         fillTables();
         editError.hidden = true;
@@ -100,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     editFields.zone.addEventListener('change', fillTables);
+    editFields.show_id.addEventListener('change', applySelectedShow);
     add.addEventListener('click', openAdd);
     document.getElementById('cancelReservationEdit').addEventListener('click', () => {
         if (!saving) editDialog.close();
@@ -167,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function emptyRow(message) {
         const row = document.createElement('tr');
         const messageCell = cell(message);
-        messageCell.colSpan = 7;
+        messageCell.colSpan = 8;
         row.appendChild(messageCell);
         body.replaceChildren(row);
     }
@@ -192,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
             guest.appendChild(name);
             guest.appendChild(id);
             const [year, month, day] = reservation.date.split('-');
-            [guest, cell(reservation.phone_number), cell(`${day}/${month}/${year}`), cell(reservation.time),
+            [guest, cell(reservation.artist_name), cell(reservation.phone_number), cell(`${day}/${month}/${year}`), cell(reservation.time),
                 cell(reservation.zone), cell(reservation.table_number, 'reservation-table-code')]
                 .forEach(column => row.appendChild(column));
             const actions = cell('', 'reservation-row-actions');
@@ -225,11 +250,16 @@ document.addEventListener('DOMContentLoaded', () => {
             emptyRow('Loading reservations...');
         }
         try {
-            const response = await fetch('/api/reservations', { cache: 'no-store' });
-            if (!response.ok) throw new Error('Unable to load reservations');
-            const result = await response.json();
-            if (!Array.isArray(result.data)) throw new Error('Invalid reservation list');
-            reservations = result.data;
+            const [reservationResponse, showResponse] = await Promise.all([
+                fetch('/api/reservations', { cache: 'no-store' }),
+                fetch('/api/shows', { cache: 'no-store' }),
+            ]);
+            if (!reservationResponse.ok || !showResponse.ok) throw new Error('Unable to load reservations');
+            const [reservationResult, showResult] = await Promise.all([reservationResponse.json(), showResponse.json()]);
+            if (!Array.isArray(reservationResult.data) || !Array.isArray(showResult.data)) throw new Error('Invalid reservation list');
+            reservations = reservationResult.data;
+            shows = showResult.data;
+            fillShows();
             loaded = true;
         } catch {
             loaded = false;

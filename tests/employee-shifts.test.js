@@ -160,9 +160,11 @@ test('admin shift page exposes ERD fields and database CRUD without staffing tar
   for (const id of ['shiftEmployee', 'shiftShow', 'shiftRole', 'shiftDate', 'shiftStart', 'shiftEnd']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
-  assert.match(html, /id="shiftRows"/);
+  assert.match(html, /id="scheduleGrid"/);
   assert.match(script, /\/api\/employee-shifts/);
   assert.match(script, /editingId === null \? 'POST' : 'PUT'/);
   assert.match(script, /method: 'DELETE'/);
-  assert.doesNotMatch(html + script, /roleTarget|employee-role-targets/i);
+  assert.doesNotMatch(html + script, /roleTarget|employee-role-targets|target not set|schedule-settings/i);
+  assert.match(script, /schedule-show-warning/);
+  assert.match(script, /has no employee shifts/);
 });

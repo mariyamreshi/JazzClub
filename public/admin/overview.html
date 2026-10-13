@@ -24,30 +24,15 @@
 
         <nav class="sidebar-nav">
             <div class="nav-section-label">CLUB MANAGEMENT</div>
-            <a href="/admin/overview.html" class="nav-item active">
-                <span class="nav-icon">📊</span> Overview
-            </a>
-            <a href="/admin/reservations.html" class="nav-item">
-                <span class="nav-icon">📅</span> Reservations
-                <span class="badge" id="reservationCount">—</span>
-            </a>
-            <a href="/admin/shows.html" class="nav-item">
-                <span class="nav-icon">🎷</span> Shows & artists
-            </a>
-            <a href="/admin/menu.html" class="nav-item">
-                <span class="nav-icon">🍽️</span> Menu
-            </a>
-            <a href="/admin/order.html" class="nav-item">
-                <span class="nav-icon">📋</span> Orders
-            </a>
-            <a href="/admin/employees.html" class="nav-item">
-                <span class="nav-icon">👥</span> Employees
-            </a>
-            <a href="/admin/shifts.html" class="nav-item">
-                <span class="nav-icon">🗓️</span> Shifts
-            </a>
+            <a href="/admin/overview.html" class="nav-item active"><span class="nav-icon">📊</span> Overview</a>
+            <a href="/admin/reservations.html" class="nav-item"><span class="nav-icon">📅</span> Reservations</a>
+            <a href="/admin/shows.html" class="nav-item"><span class="nav-icon">🎷</span> Shows & artists</a>
+            <a href="/admin/menu.html" class="nav-item"><span class="nav-icon">🍽️</span> Menu</a>
+            <a href="/admin/order.html" class="nav-item"><span class="nav-icon">📋</span> Orders</a>
+            <a href="/admin/inventory.html" class="nav-item"><span class="nav-icon">📦</span> Inventory</a>
+            <a href="/admin/employees.html" class="nav-item "><span class="nav-icon">👥</span> Employees</a>
+            <a href="/admin/shifts.html" class="nav-item"><span class="nav-icon">🗓️</span> Shifts</a>
         </nav>
-
         <!-- Sidebar Bottom Footer -->
         <div class="sidebar-footer-widgets">
             <div class="user-profile-bar">
@@ -136,6 +121,7 @@
                         <thead>
                         <tr>
                             <th scope="col">GUEST</th>
+                            <th scope="col">SHOW</th>
                             <th scope="col">PHONE</th>
                             <th scope="col">DATE</th>
                             <th scope="col">TIME</th>
@@ -161,7 +147,8 @@
         <fieldset id="editReservationFields" class="reservation-edit-fields">
             <label>Guest name<input id="editGuestName" type="text" maxlength="100" required></label>
             <label>Phone number<input id="editPhoneNumber" type="tel" maxlength="25" required></label>
-            <label>Date<input id="editDate" type="date" required></label>
+            <label>Show<select id="editShow" required><option value="">Loading shows...</option></select></label>
+            <label>Date<input id="editDate" type="date" readonly required></label>
             <label>Arrival time<select id="editTime" required>
                 <option value="" disabled>Select arrival time</option>
                 <option value="20:00">20:00</option>

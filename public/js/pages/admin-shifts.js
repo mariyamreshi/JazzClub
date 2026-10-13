@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let shows = [];
     let editingId = null;
     let deletingId = null;
-    let requestedDate = null;
     let loading = false;
     let saving = false;
 
@@ -114,9 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const number = document.createElement('strong');
             number.textContent = String(day.getDate());
             const note = document.createElement('small');
-            const dayKey = `${day.getFullYear()}-${String(day.getMonth()+1).padStart(2,'0')}-${String(day.getDate()).padStart(2,'0')}`;
-            const dayShows = shows.filter(show => show.performance_date === dayKey);
-            note.textContent = dayShows.length ? dayShows.map(show => `${show.artist_name} · ${show.start_time}`).join(' / ') : 'No show listed';
+            note.textContent = 'No show listed';
             cell.append(weekday, number, note);
             children.push(cell);
         }
@@ -254,28 +251,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function openAdd(prefill = {}) {
         if (saving) return;
         editingId = null;
-        requestedDate = prefill.date || null;
         form.reset();
         get('shiftId').value = '';
         get('shiftDialogTitle').textContent = 'Add shift';
         formError.hidden = true;
         const { from, to } = weekRange();
         const defaultShow = shows.find(show => show.performance_date >= from && show.performance_date <= to) || shows[0];
-        const matchingShow = prefill.date ? shows.find(show => show.performance_date === prefill.date) : null;
-        const chosenShow = prefill.date ? matchingShow : defaultShow;
+        const chosenShow = (prefill.date && shows.find(show => show.performance_date === prefill.date)) || defaultShow;
         if (chosenShow) showSelect.value = String(chosenShow.show_id);
         setShowFields({ updateTimes: true });
         if (prefill.role) fields.role.value = prefill.role;
-        if (prefill.date && !matchingShow) {
-            formError.textContent = `There is no show scheduled on ${formatDate(prefill.date, { month: 'long', day: 'numeric', year: 'numeric' })}. Shifts must be linked to a show, so choose a show to use its date or add a show for this day first.`;
-            formError.hidden = false;
-        }
         dialog.showModal();
     }
 
     function openEdit(shift) {
         if (saving) return;
-        requestedDate = null;
         editingId = shift.shift_id;
         get('shiftId').value = displayId(shift.shift_id);
         get('shiftDialogTitle').textContent = `Edit shift ${displayId(shift.shift_id)}`;
@@ -337,16 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    showSelect.addEventListener('change', () => {
-        setShowFields({ updateTimes: true });
-        const chosen = selectedShow();
-        if (requestedDate && chosen && chosen.performance_date !== requestedDate) {
-            formError.textContent = `This show is on ${formatDate(chosen.performance_date, { month: 'long', day: 'numeric', year: 'numeric' })}, so the shift date will be ${formatDate(chosen.performance_date)} instead of the day you clicked.`;
-            formError.hidden = false;
-        } else {
-            formError.hidden = true;
-        }
-    });
+    showSelect.addEventListener('change', () => setShowFields());
     for (const input of [search, roleFilter]) {
         input.addEventListener('input', render);
         input.addEventListener('change', render);

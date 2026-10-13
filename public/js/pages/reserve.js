@@ -20,11 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const status = document.getElementById('availabilityStatus');
     const retry = document.getElementById('retryAvailability');
     const params = new URLSearchParams(window.location.search);
-    const hasShow = params.has('show_id');
-    const showId = params.get('show_id');
+    const requestedShowId = params.get('show_id');
     const showStatus = document.getElementById('showStatus');
     const retryShow = document.getElementById('retryShow');
-    let showReady = !hasShow;
+    let showReady = false;
     let selectedShow = null;
     let loadingShow = false;
     let loadedSlot = null;
@@ -34,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const unavailable = !showReady || isSubmitting || loadedSlot !== `${dateInput.value}|${timeInput.value}`;
         submitButton.disabled = unavailable;
         dateInput.disabled = isSubmitting || !showReady;
-        dateInput.readOnly = Boolean(selectedShow);
-        timeInput.disabled = isSubmitting || !showReady;
+        dateInput.readOnly = true;
+        timeInput.disabled = Boolean(selectedShow) || isSubmitting || !showReady;
         tables.forEach(table => {
             table.setAttribute('aria-disabled', String(unavailable || table.classList.contains('booked')));
         });
@@ -114,6 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         const payload = {
+            show_id: selectedShow.show_id,
             guest_name: document.getElementById('guestName').value.trim(),
             phone_number: document.getElementById('phoneNumber').value.trim(),
             zone: selected.dataset.zone,
@@ -140,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const saved = result.data;
             if (!saved?.id) throw new Error('The server did not confirm the reservation.');
             document.getElementById('confirmName').textContent = saved.guest_name;
+            document.getElementById('confirmReservationId').textContent = `R-${saved.id}`;
             document.getElementById('confirmDate').textContent = saved.date;
             document.getElementById('confirmTime').textContent = saved.time;
             document.getElementById('confirmTable').textContent = `${saved.table_number} (${saved.zone})`;
@@ -169,16 +170,25 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('showArtist').textContent = 'Loading show...';
         status.textContent = 'Waiting for show details...';
         try {
-            if (!/^[1-9]\d*$/.test(showId) || Number(showId) > 4294967295) {
-                throw new Error('Invalid show. Please choose a show from the shows page.');
+            let show;
+            if (requestedShowId) {
+                if (!/^[1-9]\d*$/.test(requestedShowId) || Number(requestedShowId) > 4294967295) {
+                    throw new Error('Invalid show. Please choose a show from the shows page.');
+                }
+                const response = await fetch(`/api/shows/${encodeURIComponent(requestedShowId)}`, { cache: 'no-store' });
+                if (!response.ok) {
+                    if (response.status === 404) throw new Error('This show is no longer available. Please choose another show.');
+                    throw new Error('Unable to load show details. Please try again.');
+                }
+                ({ data: show } = await response.json());
+            } else {
+                const response = await fetch('/api/shows', { cache: 'no-store' });
+                if (!response.ok) throw new Error('Unable to load show details. Please try again.');
+                const result = await response.json();
+                show = Array.isArray(result.data) ? result.data[0] : null;
+                if (!show) throw new Error('No shows are available for reservation yet.');
             }
-            const response = await fetch(`/api/shows/${encodeURIComponent(showId)}`, { cache: 'no-store' });
-            if (!response.ok) {
-                if (response.status === 404) throw new Error('This show is no longer available. Please choose another show.');
-                throw new Error('Unable to load show details. Please try again.');
-            }
-            const { data: show } = await response.json();
-            if (!show || String(show.show_id) !== showId || !/^\d{4}-\d{2}-\d{2}$/.test(show.performance_date)
+            if (!show || (requestedShowId && String(show.show_id) !== requestedShowId) || !/^\d{4}-\d{2}-\d{2}$/.test(show.performance_date)
                 || !/^(?:[01]\d|2[0-3]):[0-5]\d$/.test(show.start_time)
                 || typeof show.artist_name !== 'string' || typeof show.genre !== 'string') {
                 throw new Error('Unable to load show details. Please try again.');
@@ -218,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     retryShow.addEventListener('click', loadSelectedShow);
-    return hasShow ? loadSelectedShow() : refreshAvailability();
+    return loadSelectedShow();
 });
 
 function closeConfirmation() {

@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Garnet's House - Employee Schedules</title>
+<link rel="stylesheet" href="/css/admin/admin.css"><link rel="stylesheet" href="/css/admin/employees.css"><link rel="stylesheet" href="/css/admin/navbar.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+</head><body class="admin-body"><div class="admin-layout">
+<aside class="admin-sidebar"><div class="sidebar-brand"><div class="brand-text"><h1>Garnet's House</h1><span>JAZZ CLUB</span></div></div><nav class="sidebar-nav">
+<div class="nav-section-label">CLUB MANAGEMENT</div>
+<a href="/admin/overview.html" class="nav-item">📊 Overview</a><a href="/admin/reservations.html" class="nav-item">📅 Reservations</a>
+<a href="/admin/shows.html" class="nav-item">🎷 Shows & artists</a><a href="/admin/menu.html" class="nav-item">🍽️ Menu</a>
+<a href="/admin/order.html" class="nav-item">📋 Orders</a><a href="/admin/employees.html" class="nav-item">👥 Employees</a>
+<a href="/admin/shifts.html" class="nav-item">🗓️ Shifts</a><a href="/admin/schedules.html" class="nav-item active" aria-current="page">⏱️ Schedules</a>
+</nav></aside>
+<main class="admin-main"><header class="admin-header-simple"><a href="/admin/shifts.html" class="btn-guest-site">View shifts</a></header>
+<div class="employees-content"><div class="employees-heading"><div><div class="employees-eyebrow">CLUB MANAGEMENT / EMPLOYEE_SCHEDULE</div><h1>Employee schedules</h1><p>Recurring weekly availability from the ERD.</p></div><button id="addSchedule" class="employee-primary" type="button">+ Add schedule</button></div>
+<section class="employee-directory"><div class="employee-controls"><label class="employee-search"><span>⌕</span><input id="scheduleSearch" type="search" placeholder="Search employee or day..."></label><button id="refreshSchedules" class="employee-secondary" type="button">Refresh</button></div>
+<div class="employee-count" id="scheduleCount">Loading schedules…</div><p class="employee-load-error" id="scheduleLoadError" hidden></p>
+<div class="employee-table-wrap"><table class="employee-table"><thead><tr><th>ID</th><th>Employee</th><th>Day</th><th>Start</th><th>End</th><th>Actions</th></tr></thead><tbody id="scheduleRows" aria-busy="true"></tbody></table></div><div class="employee-empty" id="scheduleEmpty" hidden>No schedules found.</div></section></div></main></div>
+<dialog class="employee-dialog" id="scheduleDialog"><form id="scheduleForm"><div class="dialog-top"><h2 id="scheduleDialogTitle">Schedule details</h2><button id="closeSchedule" class="dialog-close" type="button">×</button></div><div class="employee-fields">
+<label>Employee<select id="scheduleEmployee" required></select></label><label>Day<select id="scheduleDay" required><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></label>
+<label>Start time<input id="scheduleStart" type="time" required></label><label>End time<input id="scheduleEnd" type="time" required></label></div><p id="scheduleFormError" class="employee-form-error" hidden></p><div class="employee-dialog-actions"><button id="cancelSchedule" class="employee-secondary" type="button">Cancel</button><button id="saveSchedule" class="employee-primary" type="submit">Save schedule</button></div></form></dialog>
+<script src="/js/pages/admin-schedules.js"></script></body></html>

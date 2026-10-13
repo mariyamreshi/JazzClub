@@ -36,11 +36,12 @@ function validateReservation(body = {}) {
     return invalid('Please select a valid table and its zone.');
   }
   if (!validDate(date)) return invalid('Please enter a valid date in YYYY-MM-DD format.');
+  if (!validId(String(body.show_id || ''))) return invalid('Please select a valid show.');
   if (!reservationTimes.has(time)) {
     return invalid('Please select 20:00, 20:30 or 21:00.');
   }
 
-  return { reservation };
+  return { reservation: { ...reservation, show_id: Number(body.show_id) } };
 }
 
 function reservationError(error, res, next) {
@@ -51,6 +52,12 @@ function reservationError(error, res, next) {
   }
   if (error.code === 'TABLE_NOT_FOUND') {
     return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: error.message } });
+  }
+  if (error.code === 'SHOW_NOT_FOUND') {
+    return res.status(404).json({ error: { code: error.code, message: 'The selected show no longer exists.' } });
+  }
+  if (error.code === 'SHOW_TIME_MISMATCH') {
+    return res.status(409).json({ error: { code: error.code, message: 'Reservation date and time must match the selected show.' } });
   }
   next(error);
 }

@@ -70,7 +70,7 @@
 <dialog id="orderDialog" class="order-dialog" aria-labelledby="orderDialogTitle">
     <div class="order-dialog-header">
         <div>
-            <span class="order-eyebrow">TABLE ORDER</span>
+            <span class="order-eyebrow">RESERVATION ORDER</span>
             <h2 id="orderDialogTitle">Order an item</h2>
         </div>
         <button id="closeOrderDialog" class="order-dialog-close" type="button" aria-label="Close">×</button>
@@ -85,12 +85,10 @@
             <span id="orderItemPrice" class="order-item-price"></span>
         </div>
 
-        <label class="order-field" for="orderTableId">
-            <span>Table ID</span>
-            <select id="orderTableId" required>
-                <option value="">Loading tables...</option>
-            </select>
-            <small>Select the table shown on your table card.</small>
+        <label class="order-field" for="orderReservationId">
+            <span>Reservation ID</span>
+            <input id="orderReservationId" type="number" min="1" step="1" placeholder="Example: 12" required>
+            <small>Enter the number shown on your reservation pass.</small>
         </label>
 
         <label class="order-field" for="orderQuantity">
