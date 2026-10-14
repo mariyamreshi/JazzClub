@@ -191,18 +191,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const quantity = Number(orderQuantity.value);
         try {
             const placed = await requestOrder({
-                reservation_id: orderReservationId.value,
+                reservation_id: orderReservationId.value.trim(),
                 item_id: selectedItem.item_id,
                 quantity,
             });
             menuItems = menuItems
                 .map(item => item.item_id === selectedItem.item_id
-                    ? { ...item, stock_quantity: item.stock_quantity - quantity }
+                    ? { ...item, stock_quantity: placed.remaining_stock }
                     : item)
                 .filter(item => item.stock_quantity > 0);
             renderMenu();
             document.getElementById('orderSuccessSummary').textContent =
-                `Added ${quantity} × ${selectedItem.item_name} to reservation R-${placed.reservation_id} at table ${placed.table_id}. Order total $${placed.total_amount}.`;
+                `Added ${quantity} × ${selectedItem.item_name} to reservation R-${placed.reservation_id} at table ${placed.table_id}. Order total $${placed.total_amount}. ${placed.remaining_stock} left in stock.`;
             orderForm.hidden = true;
             orderSuccess.hidden = false;
         } catch (error) {

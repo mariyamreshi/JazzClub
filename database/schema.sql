@@ -1,4 +1,3 @@
--- Jazz Club relational schema aligned with the approved business rules.
 USE jazzclub;
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -48,8 +47,6 @@ CREATE TABLE IF NOT EXISTS shows (
   CONSTRAINT shows_time_order CHECK (end_time > start_time)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- A reservation records its selected show so attendance and show revenue can
--- be reported without inferring the show from a date and time.
 CREATE TABLE IF NOT EXISTS reservations (
   reservation_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
   customer_id INT UNSIGNED NOT NULL,

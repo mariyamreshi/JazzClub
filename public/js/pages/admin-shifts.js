@@ -103,9 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const header = document.createElement('div');
         header.className = 'schedule-corner';
-        header.textContent = 'ROLE / TARGET';
+        header.textContent = 'ROLE / ASSIGNMENTS';
         const children = [header];
         for (const day of days) {
+            const date = dateKey(day);
+            const dayShows = shows.filter(show => show.performance_date === date);
             const cell = document.createElement('div');
             cell.className = 'schedule-day';
             const weekday = document.createElement('span');
@@ -113,8 +115,29 @@ document.addEventListener('DOMContentLoaded', () => {
             const number = document.createElement('strong');
             number.textContent = String(day.getDate());
             const note = document.createElement('small');
-            note.textContent = 'No show listed';
+            note.textContent = dayShows.length ? `${dayShows.length} show${dayShows.length === 1 ? '' : 's'}` : 'No show listed';
             cell.append(weekday, number, note);
+            if (dayShows.length) {
+                const showList = document.createElement('div');
+                showList.className = 'schedule-show-list';
+                dayShows.forEach(show => {
+                    const showRow = document.createElement('div');
+                    showRow.className = 'schedule-show';
+                    const label = document.createElement('span');
+                    label.textContent = `${show.artist_name} · ${show.start_time}`;
+                    showRow.append(label);
+                    if (!shifts.some(shift => Number(shift.show_id) === Number(show.show_id))) {
+                        const warning = document.createElement('span');
+                        warning.className = 'schedule-show-warning';
+                        warning.textContent = '!';
+                        warning.title = `${show.artist_name} has no employee shifts`;
+                        warning.setAttribute('aria-label', warning.title);
+                        showRow.append(warning);
+                    }
+                    showList.append(showRow);
+                });
+                cell.append(showList);
+            }
             children.push(cell);
         }
         const tones = ['green', 'gold', 'rose', 'blue', 'olive', 'green'];
@@ -135,32 +158,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const cell = document.createElement('div');
                 cell.className = 'schedule-cell';
                 const assignments = visible.filter(shift => shift.role === role && shift.shift_date === date);
-                const target = role === 'Floor server' && date === '2026-10-05' ? 5 : null;
                 const summary = document.createElement('div');
                 summary.className = 'schedule-summary';
-                summary.append(document.createTextNode(target === null ? `${assignments.length} assigned · target not set` : `${assignments.length} / ${target} assigned`));
-                if (target !== null && assignments.length < target) {
-                    const open = document.createElement('span');
-                    open.className = 'schedule-open-count';
-                    open.textContent = `${target - assignments.length} open`;
-                    summary.append(open);
-                }
+                summary.append(document.createTextNode(`${assignments.length} assigned`));
                 const sub = document.createElement('small');
-                sub.textContent = target === null ? 'Set a target' : `${target} person target`;
+                sub.textContent = assignments.length === 1 ? 'Employee shift' : 'Employee shifts';
                 summary.append(sub);
-                const settings = document.createElement('button');
-                settings.className = 'schedule-settings';
-                settings.type = 'button';
-                settings.textContent = '⚙';
-                settings.setAttribute('aria-label', `Set ${role} target for ${date}`);
-                settings.addEventListener('click', () => {
-                    const value = window.prompt(`Daily target for ${role}`, target ?? '');
-                    if (value !== null && (value === '' || /^\d+$/.test(value))) {
-                        settings.title = value ? `${value} person target` : 'Target not set';
-                        if (value) sub.textContent = `${value} person target`;
-                    }
-                });
-                cell.append(summary, settings);
+                cell.append(summary);
 
                 assignments.forEach(shift => {
                     const chip = document.createElement('div');

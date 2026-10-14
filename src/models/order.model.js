@@ -105,6 +105,9 @@ async function create({ reservation_id, item_id, quantity }) {
     );
     if (!stockResult.affectedRows) throw orderError('INSUFFICIENT_STOCK');
 
+    const [stockRows] = await connection.execute(
+      'SELECT stock_quantity FROM menu_items WHERE item_id = ?', [item_id]
+    );
     const [orderRows] = await connection.execute(
       'SELECT total_amount FROM orders WHERE order_id = ?', [orderId]
     );
@@ -112,6 +115,7 @@ async function create({ reservation_id, item_id, quantity }) {
     return {
       order_id: orderId, reservation_id, table_id: reservationRows[0].table_id,
       status, total_amount: Number(orderRows[0].total_amount).toFixed(2),
+      remaining_stock: Number(stockRows[0].stock_quantity),
       item: { item_id, item_name: item.item_name, price_at_time: priceAtTime, quantity },
     };
   } catch (error) {

@@ -18,7 +18,8 @@ DELETE FROM club_tables;
 INSERT INTO club_tables (table_id, capacity, zone, status) VALUES
   ('F01',8,'Front Stage','available'),('F02',8,'Front Stage','available'),
   ('F03',8,'Front Stage','available'),('F04',8,'Front Stage','available'),
-  ('M01',8,'Main Floor','available'),('M02',8,'Main Floor','available'),('M03',8,'Main Floor','available'),
+  ('M01',8,'Main Floor','available'),('M02',8,'Main Floor','available'),
+  ('M03',8,'Main Floor','available'),
   ('VIP-1',12,'VIP Lounge','available'),('VIP-2',12,'VIP Lounge','available'),
   ('B01',1,'Bar Counter','available'),('B02',1,'Bar Counter','available'),
   ('B03',1,'Bar Counter','available'),('B04',1,'Bar Counter','maintenance')
@@ -42,15 +43,24 @@ INSERT INTO shows (artist_id,performance_date,start_time,end_time)
 SELECT artist_id,'2026-10-18','21:00','23:00' FROM artists WHERE artist_name='Riverfront Jazz Ensemble';
 
 INSERT INTO employees (employee_name,phone,status,employment_type) VALUES
- ('Garnet Faioei','081-600-0001','Active','Full-time'),('Ganet Faioei','081-600-0002','Active','Full-time'),
- ('Garnes Faioei','081-600-0003','Active','Full-time'),('Mary Reshi','081-600-0004','Active','Full-time'),
- ('Mariyam Reshi','081-600-0005','Active','Full-time'),('Mery Reshi','081-600-0006','Active','Full-time'),
- ('Fifa Sroiraya','081-600-0007','Active','Full-time'),('Phifa Sroiraya','081-600-0008','Active','Full-time'),
- ('Fipha Sroiraya','081-600-0009','Active','Full-time'),('Many Chai','081-600-0010','Active','Full-time'),
- ('Makmai Chai','081-600-0011','Active','Full-time'),('Fany Chai','081-600-0012','Active','Full-time'),
- ('Anan Prasert','081-600-0013','Active','Full-time'),('Anant Prasert','081-600-0014','Active','Full-time'),
- ('Anan Chai','081-600-0015','Active','Full-time'),('Irene Tan','081-600-0016','Active','Part-time'),
- ('Irine Tan','081-600-0017','Active','Part-time'),('Airene Tan','081-600-0018','On leave','Part-time')
+ ('Garnet Faioei','081-600-0001','Active','Full-time'),
+ ('Ganet Faioei','081-600-0002','Active','Full-time'),
+ ('Garnes Faioei','081-600-0003','Active','Full-time'),
+ ('Mary Reshi','081-600-0004','Active','Full-time'),
+ ('Mariyam Reshi','081-600-0005','Active','Full-time'),
+ ('Mery Reshi','081-600-0006','Active','Full-time'),
+ ('Fifa Sroiraya','081-600-0007','Active','Full-time'),
+ ('Phifa Sroiraya','081-600-0008','Active','Full-time'),
+ ('Fipha Sroiraya','081-600-0009','Active','Full-time'),
+ ('Many Chai','081-600-0010','Active','Full-time'),
+ ('Makmai Chai','081-600-0011','Active','Full-time'),
+ ('Fany Chai','081-600-0012','Active','Full-time'),
+ ('Anan Prasert','081-600-0013','Active','Full-time'),
+ ('Anant Prasert','081-600-0014','Active','Full-time'),
+ ('Anan Chai','081-600-0015','Active','Full-time'),
+ ('Irene Tan','081-600-0016','Active','Part-time'),
+ ('Irine Tan','081-600-0017','Active','Part-time'),
+ ('Airene Tan','081-600-0018','On leave','Part-time')
 ON DUPLICATE KEY UPDATE employee_name=VALUES(employee_name),status=VALUES(status),employment_type=VALUES(employment_type);
 
 INSERT INTO employee_schedules (employee_id,day_of_week,start_time,end_time)
@@ -62,7 +72,6 @@ SELECT employee_id,'Friday','17:00','23:59' FROM employees WHERE phone BETWEEN '
 INSERT INTO employee_schedules (employee_id,day_of_week,start_time,end_time)
 SELECT employee_id,'Saturday','17:00','23:59' FROM employees WHERE phone IN ('081-600-0001','081-600-0004','081-600-0007','081-600-0010','081-600-0013','081-600-0016');
 
--- The 18 October show intentionally has no shifts so the red warning and
 -- show-readiness report have a meaningful missing-staff example.
 INSERT INTO employee_shifts (employee_id,show_id,role,shift_date,start_time,end_time)
 SELECT e.employee_id,s.show_id,'Floor server',s.performance_date,'18:30','23:30' FROM employees e JOIN shows s ON s.performance_date='2026-10-12' WHERE e.phone='081-600-0001';

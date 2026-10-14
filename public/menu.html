@@ -87,8 +87,9 @@
 
         <label class="order-field" for="orderReservationId">
             <span>Reservation ID</span>
-            <input id="orderReservationId" type="number" min="1" step="1" placeholder="Example: 12" required>
-            <small>Enter the number shown on your reservation pass.</small>
+            <input id="orderReservationId" type="text" inputmode="numeric" autocomplete="off"
+                   pattern="(?:[Rr]-)?[1-9][0-9]*" placeholder="Example: R-45 or 45" required>
+            <small>Enter the ID shown on your reservation pass, with or without R-.</small>
         </label>
 
         <label class="order-field" for="orderQuantity">

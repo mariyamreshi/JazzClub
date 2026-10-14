@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
         table_number: document.getElementById('editTable'),
     };
 
+    function updateCount(value) {
+        if (count) count.textContent = String(value);
+    }
+
     function showLabel(show) {
         return `${show.artist_name} · ${show.performance_date} · ${show.start_time}`;
     }
@@ -235,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         body.replaceChildren(...rows);
         if (!rows.length) emptyRow(reservations.length ? 'No reservations match your filters.' : 'No reservations yet.');
-        count.textContent = String(reservations.length);
+        updateCount(reservations.length);
         status.textContent = `Showing ${filtered.length} of ${reservations.length} reservations`;
     }
 
@@ -246,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
         body.setAttribute('aria-busy', 'true');
         status.textContent = loaded ? 'Refreshing reservations...' : 'Loading reservations...';
         if (!loaded) {
-            count.textContent = '—';
+            updateCount('—');
             emptyRow('Loading reservations...');
         }
         try {
@@ -264,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch {
             loaded = false;
             reservations = [];
-            count.textContent = '—';
+            updateCount('—');
             status.textContent = 'Unable to load reservations. Please click Refresh to try again.';
             emptyRow('Reservations could not be loaded.');
         } finally {

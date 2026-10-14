@@ -4,17 +4,24 @@ function validUnsignedId(value) {
   return /^[1-9]\d*$/.test(String(value)) && Number(value) <= 4294967295;
 }
 
+function reservationId(value) {
+  const match = String(value ?? '').trim().match(/^(?:R-)?([1-9]\d*)$/i);
+  if (!match || Number(match[1]) > 4294967295) return null;
+  return Number(match[1]);
+}
+
 function validateOrder(body = {}) {
   const quantity = Number(body.quantity);
+  const normalizedReservationId = reservationId(body.reservation_id);
 
-  if (!validUnsignedId(body.reservation_id)) return { error: 'Please enter a valid reservation ID.' };
+  if (normalizedReservationId === null) return { error: 'Please enter a valid reservation ID, such as R-45 or 45.' };
   if (!validUnsignedId(body.item_id)) {
     return { error: 'Please select a valid menu item.' };
   }
   if (!Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
     return { error: 'Quantity must be a whole number from 1 to 99.' };
   }
-  return { value: { reservation_id: Number(body.reservation_id), item_id: Number(body.item_id), quantity } };
+  return { value: { reservation_id: normalizedReservationId, item_id: Number(body.item_id), quantity } };
 }
 
 async function listTables(req, res, next) {
