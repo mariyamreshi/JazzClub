@@ -152,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const updated = await writeReservation(creating ? 'POST' : 'PUT', editingId, payload);
             if (creating) {
                 reservations = [...reservations, updated];
-                // Show the new booking even when the previous search hid this guest.
                 search.value = '';
                 dateFilter.value = updated.date;
             } else {
@@ -287,7 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
         render();
     });
     refresh.addEventListener('click', loadReservations);
-    // Both admin pages reload the same DB-backed list when returning from booking.
     window.addEventListener('focus', loadReservations);
     window.addEventListener('pageshow', event => {
         if (event.persisted) loadReservations();

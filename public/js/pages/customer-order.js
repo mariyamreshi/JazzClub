@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusFilter = document.getElementById("statusFilter");
     const emptyOrders = document.getElementById("emptyOrders");
 
-    // Get orders from localStorage
     function getOrders() {
         try {
             const orders = JSON.parse(
@@ -17,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Format price in Thai Baht
     function formatPrice(price) {
         return new Intl.NumberFormat("th-TH", {
             style: "currency",
@@ -26,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }).format(Number(price) || 0);
     }
 
-    // Format order date
     function formatDate(date) {
         const parsedDate = new Date(date);
 
@@ -43,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Get readable status
     function getStatus(status) {
         const statuses = {
             pending: "Pending",
@@ -56,7 +52,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return statuses[status] || "Pending";
     }
 
-    // Calculate order total
     function calculateTotal(order) {
         if (typeof order.total === "number" &&
             Number.isFinite(order.total)) {
@@ -70,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 0);
     }
 
-    // Create an order card
     function createOrderCard(order, index) {
         const card = document.createElement("article");
         card.className = "order-card";
@@ -91,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const orderNumber = order.orderNumber || `GH-${1000 + index}`;
         const items = Array.isArray(order.items) ? order.items : [];
 
-        // Card header
         const header = document.createElement("div");
         header.className = "order-card-header";
 
@@ -113,7 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         header.append(orderInfo, badge);
 
-        // Order items
         const itemsContainer = document.createElement("div");
         itemsContainer.className = "order-items";
 
@@ -140,7 +132,6 @@ document.addEventListener("DOMContentLoaded", () => {
             itemsContainer.appendChild(itemRow);
         });
 
-        // Card footer
         const footer = document.createElement("div");
         footer.className = "order-card-footer";
 
@@ -164,7 +155,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         footer.append(totalWrapper, detailsButton);
 
-        // Expandable order details
         const details = document.createElement("div");
         details.className = "order-details";
         details.hidden = true;
@@ -196,7 +186,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return card;
     }
 
-    // Display orders
     function renderOrders() {
         const orders = getOrders();
         const selectedStatus = statusFilter
@@ -233,7 +222,6 @@ document.addEventListener("DOMContentLoaded", () => {
             emptyOrders.hidden = true;
         }
 
-        // Show newest orders first
         filteredOrders
             .slice()
             .reverse()
@@ -245,15 +233,12 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     }
 
-    // Filter orders by status
     if (statusFilter) {
         statusFilter.addEventListener("change", renderOrders);
     }
 
-    // Initial display
     renderOrders();
 
-    // Refresh when orders change in another browser tab
     window.addEventListener("storage", event => {
         if (event.key === "garnetOrders") {
             renderOrders();

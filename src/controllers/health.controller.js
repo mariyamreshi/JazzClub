@@ -10,7 +10,6 @@ async function database(req, res) {
     if (!connected) throw new Error('Database check did not succeed.');
     res.json({ data: { database: 'ok' } });
   } catch {
-    // Keep database credentials and internal errors out of HTTP responses.
     res.status(503).json({
       error: {
         code: 'DATABASE_UNAVAILABLE',

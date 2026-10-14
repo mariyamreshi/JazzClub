@@ -1,4 +1,4 @@
-/* Reset & Base Styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -12,12 +12,12 @@ body {
     overflow-x: hidden;
 }
 
-/* Background & Hero Section */
+
 .hero-section {
     position: relative;
     width: 100%;
     min-height: 100vh;
-    /* ใช้ภาพ saxophone โทนเข้ม/ทองจาก Unsplash */
+
     background: url('https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
     display: flex;
     flex-direction: column;
@@ -39,7 +39,7 @@ body {
     z-index: 1;
 }
 
-/* Navigation Bar */
+
 .navbar {
     position: relative;
     z-index: 10;
@@ -70,7 +70,7 @@ body {
     margin-left: 25px;
 }
 
-/* Nav Links */
+
 .nav-links {
     display: flex;
     list-style: none;
@@ -89,7 +89,7 @@ body {
     color: #ffffff;
 }
 
-/* Nav Right */
+
 .nav-right {
     display: flex;
     align-items: center;
@@ -126,7 +126,7 @@ body {
     font-size: 13px;
 }
 
-/* Hero Main Content */
+
 .hero-container {
     position: relative;
     z-index: 5;
@@ -169,7 +169,7 @@ body {
     font-weight: 300;
 }
 
-/* CTA Buttons */
+
 .cta-buttons {
     display: flex;
     align-items: center;
@@ -206,7 +206,7 @@ body {
     color: #d1b172;
 }
 
-/* Bottom Floating Widget */
+
 .bottom-widget {
     position: relative;
     z-index: 10;
@@ -281,7 +281,7 @@ body {
     color: #d1b172;
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 1024px) {
     .main-title {
         font-size: 54px;

@@ -61,7 +61,7 @@
     .shift-field-wide { grid-column: auto; }
 }
 
-/* Weekly role-by-day assignment schedule */
+
 .shift-directory { padding-top: 0; }
 .shift-directory .shift-week-heading { padding: 26px 30px 20px; }
 .shift-directory .shift-week-heading h2 { font-size: 1.7rem; }

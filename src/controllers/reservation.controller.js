@@ -1,6 +1,5 @@
 const reservations = require('../models/reservation.model');
 
-// Table codes and zones currently displayed on the reservation floor plan.
 const tablesByZone = {
   'Front Stage': ['F01', 'F02', 'F03', 'F04'],
   'Main Floor': ['M01', 'M02', 'M03'],

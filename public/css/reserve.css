@@ -41,7 +41,7 @@ body {
     min-height: 100vh;
 }
 
-/* Navbar */
+
 .navbar {
     position: relative;
     z-index: 10;
@@ -51,17 +51,17 @@ body {
     padding: 25px 50px;
     background-color: rgba(230, 220, 200, 0.99);
 
-    /* 2. เพิ่มเอฟเฟกต์เบลอพื้นหลังด้านหลัง Navbar (Glassmorphism) */
+
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    /* 3. เพิ่มเส้นขอบด้านล่างบางๆ ให้ดูมีมิติขึ้น */
+
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo {
     display: flex;
-    flex: 1; /* กำหนดสัดส่วนฝั่งซ้าย */
+    flex: 1;
 }
 
 
@@ -114,7 +114,7 @@ body {
     flex: 1;
 }
 
-/* Gold Reservation Button */
+
 .btn-reserve,
 .nav-right .active-link {
     background-color: #d1b172;
@@ -131,7 +131,7 @@ body {
 .nav-right .active-link:hover {
     background-color: #e2c486;
 }
-/* Main Outer Container */
+
 .card-container {
     max-width: 760px;
     margin: 40px auto;
@@ -156,7 +156,7 @@ body {
     margin-bottom: 24px;
 }
 
-/* Show Card */
+
 .show-card {
     background-color: #F8F5EE;
     border-radius: 12px;
@@ -197,7 +197,7 @@ body {
     color: var(--text-muted);
 }
 
-/* Form Inputs */
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -236,7 +236,7 @@ input:focus, select:focus, textarea:focus {
     border-color: var(--gold);
 }
 
-/* Floor Plan Header */
+
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -254,7 +254,7 @@ h2 { font-size: 1.1rem; color: #333; }
 .dot.select { background: #E3CA7A; border-color: var(--gold); }
 .dot.booked { background: #DDD; }
 
-/* Floor Plan Box */
+
 .floor-wrapper {
     background-color: #FBF9F4;
     border: 1px solid var(--border-light);
@@ -327,7 +327,7 @@ h2 { font-size: 1.1rem; color: #333; }
 .t-name { font-weight: 700; font-size: 0.85rem; }
 .t-seats { font-size: 0.7rem; color: var(--text-muted); }
 
-/* Table State Colors */
+
 .table-card.selected .table-circle {
     background-color: #E3CA7A;
     border-color: var(--gold);
@@ -355,7 +355,7 @@ h2 { font-size: 1.1rem; color: #333; }
     padding-right: 60px;
 }
 
-/* Selected Info Box */
+
 .selection-box {
     background-color: #F9F6EE;
     border: 1px solid #EFE6D5;
@@ -373,7 +373,7 @@ h2 { font-size: 1.1rem; color: #333; }
 .table-sub { font-size: 0.8rem; color: var(--text-muted); }
 .fee-text { font-size: 0.85rem; font-weight: 700; color: var(--stage-green); }
 
-/* Submit Button */
+
 .btn-confirm {
     width: 100%;
     background-color: var(--maroon);
@@ -391,7 +391,7 @@ h2 { font-size: 1.1rem; color: #333; }
     background-color: var(--maroon-hover);
 }
 
-/* Zone Containers */
+
 .zone-block {
     border: 1px dashed #D6CFBF;
     border-radius: 12px;
@@ -418,7 +418,7 @@ h2 { font-size: 1.1rem; color: #333; }
     color: var(--gold);
 }
 
-/* Grid Layouts */
+
 .grid-2x2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -440,7 +440,7 @@ h2 { font-size: 1.1rem; color: #333; }
     justify-items: center;
 }
 
-/* VIP Circle Styling */
+
 .vip-circle {
     border-color: var(--gold);
     width: 85px !important;
@@ -448,7 +448,7 @@ h2 { font-size: 1.1rem; color: #333; }
     background: #FFF9E6;
 }
 
-/* Bar Zone Styling */
+
 .bar-container {
     background-color: var(--maroon);
     color: #FFF;
@@ -513,7 +513,7 @@ h2 { font-size: 1.1rem; color: #333; }
     cursor: not-allowed;
 }
 
-/* Confirmation Receipt Overlay */
+
 .confirmation-overlay {
     position: fixed;
     top: 0;
@@ -533,7 +533,7 @@ h2 { font-size: 1.1rem; color: #333; }
     display: none;
 }
 
-/* Screenshot Ticket Card */
+
 .ticket-card {
     background: #121214;
     border: 2px solid #FFC700;

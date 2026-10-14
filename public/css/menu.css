@@ -12,7 +12,7 @@
     --grid-line: #E8E3D8;
     --border-light: #E0DDD5;
 
-}/* Reset & Base Setup */
+}
 * {
     margin: 0;
     padding: 0;
@@ -26,14 +26,14 @@ body {
     min-height: 100vh;
 }
 
-/* Container กำหนดความกว้างไม่ให้ล้น */
+
 .menu-section {
     max-width: 1200px;
     margin: 0 auto;
     padding: 60px 24px;
 }
 
-/* Header Section จัดซ้าย-ขวา */
+
 .menu-header {
     display: flex;
     justify-content: space-between;
@@ -45,8 +45,8 @@ body {
     max-width: 440px;
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* จัดองค์ประกอบภายในให้ชิดขวา */
-    text-align: right;     /* ให้ข้อความชิดขวา */
+    align-items: flex-end;
+    text-align: right;
 }
 .sub-title {
     color: #d1b172;
@@ -80,15 +80,15 @@ body {
     margin-bottom: 24px;
 }
 
-/* Search Box - Centered */
+
 .search-box {
     display: flex;
     align-items: center;
     background: #D6C8B0;
     border-radius: 30px;
     padding: 10px 10px 10px 10px;
-    margin: 0 auto;       /* Align centered horizontally */
-    max-width: 360px;     /* Adjust width as needed */
+    margin: 0 auto;
+    max-width: 360px;
     width: 100%;
 }
 
@@ -114,11 +114,11 @@ body {
 }
 
 .search-box button:hover {
-    background: #e2c486;  /* Added slight hover contrast */
+    background: #e2c486;
     color: #000;
 }
 
-/* Category Filter Bar */
+
 .filter-container {
     display: flex;
     justify-content: space-between;
@@ -148,12 +148,12 @@ body {
 }
 
 .filter-btn:hover {
-    background: #e2c486; /* สีทองอ่อน */
-    color: #121316;      /* สีตัวอักษรเข้ม */
+    background: #e2c486;
+    color: #121316;
     border-color: #e2c486;
     }
 
-/* ปุ่มที่ถูกเลือก (Active) และขณะเอาเมาส์ชี้บนปุ่ม Active */
+
 .filter-btn.active,
 .filter-btn.active:hover {
     background: #d1b172;
@@ -195,7 +195,6 @@ body {
 }
 
 
-/* Dishes Grid (3 คอลัมน์) */
 .dishes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

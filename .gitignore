@@ -1,17 +1,13 @@
-# Local dependencies and output
 node_modules/
 coverage/
 dist/
 out/
 *.log
 
-# Local configuration and credentials
 .env
 
-# Editor and OS files
 .idea/
 *.iml
 .DS_Store
 
-# Temporary artifacts
 tmp/

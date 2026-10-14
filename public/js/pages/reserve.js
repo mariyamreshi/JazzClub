@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.data?.date !== date || result.data?.time !== time || !Array.isArray(result.data.booked_tables)) {
                 throw new Error('Unable to check available tables. Please try again.');
             }
-            // Ignore an old response if the user has already selected a different date.
             if (request !== requestNumber || dateInput.value !== date || timeInput.value !== time) return;
             const booked = new Set(result.data.booked_tables);
             tables.forEach(table => {
@@ -133,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const result = await response.json();
             if (!response.ok) {
-                // Someone else may have booked after we loaded the floor plan.
                 if (response.status === 409) await refreshAvailability();
                 throw new Error(result.error?.message || 'Unable to save your reservation. Please try again.');
             }

@@ -1,4 +1,4 @@
-/* Base Styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: #f4efe6; /* สีพื้นหลังโทนครีมอุ่น */
+    background-color: #f4efe6;
     color: #1a1a1a;
 }
 
@@ -23,7 +23,7 @@ body {
     max-width: 1100px;
 }
 
-/* Header Section */
+
 .shows-header {
     display: flex;
     justify-content: space-between;
@@ -46,7 +46,7 @@ body {
     text-align: right;
 }
 
-/* Shows List & Border separators */
+
 .shows-list {
     display: flex;
     flex-direction: column;
@@ -61,7 +61,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-/* Image & Date Badge */
+
 .show-img-wrapper {
     position: relative;
     width: 180px;
@@ -82,7 +82,7 @@ body {
     position: absolute;
     bottom: 0;
     left: 0;
-    background-color: #8c2323; /* สีแดงเข้มตามภาพ */
+    background-color: #8c2323;
     color: #ffffff;
     font-size: 11px;
     font-weight: 600;
@@ -90,7 +90,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-/* Show Details */
+
 .show-details {
     margin-left: 30px;
     flex-grow: 1;
@@ -100,7 +100,7 @@ body {
     font-size: 10px;
     font-weight: 600;
     letter-spacing: 1.5px;
-    color: #937341; /* สีทองน้ำตาลอ่อน */
+    color: #937341;
     display: block;
     margin-bottom: 8px;
     text-transform: uppercase;
@@ -130,7 +130,7 @@ body {
     font-size: 10px;
 }
 
-/* Arrow Button */
+
 .arrow-btn {
     width: 42px;
     height: 42px;
@@ -152,7 +152,7 @@ body {
     border-color: #1c1c1c;
 }
 
-/* Responsive Styles */
+
 @media (max-width: 768px) {
     .shows-header {
         flex-direction: column;

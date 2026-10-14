@@ -34,7 +34,7 @@ body.admin-body {
     min-height: 100vh;
 }
 
-/* MAIN CONTENT */
+
 .admin-main {
     flex: 1;
     display: flex;
@@ -120,7 +120,7 @@ body.admin-body {
     background: var(--primary-accent-hover);
 }
 
-/* DASHBOARD CONTENT CONTAINER */
+
 .dashboard-content {
     padding: 32px;
     display: flex;
@@ -179,7 +179,7 @@ body.admin-body {
 
 .status-dot.green { background: var(--green-status); }
 
-/* KPI CARDS GRID */
+
 .kpi-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -235,7 +235,7 @@ body.admin-body {
 .trend.positive { color: var(--green-status); font-weight: 600; }
 .action-link { color: var(--text-dark); font-weight: 600; text-decoration: underline; }
 
-/* TWO COLUMN MAIN BODY */
+
 .dashboard-body-grid {
     display: grid;
     grid-template-columns: 1fr 340px;
@@ -275,7 +275,7 @@ body.admin-body {
     text-decoration: none;
 }
 
-/* Table Controls */
+
 .table-controls {
     display: flex;
     justify-content: space-between;
@@ -325,7 +325,7 @@ body.admin-body {
     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Data Table */
+
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -380,13 +380,11 @@ body.admin-body {
 }
 
 
-
-/* 2 Compact Cards Side-By-Side */
 .kpi-grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    max-width: 650px; /* Constrains width so they stay compact & square */
+    max-width: 650px;
 }
 
 .kpi-card {
@@ -397,10 +395,9 @@ body.admin-body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 140px; /* Gives nice proportion */
+    min-height: 140px;
 }
 
-/* Reservation management */
 
 .guest-list-panel .table-controls {
     flex-wrap: wrap;

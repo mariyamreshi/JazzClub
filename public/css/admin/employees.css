@@ -1,4 +1,4 @@
-/* Employee page layout */
+
 .employees-content {
     width: 100%;
     max-width: 1800px;
@@ -39,7 +39,7 @@
     font-size: 1rem;
 }
 
-/* Buttons */
+
 .employee-primary,
 .employee-secondary {
     padding: 12px 18px;
@@ -62,7 +62,7 @@
     color: #493a32;
 }
 
-/* Summary cards */
+
 .employee-summary {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -108,7 +108,7 @@
     color: #a9634f;
 }
 
-/* Employee directory */
+
 .employee-directory,
 .shift-panel {
     overflow: hidden;
@@ -364,7 +364,7 @@
     font-size: .8rem;
 }
 
-/* Add/edit employee modal */
+
 .employee-dialog {
     width: min(650px, calc(100vw - 28px));
     margin: auto;
@@ -485,7 +485,7 @@
     border-top: 1px solid #eee8df;
 }
 
-/* Shift page */
+
 .shift-panel {
     padding: 24px;
 }
@@ -651,7 +651,7 @@
     border: 0;
 }
 
-/* Responsive layout */
+
 @media (max-width: 1050px) {
     .employee-summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));

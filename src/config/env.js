@@ -2,7 +2,6 @@
 const path = require('node:path');
 const dotenv = require('dotenv');
 
-// Resolve from this file so commands also work outside the project directory.
 dotenv.config({ path: path.resolve(__dirname, '../../.env'), quiet: true });
 
 function port(name, fallback) {

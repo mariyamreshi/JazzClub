@@ -6,18 +6,15 @@ async function seedDatabase() {
   try {
     console.log('🌱 Seeding database with sample data...');
 
-    // อ่าน seed.sql
     const seedPath = path.join(__dirname, '../database/seed.sql');
     const seedSQL = fs.readFileSync(seedPath, 'utf-8');
 
-    // แยก SQL statements
     const statements = seedSQL
       .replace(/^\s*--.*$/gm, '')
       .split(';')
       .map(s => s.trim())
       .filter(s => s.length > 0);
 
-    // รัน SQL ทีละ statement
     const connection = await db.getConnection();
     try {
       await connection.beginTransaction();

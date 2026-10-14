@@ -1,4 +1,4 @@
-/* Navigation Bar */
+
 .navbar {
     position: relative;
     z-index: 10;
@@ -8,17 +8,17 @@
     padding: 25px 50px;
     background-color: rgba(230, 220, 200, 0.99);
 
-    /* Glassmorphism Effect */
+
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    /* Border bottom */
+
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo {
     display: flex;
-    flex: 1; /* ดันพื้นที่ฝั่งซ้าย */
+    flex: 1;
 }
 
 .brand-name {
@@ -75,7 +75,7 @@
     flex: 1;
 }
 
-/* Reserve Button & Active States */
+
 .btn-reserve,
 .btn-reserve-nav,
 .nav-right .active-link {

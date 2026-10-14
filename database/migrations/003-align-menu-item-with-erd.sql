@@ -1,4 +1,3 @@
--- Upgrade an installation created before MENU_ITEM was aligned with the ERD.
 ALTER TABLE menu_items
   ADD COLUMN stock_quantity INT UNSIGNED NOT NULL DEFAULT 0 AFTER price;
 

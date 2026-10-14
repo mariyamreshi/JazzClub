@@ -91,9 +91,6 @@ body.admin-body {
 }
 
 
-
-/* Summary cards */
-
 .order-stats {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -121,7 +118,6 @@ body.admin-body {
     overflow-wrap: anywhere;
 }
 
-/* Toolbar */
 
 .orders-toolbar {
     display: flex;
@@ -172,7 +168,6 @@ body.admin-body {
     border-color: var(--gold);
 }
 
-/* Order cards */
 
 .admin-orders-list {
     display: grid;
@@ -297,7 +292,6 @@ body.admin-body {
     color: var(--maroon);
 }
 
-/* Table and item list */
 
 .order-meta {
     display: flex;
@@ -365,7 +359,6 @@ body.admin-body {
     overflow-wrap: anywhere;
 }
 
-/* Card footer */
 
 .admin-order-footer {
     display: flex;
@@ -422,7 +415,6 @@ body.admin-body {
     background: var(--maroon-hover);
 }
 
-/* Empty state */
 
 .empty-orders {
     padding: 75px 20px;
@@ -459,7 +451,6 @@ body.admin-body {
     font-weight: 600;
 }
 
-/* Payment popup */
 
 .modal-overlay {
     position: fixed;
@@ -650,7 +641,6 @@ dialog.payment-modal::backdrop {
     text-align: right;
 }
 
-/* Responsive */
 
 @media (max-width: 1200px) {
     .admin-main {

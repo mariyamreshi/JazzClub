@@ -1,7 +1,6 @@
 const mysql = require('mysql2/promise');
 const env = require('./env');
 
-// Connections are opened only when a model runs a query.
 const pool = mysql.createPool({
   ...env.database,
   waitForConnections: true,

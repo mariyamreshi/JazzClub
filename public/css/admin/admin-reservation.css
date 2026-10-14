@@ -57,16 +57,14 @@ select:focus-visible {
     outline-offset: 3px;
 }
 
-/* 2. MAIN LAYOUT */
+
 .admin-layout {
     display: flex;
     min-height: 100vh;
     width: 100%;
 }
 
-/* Sidebar styles are in admin/navbar.css. */
 
-/* 4. MAIN CONTENT */
 .admin-main {
     min-width: 0;
     min-height: 100vh;
@@ -75,29 +73,29 @@ select:focus-visible {
 }
 .dashboard-content {
     width: 100%;
-    /* ปิด max-width 100% เดิม เพื่อให้คำนวณพื้นที่ได้ถูกต้อง */
+
     margin: 0 auto;
     padding: 36px 40px 60px;
 
     display: flex;
     flex-direction: column;
-    align-items: center; /* จัดทุกอย่างที่อยู่ข้างในให้อยู่ตรงกลางแนวนอน */
+    align-items: center;
 }
 
-/* 1. จัดหัวข้อด้านบนให้อยู่กึ่งกลางและมีความกว้างพอดีกับกล่อง */
+
 .dashboard-content > .welcome-banner {
     width: 100%;
-    max-width: 1100px; /* ปรับขนาดความกว้างตามต้องการ */
+    max-width: 1100px;
     margin-left: auto;
     margin-right: auto;
 }
 
-/* 2. บังคับให้ตัว Box (Panel-card) มาอยู่ตรงกลางแนวนอนแน่นอน */
+
 .panel-card {
     width: 100%;
-    max-width: 1100px; /* กำหนดความกว้างของ Box */
-    margin-left: auto;  /* ดันซ้ายให้อัตโนมัติ เพื่อให้อยู่กึ่งกลาง */
-    margin-right: auto; /* ดันขวาให้อัตโนมัติ เพื่อให้อยู่กึ่งกลาง */
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
 
     min-width: 0;
     padding: 28px;
@@ -123,7 +121,7 @@ select:focus-visible {
     line-height: 1.7;
 }
 
-/* 6. RESERVATION PANEL */
+
 .panel-header {
     display: flex;
     align-items: center;
@@ -151,7 +149,7 @@ select:focus-visible {
     color: #1c1c1c;
 }
 
-/* 7. FILTER CONTROLS */
+
 .table-controls {
     display: flex;
     align-items: center;
@@ -278,7 +276,7 @@ select:focus-visible {
     color: var(--white);
 }
 
-/* 8. TABLE STATUS */
+
 .reservation-list-status {
     margin-bottom: 16px;
     color: #666056;
@@ -286,7 +284,7 @@ select:focus-visible {
     line-height: 1.6;
 }
 
-/* 9. RESERVATION TABLE */
+
 .data-table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -398,9 +396,7 @@ select:focus-visible {
     text-align: center;
 }
 
-/* 10. RESERVATION DIALOGS
-   Used by JavaScript showModal()
-*/
+
 #editReservationDialog,
 #deleteReservationDialog {
     position: fixed;
@@ -461,7 +457,7 @@ select:focus-visible {
     width: 100%;
 }
 
-/* 11. DIALOG FORM */
+
 .reservation-edit-fields {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -511,7 +507,7 @@ select:focus-visible {
     box-shadow: 0 0 0 2px rgba(147, 115, 65, 0.12);
 }
 
-/* 12. DIALOG BUTTONS */
+
 .reservation-dialog-actions {
     display: flex;
     align-items: center;
@@ -559,7 +555,7 @@ select:focus-visible {
     background: var(--burgundy-dark);
 }
 
-/* 13. DELETE CONFIRMATION */
+
 #deleteReservationSummary {
     margin-bottom: 16px;
     padding: 15px;
@@ -580,7 +576,7 @@ select:focus-visible {
     line-height: 1.8;
 }
 
-/* 14. ERROR MESSAGE */
+
 .reservation-action-error {
     margin-top: 16px;
     padding: 12px 14px;
@@ -593,9 +589,7 @@ select:focus-visible {
     line-height: 1.7;
 }
 
-/* 15. OPTIONAL LEGACY ADD MODAL
-   For #addReservationModal if another script uses it
-*/
+
 #addReservationModal {
     position: fixed;
     inset: 0;
@@ -756,7 +750,7 @@ select:focus-visible {
     background: var(--burgundy-dark);
 }
 
-/* 16. RESPONSIVE: TABLET */
+
 @media (max-width: 1100px) {
     .admin-main {
         margin-left: 220px;
@@ -784,7 +778,7 @@ select:focus-visible {
     }
 }
 
-/* 17. RESPONSIVE: MOBILE */
+
 @media (max-width: 768px) {
     .admin-layout {
         display: block;
@@ -897,7 +891,7 @@ select:focus-visible {
     }
 }
 
-/* 18. RESPONSIVE: SMALL MOBILE */
+
 @media (max-width: 400px) {
     .dashboard-content {
         padding-right: 12px;

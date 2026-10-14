@@ -106,8 +106,6 @@ async function update(showId, show) {
        WHERE show_id = ?`,
       [artistId, show.performance_date, show.start_time, show.end_time, showId]
     );
-    // These values repeat the selected show slot throughout the ERD. Keep them
-    // synchronized when an administrator reschedules a show.
     await connection.execute(
       'UPDATE reservations SET date_time = TIMESTAMP(?, ?) WHERE show_id = ?',
       [show.performance_date, show.start_time, showId]

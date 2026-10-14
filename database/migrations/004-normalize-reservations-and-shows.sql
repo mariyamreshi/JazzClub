@@ -1,5 +1,3 @@
--- Normalize existing reservation and show data to match the ERD.
--- Existing primary-key values are preserved.
 
 CREATE TABLE IF NOT EXISTS customers (
   customer_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -9,7 +7,8 @@ CREATE TABLE IF NOT EXISTS customers (
   membership_status VARCHAR(30) NOT NULL DEFAULT 'non-member',
   PRIMARY KEY (customer_id),
   UNIQUE KEY customers_phone_unique (phone)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE IF NOT EXISTS club_tables (
   table_id VARCHAR(10) NOT NULL,
@@ -18,7 +17,8 @@ CREATE TABLE IF NOT EXISTS club_tables (
   status VARCHAR(20) NOT NULL DEFAULT 'available',
   PRIMARY KEY (table_id),
   CONSTRAINT club_tables_capacity_positive CHECK (capacity > 0)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO club_tables (table_id, capacity, zone, status) VALUES
   ('F01', 8, 'Front Stage', 'available'),
@@ -52,10 +52,15 @@ CREATE TABLE reservations_erd (
   UNIQUE KEY reservations_table_datetime_unique (table_id, date_time),
   KEY reservations_customer (customer_id),
   CONSTRAINT reservations_erd_customer_fk FOREIGN KEY (customer_id)
-    REFERENCES customers (customer_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    REFERENCES customers (customer_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
   CONSTRAINT reservations_erd_table_fk FOREIGN KEY (table_id)
-    REFERENCES club_tables (table_id) ON UPDATE CASCADE ON DELETE RESTRICT
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    REFERENCES club_tables (table_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO reservations_erd (reservation_id, customer_id, table_id, date_time, status)
 SELECT r.id, c.customer_id, t.table_id, TIMESTAMP(r.`date`, r.`time`), 'confirmed'
@@ -70,9 +75,13 @@ ALTER TABLE reservations
   DROP FOREIGN KEY reservations_erd_customer_fk,
   DROP FOREIGN KEY reservations_erd_table_fk,
   ADD CONSTRAINT reservations_customer_fk FOREIGN KEY (customer_id)
-    REFERENCES customers (customer_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    REFERENCES customers (customer_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
   ADD CONSTRAINT reservations_table_fk FOREIGN KEY (table_id)
-    REFERENCES club_tables (table_id) ON UPDATE CASCADE ON DELETE RESTRICT;
+    REFERENCES club_tables (table_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT;
 
 CREATE TABLE IF NOT EXISTS artists (
   artist_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -81,7 +90,8 @@ CREATE TABLE IF NOT EXISTS artists (
   genre VARCHAR(100) NOT NULL,
   PRIMARY KEY (artist_id),
   UNIQUE KEY artists_name_unique (artist_name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO artists (artist_name, artist_type, genre)
 SELECT artist, 'guest', MAX(genre)
@@ -99,9 +109,12 @@ CREATE TABLE shows_erd (
   KEY shows_schedule (performance_date, start_time),
   KEY shows_artist (artist_id),
   CONSTRAINT shows_erd_artist_fk FOREIGN KEY (artist_id)
-    REFERENCES artists (artist_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+    REFERENCES artists (artist_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
   CONSTRAINT shows_erd_time_order CHECK (end_time > start_time)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 INSERT INTO shows_erd (show_id, artist_id, performance_date, start_time, end_time)
 SELECT s.show_id, a.artist_id, s.show_date, s.start_time,
@@ -115,7 +128,9 @@ RENAME TABLE shows TO shows_before_erd,
 ALTER TABLE shows
   DROP FOREIGN KEY shows_erd_artist_fk,
   ADD CONSTRAINT shows_artist_fk FOREIGN KEY (artist_id)
-    REFERENCES artists (artist_id) ON UPDATE CASCADE ON DELETE RESTRICT;
+    REFERENCES artists (artist_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT;
 
 DROP TABLE reservations_before_erd;
 DROP TABLE shows_before_erd;

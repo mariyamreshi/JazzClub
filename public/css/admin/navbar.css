@@ -1,4 +1,4 @@
-/* Shared admin sidebar and navigation. Load this after page stylesheets. */
+
 .admin-sidebar {
     box-sizing: border-box;
     width: 260px;
@@ -134,7 +134,7 @@
     cursor: pointer;
 }
 
-/* The legacy Reservations stylesheet adds a left margin to admin-main. */
+
 .admin-main {
     min-width: 0;
     margin-left: 0;

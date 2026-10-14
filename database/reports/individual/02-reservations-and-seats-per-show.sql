@@ -1,2 +1,18 @@
--- 2 Reservations and seats per show
-SELECT s.show_id,a.artist_name,COUNT(r.reservation_id) AS reservations,COALESCE(SUM(t.capacity),0) AS reserved_seats FROM shows s JOIN artists a ON a.artist_id=s.artist_id LEFT JOIN reservations r ON r.show_id=s.show_id AND r.status NOT IN ('cancelled','no-show') LEFT JOIN club_tables t ON t.table_id=r.table_id GROUP BY s.show_id,a.artist_name,s.performance_date ORDER BY s.performance_date;
+SELECT
+  s.show_id,
+  a.artist_name,
+  COUNT(r.reservation_id) AS reservations,
+  COALESCE(SUM(t.capacity), 0) AS reserved_seats
+FROM shows s
+JOIN artists a
+  ON a.artist_id = s.artist_id
+LEFT JOIN reservations r
+  ON r.show_id = s.show_id
+  AND r.status NOT IN ('cancelled', 'no-show')
+LEFT JOIN club_tables t
+  ON t.table_id = r.table_id
+GROUP BY
+  s.show_id,
+  a.artist_name,
+  s.performance_date
+ORDER BY s.performance_date;

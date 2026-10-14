@@ -1,13 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ==========================================
-    // PART 1: FETCH & RENDER SHOWS LIST
-    // ==========================================
     const list = document.getElementById('showsList');
     const status = document.getElementById('showsStatus');
     const retry = document.getElementById('retryShows');
     const template = document.getElementById('showTemplate');
 
-    // Only run fetch logic if the shows list element exists on the current page
     if (list && template) {
         const dateFormatter = new Intl.DateTimeFormat('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC',
@@ -69,9 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return loadShows();
     }
 
-    // ==========================================
-    // PART 2: ADD SHOW MODAL CONTROLLER
-    // ==========================================
     const modal = document.getElementById('addShowModal');
     const openBtn = document.getElementById('openAddShowModalBtn');
     const closeBtn = document.getElementById('closeShowModalBtn');

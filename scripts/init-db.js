@@ -14,14 +14,11 @@ async function initDatabase() {
   try {
     console.log('🔧 Initializing database schema...');
 
-    // อ่าน schema.sql
     const schemaPath = path.join(__dirname, '../database/schema.sql');
     const schemaSQL = fs.readFileSync(schemaPath, 'utf-8');
 
     const connection = await db.getConnection();
     try {
-      // Migrate the legacy table-based ORDER before schema.sql creates
-      // triggers that expect the proposal-aligned total_amount column.
       let legacyOrderColumn = [];
       try {
         [legacyOrderColumn] = await connection.query("SHOW COLUMNS FROM orders LIKE 'table_id'");
@@ -38,13 +35,11 @@ async function initDatabase() {
         }
       }
 
-      // Run the canonical schema after migrations.
       const statements = sqlStatements(schemaSQL);
       for (const statement of statements) {
         console.log(`  ✓ Executing: ${statement.substring(0, 50)}...`);
         await connection.query(statement);
       }
-      // CREATE TABLE IF NOT EXISTS does not update an existing installation.
       const [stockColumns] = await connection.query(
         "SHOW COLUMNS FROM menu_items LIKE 'stock_quantity'"
       );

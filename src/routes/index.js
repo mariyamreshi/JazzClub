@@ -12,7 +12,6 @@ const menuController = require('../controllers/menu.controller');
 const orderController = require('../controllers/order.controller');
 const paymentController = require('../controllers/payment.controller');
 
-// Home & Health routes (from your friend)
 router.get('/', home.index);
 router.get('/api/health', health.server);
 router.get('/api/health/db', health.database);
@@ -38,20 +37,17 @@ router.post('/api/employee-schedules', employeeScheduleController.create);
 router.put('/api/employee-schedules/:scheduleId', employeeScheduleController.update);
 router.delete('/api/employee-schedules/:scheduleId', employeeScheduleController.remove);
 
-// Guest menu and admin menu management.
 router.get('/api/menu-items', menuController.listPublic);
 router.get('/api/admin/menu-items', menuController.listAdmin);
 router.post('/api/menu-items', menuController.createItem);
 router.put('/api/menu-items/:itemId', menuController.updateItem);
 router.delete('/api/menu-items/:itemId', menuController.deleteItem);
 
-// Guest table ordering. Each order owns one or more ORDER_ITEM rows.
 router.get('/api/tables', orderController.listTables);
 router.get('/api/orders', orderController.listOrders);
 router.post('/api/orders', orderController.createOrder);
 router.post('/api/payments', paymentController.createPayment);
 
-// Reservation routes (your part)
 router.get('/api/reservations', reservationController.listReservations);
 router.get('/api/reservations/availability', reservationController.getAvailability);
 router.post('/api/reservations', reservationController.createReservation);

@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<!-- Top Dark Header -->
+
 <nav class="navbar">
     <div class="logo">
             <div class="brand-sub">Garnet's House</div>
@@ -26,12 +26,12 @@
     </div>
 </nav>
 
-<!-- Main Card Container -->
+
 <div class="card-container">
     <div class="section-subtitle">TABLE RESERVATION</div>
     <h1 class="page-title">Plan your evening</h1>
 
-    <!-- Show Information Card -->
+
     <div class="show-card">
         <div class="show-img">🎷</div>
         <div class="show-info">
@@ -44,7 +44,7 @@
     <p id="showStatus" role="status" aria-live="polite" hidden></p>
     <button type="button" id="retryShow" hidden>Load show again</button>
 
-    <!-- Booking Details Form -->
+
     <form id="reservationForm">
         <div class="form-row">
             <div class="form-group">
@@ -61,7 +61,7 @@
             </div>
         </div>
 
-        <!-- Floor Plan Header & Legend -->
+
         <div class="section-header">
             <div>
                 <h2>Choose your table</h2>
@@ -77,12 +77,12 @@
         <p id="availabilityStatus" role="status" aria-live="polite">Checking available tables...</p>
         <button type="button" id="retryAvailability" hidden>Check tables again</button>
 
-        <!-- Floor Plan Container -->
-        <!-- Zoned Floor Plan Container -->
+
+
         <div class="floor-wrapper">
             <div class="stage"><span class="icon">🎸</span> STAGE</div>
 
-            <!-- Zone 1: Front Stage (4 Tables, 8 Seats Total) -->
+
             <div class="zone-block">
                 <div class="zone-label">FRONT STAGE ZONE (MAX 8 PEOPLE PER TABLE)</div>
                 <div class="tables-grid grid-2x2">
@@ -101,7 +101,7 @@
                 </div>
             </div>
 
-            <!-- Zone 2: Main Floor (3 Tables, 9 Seats Total) -->
+
             <div class="zone-block">
                 <div class="zone-label">MAIN FLOOR ZONE (MAX 8 SEATS PER TABLE)</div>
                 <div class="tables-grid grid-3col">
@@ -117,7 +117,7 @@
                 </div>
             </div>
 
-            <!-- Zone 3: VIP Lounge (At the Back, 12 Seats Total) -->
+
             <div class="zone-block vip-zone">
                 <div class="zone-label vip-label">👑 VIP LOUNGE (MAX 12 PEOPLE PER TABLE)</div>
                 <div class="tables-grid grid-2col">
@@ -130,7 +130,7 @@
                 </div>
             </div>
 
-            <!-- Zone 4: Bar Counter (4 Spots, Max 2 Seats Each) -->
+
             <div class="bar-container">
                 <div class="bar-title">🍷 BAR COUNTER</div>
                 <div class="bar-spots">
@@ -152,7 +152,7 @@
             <div class="entrance">ENTRANCE</div>
         </div>
 
-        <!-- Selected Table Info Banner -->
+
         <div class="selection-box">
             <div class="selected-left">
                 <span class="sofa-icon">🛋️</span>
@@ -163,7 +163,7 @@
             </div>
         </div>
 
-        <!-- Guest Fields -->
+
         <div class="form-group full-width">
             <label for="guestName">Guest name</label>
             <input type="text" id="guestName" placeholder="Full name" maxlength="100" autocomplete="name" required>
@@ -178,7 +178,7 @@
         <button type="submit" class="btn-confirm" disabled>Confirm reservation request</button>
     </form>
 </div>
-<!-- Confirmation Receipt View (Hidden by default) -->
+
 <div id="confirmationCard" class="confirmation-overlay hidden">
     <div class="ticket-card">
         <div class="ticket-header">

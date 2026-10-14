@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterTabs = document.querySelectorAll('.tab-btn');
     const tableRows = document.querySelectorAll('#reservationTableBody tr');
 
-    // 1. Table Search Filtering
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase();
@@ -15,7 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 2. Status Tab Filtering
     filterTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             filterTabs.forEach(t => t.classList.remove('active'));
@@ -45,20 +43,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const addShowForm = document.getElementById('addShowForm');
         const showsList = document.querySelector('.shows-list');
 
-        // Open Modal
         if (addShowBtn && modal) {
             addShowBtn.addEventListener('click', () => {
                 modal.classList.add('open');
             });
         }
 
-        // Close Modal helper
         const closeModal = () => modal.classList.remove('open');
 
         if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
         if (cancelModalBtn) cancelModalBtn.addEventListener('click', closeModal);
 
-        // Form Submit Handler
         if (addShowForm) {
             addShowForm.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -70,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const capacity = document.getElementById('maxCapacity').value;
                 const status = document.getElementById('showStatus').value;
 
-                // Format date (e.g. "15" and "Sep")
                 const parsedDate = new Date(dateVal);
                 const dayNum = isNaN(parsedDate.getDate()) ? '15' : parsedDate.getDate();
                 const monthStr = isNaN(parsedDate.getDate())
@@ -80,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const statusText = status === 'tonight' ? 'Tonight' : 'On sale';
                 const isHighlighted = status === 'tonight' ? 'highlighted' : '';
 
-                // Construct new card element
                 const newShowCard = document.createElement('div');
                 newShowCard.className = `show-item-card ${isHighlighted}`;
                 newShowCard.innerHTML = `
@@ -102,7 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
 
-                // Append new card and reset form
                 showsList.prepend(newShowCard);
                 addShowForm.reset();
                 closeModal();
